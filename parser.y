@@ -28,7 +28,7 @@ extern grammar_t* root_node;
 
 %union {
     token_t* token;
-    struct _grammar_t_* grammar;
+    grammar_t* grammar;
     grammar_list_t* grammar_list;
     non_terminal_rule_t* non_terminal_rule;
     rule_element_list_t* rule_element_list;

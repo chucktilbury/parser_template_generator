@@ -1,3 +1,10 @@
+pgen
+scanner.c
+scanner.h
+parser.c
+parser.h
+parser.output
+
 # Prerequisites
 *.d
 
