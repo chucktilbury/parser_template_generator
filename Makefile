@@ -1,4 +1,5 @@
 TARGET = pgen
+DEPS = $(TARGET).deps
 OBJS = 	parser.o \
 		scanner.o \
 		main.o \
@@ -14,22 +15,26 @@ HEADERS = trace.h \
 		errors.h \
 		common.h
 
-CARGS = -Wall -DUSE_TRACE -g
+#CARGS = -Wall -DUSE_TRACE -g
+CARGS = -Wall -g
 CC = clang
 
 %.o:%.c
 	$(CC) $(CARGS) -c -o $@ $<
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(DEPS)
 	$(CC) -g -o $(TARGET) $(OBJS)
 
-scanner.o: scanner.c scanner.h
 scanner.c scanner.h: scanner.l
 	flex scanner.l
 
-parser.o: parser.c parser.h
 parser.c parser.h: parser.y
 	bison parser.y
 
+$(DEPS): $(OBJS:.o=.c)
+	$(CC) -MM $^ > $(DEPS)
+
+include $(DEPS)
+
 clean:
-	$(RM) $(TARGET) $(OBJS) scanner.c scanner.h parser.c parser.h parser.output
+	$(RM) $(TARGET) $(OBJS) $(DEPS) scanner.c scanner.h parser.c parser.h parser.output

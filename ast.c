@@ -10,8 +10,10 @@
  */
 
 #include "ast.h"
-#include "trace.h"
 #include "errors.h"
+
+#define USE_TRACE
+#include "trace.h"
 
 #ifdef USE_TRACE
 #define TRACE_TOKEN(t) TRACE("token: \"%s\": %s", (t)->str, tok_to_str((t)->type))
@@ -187,7 +189,8 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
-    rule_element(node->rule_element);
+    rule_element(node->left);
+    rule_element(node->right);
 
     RETURN();
 }

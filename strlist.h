@@ -22,4 +22,6 @@ str_buf_t* index_str_list(str_list_t* lst, int index);
 str_buf_t* iterate_str_list(str_list_t* lst, int* post);
 int len_str_list(str_list_t* lst);
 
+void add_str_list(str_list_t* lst, str_buf_t* str);
+
 #endif /* _STRLIST_H_ */

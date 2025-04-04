@@ -4,6 +4,7 @@ scanner.h
 parser.c
 parser.h
 parser.output
+*.deps
 
 # Prerequisites
 *.d

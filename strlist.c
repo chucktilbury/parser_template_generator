@@ -8,6 +8,8 @@
  * @date 2025-04-01
  * @copyright Copyright (c) 2025
  */
+#include <string.h>
+
 #include "strlist.h"
 
 str_list_t* create_str_list(void) {
@@ -34,4 +36,21 @@ int len_str_list(str_list_t* lst) {
 
     return len_ptr_list((ptr_list_t*)lst);
 }
+
+/*
+ * Add to the string into the list if it does not already exist.
+ */
+void add_str_list(str_list_t* lst, str_buf_t* str) {
+
+    int mark = 0;
+    str_buf_t* ptr;
+
+    while(NULL != (ptr = iterate_str_list(lst, &mark)))
+        if(comp_string_buf(ptr, str) == 0)
+            return;
+
+    append_str_list(lst, str);
+}
+
+
 

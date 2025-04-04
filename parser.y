@@ -65,6 +65,9 @@ extern grammar_t* root_node;
 %output "parser.c"
 %defines
 
+%left PIPE
+%left QUESTION STAR PLUS
+
 %%
 
 grammar
@@ -157,13 +160,6 @@ non_terminal_rule_element
     }
     ;
 
-or_function
-    : rule_element PIPE {
-        $$ = (or_function_t*)create_ast_node(AST_OR_FUNCTION);
-        $$->rule_element = $1;
-    }
-    ;
-
 zero_or_more_function
     : rule_element QUESTION {
         $$ = (zero_or_more_function_t*)create_ast_node(AST_ZERO_OR_MORE_FUNCTION);
@@ -182,6 +178,14 @@ one_or_more_function
     : rule_element PLUS {
         $$ = (one_or_more_function_t*)create_ast_node(AST_ONE_OR_MORE_FUNCTION);
         $$->rule_element = $1;
+    }
+    ;
+
+or_function
+    : rule_element PIPE rule_element {
+        $$ = (or_function_t*)create_ast_node(AST_OR_FUNCTION);
+        $$->left = $1;
+        $$->right = $3;
     }
     ;
 
