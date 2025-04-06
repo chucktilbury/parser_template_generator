@@ -16,8 +16,6 @@
 #include "strlist.h"
 
 extern str_list_t* nterm_list;
-extern str_list_t* term_list;
-extern str_list_t* token_list;
 
 void make_raw_lists(grammar_t* node);
 

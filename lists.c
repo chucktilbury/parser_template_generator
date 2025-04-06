@@ -14,11 +14,13 @@
 #include "errors.h"
 #include "lists.h"
 #include "parser.h"
+#include "alloc.h"
 
+#include "nterm_list.h"
+#include "term_list.h"
 // global product produced by this file
-str_list_t* nterm_list;
-str_list_t* term_list;
-str_list_t* token_list;
+nterm_list_t* nterm_list;
+term_list_t* term_list;
 
 #define USE_TRACE
 #include "trace.h"
@@ -41,7 +43,6 @@ static void zero_or_more_function(zero_or_more_function_t* node);
 static void zero_or_one_function(zero_or_one_function_t* node);
 static void one_or_more_function(one_or_more_function_t* node);
 static void grouping_function(grouping_function_t* node);
-
 
 /*
  grammar
@@ -87,7 +88,8 @@ static void non_terminal_rule(non_terminal_rule_t* node) {
     ENTER;
 
     TRACE_TOKEN(node->NON_TERMINAL);
-    add_str_list(nterm_list, create_string_buf(node->NON_TERMINAL->str));
+
+    append_nterm_list(nterm_list, create_nterm_item(node->NON_TERMINAL->str));
     rule_element_list(node->rule_element_list);
 
     RETURN();
@@ -153,20 +155,26 @@ static void terminal_rule_element(terminal_rule_element_t* node) {
 
     switch(node->token->type) {
         case TERMINAL_NAME: {
-                str_buf_t* buf = create_string_buf(node->token->str);
-                strip_quotes(buf);
-                add_str_list(term_list, buf);
-                buf = copy_string_buf(buf);
-                upcase(buf);
-                add_str_list(token_list, create_string_buf_fmt("TOK_%s", buf->buffer));
-                destroy_string_buf(buf);
+                str_buf_t* term = create_string_buf(node->token->str);
+                strip_quotes(term);
+
+                str_buf_t* tok = copy_string_buf(term);
+                upcase(tok);
+                tok = create_string_buf_fmt("TOK_%s", tok->buffer);
+
+                append_term_list(term_list, create_term_item(term->buffer, tok->buffer));
+
+                destroy_string_buf(term);
+                destroy_string_buf(tok);
             }
             break;
         case TERMINAL_OPER: {
-                str_buf_t* buf = create_string_buf(node->token->str);
-                strip_quotes(buf);
-                add_str_list(term_list, buf);
-                buf = convert(buf->buffer);
+                str_buf_t* term = create_string_buf(node->token->str);
+                strip_quotes(term);
+
+                str_buf_t* tok = copy_string_buf(term);
+                tok = convert(tok->buffer);
+
                 add_str_list(token_list, create_string_buf_fmt("TOK_%s", buf->buffer));
                 destroy_string_buf(buf);
             }
@@ -301,9 +309,8 @@ static void grouping_function(grouping_function_t* node) {
  */
 void make_raw_lists(grammar_t* node) {
 
-    nterm_list = create_str_list();
-    term_list = create_str_list();
-    token_list = create_str_list();
+    nterm_list = create_nterm_list();
+    term_list = create_term_list();
 
     grammar((grammar_t*)node);
 }

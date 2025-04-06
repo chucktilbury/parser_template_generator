@@ -13,6 +13,8 @@ OBJS = 	parser.o \
 		hash.o \
 		render.o \
 		lists.o \
+		term_list.o \
+		nterm_list.o \
 		trace.o
 
 HEADERS = trace.h \
