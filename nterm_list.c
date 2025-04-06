@@ -23,7 +23,7 @@ void destroy_nterm_list(nterm_list_t* lst) {
         nterm_item_t* item;
         int mark = 0;
         while(NULL != (item = iterate_nterm_list(lst, &mark)))
-            destroy_nterm_list(item);
+            destroy_nterm_item(item);
 
         destroy_ptr_list((ptr_list_t*)lst);
     }

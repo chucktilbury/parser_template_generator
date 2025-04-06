@@ -55,12 +55,21 @@ void* _mem_copy(void* optr, size_t size) {
 
 char* _mem_copy_string(const char* str) {
 
-    size_t len = strlen(str) + 1;
+    size_t len;
+    if(str != NULL)
+        len = strlen(str) + 1;
+    else
+        len = 1;
+
     char* ptr  = _MALLOC(len);
     if(ptr == NULL)
         FATAL("cannot allocate %lu bytes for string", len);
 
-    memcpy(ptr, str, len);
+    if(str != NULL)
+        memcpy(ptr, str, len);
+    else
+        ptr[0] = '\0';
+
     return ptr;
 }
 

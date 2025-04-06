@@ -155,33 +155,41 @@ static void terminal_rule_element(terminal_rule_element_t* node) {
 
     switch(node->token->type) {
         case TERMINAL_NAME: {
-                str_buf_t* term = create_string_buf(node->token->str);
+                string_t term = create_string(node->token->str);
                 strip_quotes(term);
 
-                str_buf_t* tok = copy_string_buf(term);
+                string_t tok = copy_string(term);
                 upcase(tok);
-                tok = create_string_buf_fmt("TOK_%s", tok->buffer);
+                tok = create_string_fmt("TOK_%s", tok);
 
-                append_term_list(term_list, create_term_item(term->buffer, tok->buffer));
+                append_term_list(term_list, create_term_item(term, tok));
 
-                destroy_string_buf(term);
-                destroy_string_buf(tok);
+                destroy_string(term);
+                destroy_string(tok);
             }
             break;
         case TERMINAL_OPER: {
-                str_buf_t* term = create_string_buf(node->token->str);
+                string_t term = create_string(node->token->str);
                 strip_quotes(term);
 
-                str_buf_t* tok = copy_string_buf(term);
-                tok = convert(tok->buffer);
+                string_t tok = copy_string(term);
+                tok = convert(tok);
+                tok = create_string_fmt("TOK_%s", tok);
 
-                add_str_list(token_list, create_string_buf_fmt("TOK_%s", buf->buffer));
-                destroy_string_buf(buf);
+                append_term_list(term_list, create_term_item(term, tok));
+
+                destroy_string(term);
+                destroy_string(tok);
             }
             break;
         case TERMINAL_SYMBOL: {
-                add_str_list(term_list, create_string_buf(node->token->str));
-                add_str_list(token_list, create_string_buf_fmt("TOK_%s", node->token->str));
+                string_t term = copy_string(node->token->str);
+                string_t tok = create_string_fmt("TOK_%s", node->token->str);
+
+                append_term_list(term_list, create_term_item(term, tok));
+
+                destroy_string(term);
+                destroy_string(tok);
             }
             break;
         case NON_TERMINAL:

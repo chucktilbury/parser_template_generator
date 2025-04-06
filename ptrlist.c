@@ -12,6 +12,14 @@ ptr_list_t* create_ptr_list(void) {
     return ptr;
 }
 
+void destroy_ptr_list(ptr_list_t* lst) {
+
+    if(lst != NULL) {
+        _FREE(lst->buffer);
+        _FREE(lst);
+    }
+}
+
 void append_ptr_list(ptr_list_t* lst, void* ptr) {
 
     if(lst->len+1 > lst->cap) {

@@ -10,7 +10,9 @@
  */
 
 #include "term_list.h"
+#include "ptrlist.h"
 #include "alloc.h"
+#include "strbuf.h"
 
 term_list_t* create_term_list(void) {
 
@@ -23,13 +25,19 @@ void destroy_term_list(term_list_t* lst) {
         term_item_t* item;
         int mark = 0;
         while(NULL != (item = iterate_term_list(lst, &mark)))
-            destroy_term_list(item);
+            destroy_term_item(item);
 
         destroy_ptr_list((ptr_list_t*)lst);
     }
 }
 
 void append_term_list(term_list_t* lst, term_item_t* item) {
+
+    term_item_t* temp;
+    int mark = 0;
+    while(NULL != (temp = iterate_term_list(lst, &mark)))
+        if(!comp_string(temp->token, item->token))
+            return;
 
     append_ptr_list((ptr_list_t*)lst, (void*)item);
 }

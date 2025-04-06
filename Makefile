@@ -46,7 +46,7 @@ $(DEPS): $(OBJS:.o=.c)
 include $(DEPS)
 
 clean:
-	$(RM) $(TARGET) $(OBJS) $(DEPS) \
+	@ $(RM) $(TARGET) $(OBJS) $(DEPS) \
 	scanner.c scanner.h \
 	parser.c parser.h parser.output \
 	template.c template.h

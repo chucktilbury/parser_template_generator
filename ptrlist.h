@@ -10,6 +10,7 @@ typedef struct _ptr_list_t_ {
 } ptr_list_t;
 
 ptr_list_t* create_ptr_list(void);
+void destroy_ptr_list(ptr_list_t* lst);
 void append_ptr_list(ptr_list_t* lst, void* ptr);
 void* index_ptr_list(ptr_list_t* lst, int index);
 void push_ptr_list(ptr_list_t* lst, void* ptr);

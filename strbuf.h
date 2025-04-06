@@ -3,26 +3,21 @@
 
 #include <stddef.h>
 
-typedef struct _string_buf_t_ {
-    char* buffer;
-    size_t len;
-    size_t cap;
-} str_buf_t;
+typedef const char* string_t;
 
-str_buf_t* create_string_buf(const char* str);
-str_buf_t* create_string_buf_fmt(const char* fmt, ...);
-void destroy_string_buf(str_buf_t* buf);
-void append_string_buf(str_buf_t* buf, const char* str);
-void append_string_buf_fmt(str_buf_t* buf, const char* fmt, ...);
-void append_string_buf_char(str_buf_t* buf, int ch);
-const char* raw_string_buf(str_buf_t* buf);
-int len_string_buf(str_buf_t* buf);
-int comp_string_buf(str_buf_t* buf1, str_buf_t* buf2);
+string_t create_string(const char* str);
+string_t create_string_fmt(const char* fmt, ...);
+void destroy_string(string_t buf);
+string_t append_string(string_t buf, const char* str);
+string_t append_string_fmt(string_t buf, const char* fmt, ...);
+string_t append_string_char(string_t buf, int ch);
+int len_string(string_t buf);
+int comp_string(string_t buf1, string_t buf2);
 
-void strip_quotes(str_buf_t* buf);
-void upcase(str_buf_t* buf);
-str_buf_t* convert(const char* str);
-void strip_space(str_buf_t* buf);
-str_buf_t* copy_string_buf(str_buf_t* buf);
+string_t strip_quotes(string_t buf);
+string_t upcase(string_t buf);
+string_t strip_space(string_t buf);
+string_t convert(const char* str);
+string_t copy_string(string_t buf);
 
 #endif /* _STRBUF_H_ */

@@ -8,7 +8,12 @@
 #include "parser.h"
 #include "ast.h"
 #include "strlist.h"
+#include "term_list.h"
+#include "nterm_list.h"
 #include "lists.h"
+
+extern nterm_list_t* nterm_list;
+extern term_list_t* term_list;
 
 int main(int argc, char** argv) {
 
@@ -29,22 +34,17 @@ int main(int argc, char** argv) {
 
     int mark = 0;
     int count = 1;
-    str_buf_t* sbuf;
     printf("\n");
-    while(NULL != (sbuf = iterate_str_list(nterm_list, &mark)))
-        printf("%3d. nterm: %s\n", count++, sbuf->buffer);
-
-    count = 1;
-    mark = 0;
-    printf("\n");
-    while(NULL != (sbuf = iterate_term_list(term_list, &mark)))
-        printf("%3d. term: %s\n", count++, sbuf->buffer);
+    term_item_t* term;
+    while(NULL != (term = iterate_term_list(term_list, &mark)))
+        printf("%3d. %-15s%s\n", count++, term->term, term->token);
 
     mark = 0;
     count = 1;
     printf("\n");
-    while(NULL != (sbuf = iterate_str_list(token_list, &mark)))
-        printf("%3d. token: %s\n", count++, sbuf->buffer);
+    nterm_item_t* nterm;
+    while(NULL != (nterm = iterate_nterm_list(nterm_list, &mark)))
+        printf("%3d. %s\n", count++, nterm->nterm);
 
     return 0;
 }
