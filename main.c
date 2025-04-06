@@ -7,6 +7,8 @@
 #include "scanner.h"
 #include "parser.h"
 #include "ast.h"
+#include "strlist.h"
+#include "lists.h"
 
 int main(int argc, char** argv) {
 
@@ -23,7 +25,26 @@ int main(int argc, char** argv) {
 
     yyparse();
 
-    traverse_ast((ast_node_t*)root_node);
+    make_raw_lists(root_node);
+
+    int mark = 0;
+    int count = 1;
+    str_buf_t* sbuf;
+    printf("\n");
+    while(NULL != (sbuf = iterate_str_list(nterm_list, &mark)))
+        printf("%d nterm: %s\n", count++, sbuf->buffer);
+
+    count = 1;
+    mark = 0;
+    printf("\n");
+    while(NULL != (sbuf = iterate_str_list(term_list, &mark)))
+        printf("%d term: %s\n", count++, sbuf->buffer);
+
+    mark = 0;
+    count = 1;
+    printf("\n");
+    while(NULL != (sbuf = iterate_str_list(token_list, &mark)))
+        printf("%d token: %s\n", count++, sbuf->buffer);
 
     return 0;
 }

@@ -9,6 +9,10 @@ OBJS = 	parser.o \
 		strlist.o \
 		tokens.o \
 		ast.o \
+		template.o \
+		hash.o \
+		render.o \
+		lists.o \
 		trace.o
 
 HEADERS = trace.h \
@@ -25,6 +29,9 @@ CC = clang
 $(TARGET): $(OBJS) $(DEPS)
 	$(CC) -g -o $(TARGET) $(OBJS)
 
+template.c template.h: template.l
+	flex template.l
+
 scanner.c scanner.h: scanner.l
 	flex scanner.l
 
@@ -37,4 +44,7 @@ $(DEPS): $(OBJS:.o=.c)
 include $(DEPS)
 
 clean:
-	$(RM) $(TARGET) $(OBJS) $(DEPS) scanner.c scanner.h parser.c parser.h parser.output
+	$(RM) $(TARGET) $(OBJS) $(DEPS) \
+	scanner.c scanner.h \
+	parser.c parser.h parser.output \
+	template.c template.h

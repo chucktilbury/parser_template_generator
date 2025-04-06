@@ -1,7 +1,7 @@
 # This is a grammar for the Toy programming language.
 
 program
-    : program_item+ END_OF_INPUT
+    : program_item+
     ;
 
 program_item

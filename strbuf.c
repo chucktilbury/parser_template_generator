@@ -152,6 +152,62 @@ void strip_space(str_buf_t* buf) {
     buf->len = strlen(buf->buffer);
 }
 
+void upcase(str_buf_t* buf) {
+
+    for(int i = 0; i < buf->len; i++)
+        buf->buffer[i] = toupper(buf->buffer[i]);
+}
+
+str_buf_t* convert(const char* str) {
+
+    str_buf_t* buf = create_string_buf(NULL);
+
+    for(int i = 0; str[i] != '\0'; i++) {
+        switch(str[i]) {
+            case '~': append_string_buf(buf, "TILDE"); break;
+            case '`': append_string_buf(buf, "BQUOTE"); break;
+            case '!': append_string_buf(buf, "BANG"); break;
+            case '@': append_string_buf(buf, "AT"); break;
+            case '#': append_string_buf(buf, "POUND"); break;
+            case '$': append_string_buf(buf, "DOLLAR"); break;
+            case '%': append_string_buf(buf, "PERCENT"); break;
+            case '^': append_string_buf(buf, "CARET"); break;
+            case '&': append_string_buf(buf, "AMP"); break;
+            case '*': append_string_buf(buf, "STAR"); break;
+            case '(': append_string_buf(buf, "OPAREN"); break;
+            case ')': append_string_buf(buf, "CPAREN"); break;
+            case '-': append_string_buf(buf, "MINUS"); break;
+            case '=': append_string_buf(buf, "EQUAL"); break;
+            case '+': append_string_buf(buf, "PLUS"); break;
+            case '[': append_string_buf(buf, "OSBRACE"); break;
+            case '{': append_string_buf(buf, "OCBRACE"); break;
+            case ']': append_string_buf(buf, "CSBRACE"); break;
+            case '}': append_string_buf(buf, "CCBRACE"); break;
+            case '\\': append_string_buf(buf, "BSLASH"); break;
+            case '|': append_string_buf(buf, "BAR"); break;
+            case ';': append_string_buf(buf, "SCOLON"); break;
+            case ':': append_string_buf(buf, "COLON"); break;
+            case '\'': append_string_buf(buf, "SQUOTE"); break;
+            case '\"': append_string_buf(buf, "DQUOTE"); break;
+            case ',': append_string_buf(buf, "COMMA"); break;
+            case '<': append_string_buf(buf, "OPBRACE"); break;
+            case '.': append_string_buf(buf, "DOT"); break;
+            case '>': append_string_buf(buf, "CPBRACE"); break;
+            case '/': append_string_buf(buf, "SLASH"); break;
+            case '?': append_string_buf(buf, "QUESTION"); break;
+        }
+        if(str[i+1] != '\0')
+            append_string_buf_char(buf, '_');
+    }
+
+    return buf;
+}
+
+str_buf_t* copy_string_buf(str_buf_t* buf) {
+
+    return create_string_buf(buf->buffer);
+}
+
 #if 0
 int main(void) {
 

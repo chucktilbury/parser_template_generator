@@ -20,6 +20,9 @@ int len_string_buf(str_buf_t* buf);
 int comp_string_buf(str_buf_t* buf1, str_buf_t* buf2);
 
 void strip_quotes(str_buf_t* buf);
+void upcase(str_buf_t* buf);
+str_buf_t* convert(const char* str);
 void strip_space(str_buf_t* buf);
+str_buf_t* copy_string_buf(str_buf_t* buf);
 
 #endif /* _STRBUF_H_ */
