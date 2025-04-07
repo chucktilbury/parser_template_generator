@@ -5,17 +5,17 @@ program
     ( program_item+ )
 
 program_item
-    ( data_def
-    | data_decl
-    | function_def
-    | import_statement
-    | start_statement )
+    ( data_def |
+      data_decl |
+      function_def |
+      import_statement |
+      start_statement )
 
 type_name
-    ( ('int' | 'integer')
-    | 'float'
-    | ('bool' | 'boolean')
-    | ('str' | 'string') )
+    ( ( ('int' | 'integer') ) |
+      ( 'float' ) |
+      ( ('bool' | 'boolean') ) |
+      ( ('str' | 'string') ) )
 
 data_decl
     ( type_name IDENTIFIER )
@@ -45,23 +45,23 @@ and_expr
     ( equ_expr ( ('&' | 'and' ) equ_expr )* )
 
 equ_expr
-    ( magnitude_expr ( ( '==' | 'equ' ) magnitude_expr )*
-    | magnitude_expr ( ( '!=' | 'nequ' ) magnitude_expr )* )
+    ( ( magnitude_expr ( ( '==' | 'equ' ) magnitude_expr )* ) |
+      ( magnitude_expr ( ( '!=' | 'nequ' ) magnitude_expr )* ) )
 
 magnitude_expr
-    ( sum_expr ( ( '<' | 'lt' ) sum_expr )*
-    | sum_expr ( ( '>' | 'gt' ) sum_expr )*
-    | sum_expr ( ( '<=' | 'lte' ) sum_expr )*
-    | sum_expr ( ( '>=' | 'gte' ) sum_expr )* )
+    ( ( sum_expr ( ( '<' | 'lt' ) sum_expr )* ) |
+      ( sum_expr ( ( '>' | 'gt' ) sum_expr )* ) |
+      ( sum_expr ( ( '<=' | 'lte' ) sum_expr )* ) |
+      ( sum_expr ( ( '>=' | 'gte' ) sum_expr )* ) )
 
 sum_expr
-    ( product_expr ( '+' product_expr )*
-    | product_expr ( '-' product_expr )* )
+    ( ( product_expr ( '+' product_expr )* ) |
+      ( product_expr ( '-' product_expr )* ) )
 
 product_expr
-    ( pow_expr ( '*' pow_expr )*
-    | pow_expr ( '/' pow_expr )*
-    | pow_expr ( '%' pow_expr )* )
+    ( ( pow_expr ( '*' pow_expr )* ) |
+      ( pow_expr ( '/' pow_expr )* ) |
+      ( pow_expr ( '%' pow_expr )* ) )
 
 pow_expr
     ( unary_minus_expr ( '^' unary_minus_expr )* )
@@ -73,26 +73,26 @@ unary_not_expr
     ( primary_expr ( ( '!' | 'not' ) primary_expr )* )
 
 primary_expr
-    ( IDENTIFIER
-    | LITERAL_INT
-    | LITERAL_FLOAT
-    | LITERAL_BOOL
-    | formatted_string
-    | '(' expression ')' )
+    ( IDENTIFIER |
+      LITERAL_INT |
+      LITERAL_FLOAT |
+      LITERAL_BOOL |
+      formatted_string |
+      '(' expression ')' )
 
 func_body
     ( '{' ( func_body_item | func_body )+ '}' )
 
 func_body_item
-    ( data_decl
-    | data_def
-    | func_ref
-    | assignment
-    | while_statement
-    | do_statement
-    | if_statement
-    | inline_statement
-    | return_statement )
+    ( data_decl |
+      data_def |
+      func_ref |
+      assignment |
+      while_statement |
+      do_statement |
+      if_statement |
+      inline_statement |
+      return_statement )
 
 func_ref
     ( IDENTIFIER '(' ( expression ( ',' expression )* )? ')' )
@@ -101,9 +101,9 @@ assignment
     ( IDENTIFIER '=' expression )
 
 loop_body_item
-    ( func_body_item
-    | 'continue'
-    | 'break' )
+    ( func_body_item |
+      'continue' |
+      'break' )
 
 loop_body
     ( '{' ( loop_body_item | loop_body )* '}' )

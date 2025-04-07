@@ -16,12 +16,20 @@
 #include "alloc.h"
 #include "strbuf.h"
 
-string_t create_string(const char* str) {
+string_t* create_string(const char* str) {
 
-    return _COPY_STRING(str);
+    string_t* ptr = _ALLOC_TYPE(string_t);
+    ptr->cap = 1 << 3;
+    ptr->len = 0;
+    ptr->buffer = _ALLOC_ARRAY(char, ptr->cap);
+
+    if(str != NULL)
+        append_string(ptr, str);
+
+    return ptr;
 }
 
-string_t create_string_fmt(const char* fmt, ...) {
+string_t* create_string_fmt(const char* fmt, ...) {
 
     va_list args;
 
@@ -35,223 +43,239 @@ string_t create_string_fmt(const char* fmt, ...) {
     vsprintf(str, fmt, args);
     va_end(args);
 
-    return str;
-}
-
-void destroy_string(string_t buf) {
-
-    if(buf != NULL) {
-        _FREE(buf);
-    }
-}
-
-string_t append_string(string_t buf, const char* str) {
-
-    size_t len1 = strlen(str);
-    size_t len2 = strlen(buf);
-    char* ptr   = _ALLOC(len1 + len2 + 1);
-
-    strcpy(ptr, buf);
-    strcat(ptr, str);
+    string_t* ptr = create_string(str);
+    _FREE(str);
 
     return ptr;
 }
 
-string_t append_string_fmt(string_t buf, const char* fmt, ...) {
+void destroy_string(string_t* buf) {
+
+    if(buf != NULL) {
+        _FREE(buf->buffer);
+        _FREE(buf);
+    }
+}
+
+string_t* append_string(string_t* buf, const char* str) {
+
+    int len = strlen(str);
+    if(len + buf->len + 1 > buf->cap) {
+        while(len + buf->len + 1 > buf->cap)
+            buf->cap <<= 1;
+        buf->buffer = _REALLOC_ARRAY(buf->buffer, char, buf->cap);
+    }
+
+    strcat(buf->buffer, str);
+    buf->len = strlen(buf->buffer);
+
+    return buf;
+}
+
+string_t* append_string_fmt(string_t* buf, const char* fmt, ...) {
 
     va_list args;
 
     va_start(args, fmt);
-    size_t len1 = vsnprintf(NULL, 0, fmt, args);
+    size_t len = vsnprintf(NULL, 0, fmt, args);
     va_end(args);
 
-    size_t len2 = strlen(buf);
-    char* str   = _ALLOC(len1 + len2 + 1);
-    strcpy(str, buf);
+    char* str = _ALLOC(len + 1);
 
     va_start(args, fmt);
-    vsprintf(&str[len2], fmt, args);
+    vsprintf(str, fmt, args);
     va_end(args);
 
-    return str;
+    append_string(buf, str);
+    _FREE(str);
+
+    return buf;
 }
 
-string_t append_string_char(string_t buf, int ch) {
+string_t* append_string_char(string_t* buf, int ch) {
 
-    size_t len = strlen(buf);
-    char* str  = _ALLOC(len + 2);
+    if(buf->len + 1 > buf->cap) {
+        buf->cap <<= 1;
+        buf->buffer = _REALLOC_ARRAY(buf->buffer, char, buf->cap);
+    }
 
-    strcpy(str, buf);
-    str[len]     = (char)ch;
-    str[len + 1] = '\0';
+    buf->buffer[buf->len] = (char)ch;
+    buf->len++;
 
-    return str;
+    return buf;
 }
 
-int len_string(string_t buf) {
+int len_string(string_t* buf) {
 
-    return strlen(buf);
+    return buf->len;
 }
 
-int comp_string(string_t buf1, string_t buf2) {
+int comp_string(string_t* buf1, string_t* buf2) {
 
-    return strcmp(buf1, buf2);
+    return strcmp(buf1->buffer, buf2->buffer);
 }
 
-string_t strip_quotes(string_t buf) {
+const char* raw_string(string_t* str) {
+
+    return str->buffer;
+}
+
+string_t* strip_quotes(string_t* buf) {
 
     strip_space(buf);
 
-    char* temp = strrchr(buf, '\"');
+    char* temp = strrchr(buf->buffer, '\"');
     if(temp != NULL)
         *temp = '\0';
-    else if(NULL != (temp = strrchr(buf, '\'')))
+    else if(NULL != (temp = strrchr(buf->buffer, '\'')))
         *temp = '\0';
 
-    if(buf[0] == '\'' || buf[0] == '\"')
-        memmove(&((char*)buf)[0], &buf[1], strlen(buf));
+    if(buf->buffer[0] == '\'' || buf->buffer[0] == '\"')
+        memmove(&buf->buffer[0], &buf->buffer[1], strlen(buf->buffer));
+
+    buf->len = strlen(buf->buffer);
 
     return buf;
 }
 
-string_t strip_space(string_t buf) {
+string_t* strip_space(string_t* buf) {
 
     size_t len;
-    for(len = strlen(buf); (isspace(buf[len]) || buf[len] == 0) && len >= 0; len--)
-        ((char*)buf)[len] = '\0';
+    for(len = strlen(buf->buffer); (isspace(buf->buffer[len]) || buf->buffer[len] == 0) && len >= 0; len--)
+        buf->buffer[len] = '\0';
 
-    for(len = 0; buf[len] != '\0' && isspace(buf[len]); len++) {
+    for(len = 0; buf->buffer[len] != '\0' && isspace(buf->buffer[len]); len++) {
     }
 
-    memmove(&((char*)buf)[0], &buf[len], strlen(&buf[len]) + 1);
+    memmove(&buf->buffer[0], &buf->buffer[len], strlen(&buf->buffer[len]) + 1);
 
     return buf;
 }
 
-string_t upcase(string_t buf) {
+string_t* upcase(string_t* buf) {
 
-    for(int i = 0; buf[i] != '\0'; i++)
-        ((char*)buf)[i] = toupper(buf[i]);
+    for(int i = 0; buf->buffer[i] != '\0'; i++)
+        buf->buffer[i] = toupper(buf->buffer[i]);
 
     return buf;
 }
 
-string_t convert(const char* str) {
+string_t* convert(string_t* str) {
 
-    string_t buf = create_string(NULL);
+    string_t* buf = create_string(NULL);
 
-    for(int i = 0; str[i] != '\0'; i++) {
-        switch(str[i]) {
+    for(int i = 0; str->buffer[i] != '\0'; i++) {
+        switch(str->buffer[i]) {
             case '~':
-                buf = append_string(buf, "TILDE");
+                append_string(buf, "TILDE");
                 break;
             case '`':
-                buf = append_string(buf, "BQUOTE");
+                append_string(buf, "BQUOTE");
                 break;
             case '!':
-                buf = append_string(buf, "BANG");
+                append_string(buf, "BANG");
                 break;
             case '@':
-                buf = append_string(buf, "AT");
+                append_string(buf, "AT");
                 break;
             case '#':
-                buf = append_string(buf, "POUND");
+                append_string(buf, "POUND");
                 break;
             case '$':
-                buf = append_string(buf, "DOLLAR");
+                append_string(buf, "DOLLAR");
                 break;
             case '%':
-                buf = append_string(buf, "PERCENT");
+                append_string(buf, "PERCENT");
                 break;
             case '^':
-                buf = append_string(buf, "CARET");
+                append_string(buf, "CARET");
                 break;
             case '&':
-                buf = append_string(buf, "AMP");
+                append_string(buf, "AMP");
                 break;
             case '*':
-                buf = append_string(buf, "STAR");
+                append_string(buf, "STAR");
                 break;
             case '(':
-                buf = append_string(buf, "OPAREN");
+                append_string(buf, "OPAREN");
                 break;
             case ')':
-                buf = append_string(buf, "CPAREN");
+                append_string(buf, "CPAREN");
                 break;
             case '-':
-                buf = append_string(buf, "MINUS");
+                append_string(buf, "MINUS");
                 break;
             case '=':
-                buf = append_string(buf, "EQUAL");
+                append_string(buf, "EQUAL");
                 break;
             case '+':
-                buf = append_string(buf, "PLUS");
+                append_string(buf, "PLUS");
                 break;
             case '[':
-                buf = append_string(buf, "OSBRACE");
+                append_string(buf, "OSBRACE");
                 break;
             case '{':
-                buf = append_string(buf, "OCBRACE");
+                append_string(buf, "OCBRACE");
                 break;
             case ']':
-                buf = append_string(buf, "CSBRACE");
+                append_string(buf, "CSBRACE");
                 break;
             case '}':
-                buf = append_string(buf, "CCBRACE");
+                append_string(buf, "CCBRACE");
                 break;
             case '\\':
-                buf = append_string(buf, "BSLASH");
+                append_string(buf, "BSLASH");
                 break;
             case '|':
-                buf = append_string(buf, "BAR");
+                append_string(buf, "BAR");
                 break;
             case ';':
-                buf = append_string(buf, "SCOLON");
+                append_string(buf, "SCOLON");
                 break;
             case ':':
-                buf = append_string(buf, "COLON");
+                append_string(buf, "COLON");
                 break;
             case '\'':
-                buf = append_string(buf, "SQUOTE");
+                append_string(buf, "SQUOTE");
                 break;
             case '\"':
-                buf = append_string(buf, "DQUOTE");
+                append_string(buf, "DQUOTE");
                 break;
             case ',':
-                buf = append_string(buf, "COMMA");
+                append_string(buf, "COMMA");
                 break;
             case '<':
-                buf = append_string(buf, "OPBRACE");
+                append_string(buf, "OPBRACE");
                 break;
             case '.':
-                buf = append_string(buf, "DOT");
+                append_string(buf, "DOT");
                 break;
             case '>':
-                buf = append_string(buf, "CPBRACE");
+                append_string(buf, "CPBRACE");
                 break;
             case '/':
-                buf = append_string(buf, "SLASH");
+                append_string(buf, "SLASH");
                 break;
             case '?':
-                buf = append_string(buf, "QUESTION");
+                append_string(buf, "QUESTION");
                 break;
         }
-        if(str[i + 1] != '\0')
-            buf = append_string_char(buf, '_');
+        if(str->buffer[i + 1] != '\0')
+            append_string_char(buf, '_');
     }
 
     return buf;
 }
 
-string_t copy_string(string_t buf) {
+string_t* copy_string(string_t* buf) {
 
-    return _COPY_STRING(buf);
+    return create_string(buf->buffer);
 }
 
 #if 0
 int main(void) {
 
-    string_t ptr = create_string("'   this isi the string   \"");
+    string_t* ptr = create_string("'   this isi the string   \"");
 
     strip_quotes(ptr);
     strip_space(ptr);

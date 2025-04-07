@@ -39,10 +39,10 @@ nterm_item_t* iterate_nterm_list(nterm_list_t* lst, int* mark) {
     return (nterm_item_t*)iterate_ptr_list((ptr_list_t*)lst, mark);
 }
 
-nterm_item_t* create_nterm_item(const char* nterm) {
+nterm_item_t* create_nterm_item(string_t* nterm) {
 
     nterm_item_t* ptr = _ALLOC_TYPE(nterm_item_t);
-    ptr->nterm        = _COPY_STRING(nterm);
+    ptr->nterm        = nterm;
 
     return ptr;
 }
@@ -50,7 +50,7 @@ nterm_item_t* create_nterm_item(const char* nterm) {
 void destroy_nterm_item(nterm_item_t* item) {
 
     if(item != NULL) {
-        _FREE(item->nterm);
+        destroy_string(item->nterm);
         _FREE(item);
     }
 }

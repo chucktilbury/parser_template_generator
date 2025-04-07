@@ -26,7 +26,7 @@ term_list_t* term_list;
 #include "trace.h"
 
 #ifdef USE_TRACE
-#define TRACE_TOKEN(t) TRACE("token: \"%s\": %s", (t)->str, tok_to_str((t)->type))
+#define TRACE_TOKEN(t) TRACE("token: \"%s\": %s", raw_string((t)->str), tok_to_str((t)->type))
 #else
 #define TRACE_TOKEN(t)
 #endif
@@ -137,39 +137,32 @@ static void rule_element(rule_element_t* node) {
 
         switch(node->token->type) {
             case TERMINAL_NAME: {
-                string_t term = create_string(node->token->str);
+                string_t* term = copy_string(node->token->str);
                 strip_quotes(term);
 
-                string_t tok = copy_string(term);
+                string_t* tok = copy_string(term);
                 upcase(tok);
-                tok = create_string_fmt("TOK_%s", tok);
-
-                append_term_list(term_list, create_term_item(term, tok));
-
-                destroy_string(term);
+                // create_string copies the string
+                // the string term is simply assigned.
+                append_term_list(term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
                 destroy_string(tok);
             } break;
             case TERMINAL_OPER: {
-                string_t term = create_string(node->token->str);
+                string_t* term = copy_string(node->token->str);
                 strip_quotes(term);
 
-                string_t tok = copy_string(term);
+                string_t* tok = copy_string(term);
                 tok          = convert(tok);
-                tok          = create_string_fmt("TOK_%s", tok);
 
-                append_term_list(term_list, create_term_item(term, tok));
+                append_term_list(term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
 
-                destroy_string(term);
-                destroy_string(tok);
+                destroy_string(tok); // normally GC would handle this.
             } break;
             case TERMINAL_SYMBOL: {
-                string_t term = copy_string(node->token->str);
-                string_t tok  = create_string_fmt("TOK_%s", node->token->str);
+                string_t* term = copy_string(node->token->str);
+                string_t* tok  = create_string_fmt("TOK_%s", node->token->str->buffer);
 
                 append_term_list(term_list, create_term_item(term, tok));
-
-                destroy_string(term);
-                destroy_string(tok);
             } break;
             case NON_TERMINAL:
                 /* do nothing */

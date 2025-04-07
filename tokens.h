@@ -11,8 +11,9 @@
 #ifndef _TOKENS_H_
 #define _TOKENS_H_
 
+#include "strbuf.h"
 typedef struct {
-    const char* str;
+    string_t* str;
     int type;
 } token_t;
 

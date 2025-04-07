@@ -37,14 +37,14 @@ int main(int argc, char** argv) {
     printf("\n");
     term_item_t* term;
     while(NULL != (term = iterate_term_list(term_list, &mark)))
-        printf("%3d. %-15s%s\n", count++, term->term, term->token);
+        printf("%3d. %-15s%s\n", count++, raw_string(term->term), raw_string(term->token));
 
     mark  = 0;
     count = 1;
     printf("\n");
     nterm_item_t* nterm;
     while(NULL != (nterm = iterate_nterm_list(nterm_list, &mark)))
-        printf("%3d. %s\n", count++, nterm->nterm);
+        printf("%3d. %s\n", count++, raw_string(nterm->nterm));
 
     return 0;
 }

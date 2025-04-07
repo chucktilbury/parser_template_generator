@@ -59,4 +59,4 @@ clean:
 	template.c template.h
 
 format:
-	clang-format -i --verbose $(OBJS:.o=.c)
+	$(HIDE) clang-format -i --verbose $(OBJS:.o=.c)

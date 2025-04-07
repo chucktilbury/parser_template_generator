@@ -13,11 +13,12 @@
 #define _NTERM_LIST_H_
 
 #include "ptrlist.h"
+#include "strbuf.h"
 
 typedef ptr_list_t nterm_list_t;
 
 typedef struct {
-    const char* nterm;
+    string_t* nterm;
 } nterm_item_t;
 
 nterm_list_t* create_nterm_list(void);
@@ -25,7 +26,7 @@ void destroy_nterm_list(nterm_list_t* lst);
 void append_nterm_list(nterm_list_t* lst, nterm_item_t* item);
 nterm_item_t* iterate_nterm_list(nterm_list_t* lst, int* mark);
 
-nterm_item_t* create_nterm_item(const char* nterm);
+nterm_item_t* create_nterm_item(string_t* nterm);
 void destroy_nterm_item(nterm_item_t* item);
 
 

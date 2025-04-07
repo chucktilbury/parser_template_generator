@@ -12,7 +12,6 @@
 #include "term_list.h"
 #include "ptrlist.h"
 #include "alloc.h"
-#include "strbuf.h"
 
 term_list_t* create_term_list(void) {
 
@@ -47,11 +46,11 @@ term_item_t* iterate_term_list(term_list_t* lst, int* mark) {
     return (term_item_t*)iterate_ptr_list((ptr_list_t*)lst, mark);
 }
 
-term_item_t* create_term_item(const char* term, const char* tok) {
+term_item_t* create_term_item(string_t* term, string_t* tok) {
 
     term_item_t* ptr = _ALLOC_TYPE(term_item_t);
-    ptr->term        = _COPY_STRING(term);
-    ptr->token       = _COPY_STRING(tok);
+    ptr->term        = term;
+    ptr->token       = tok;
 
     return ptr;
 }
@@ -59,8 +58,8 @@ term_item_t* create_term_item(const char* term, const char* tok) {
 void destroy_term_item(term_item_t* item) {
 
     if(item != NULL) {
-        _FREE(item->term);
-        _FREE(item->token);
+        destroy_string(item->term);
+        destroy_string(item->token);
         _FREE(item);
     }
 }
