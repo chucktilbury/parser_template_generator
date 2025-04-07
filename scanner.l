@@ -18,8 +18,6 @@
 "*" { return STAR; }
 "?" { return QUESTION; }
 "|" { return PIPE; }
-":" { return COLON; }
-";" { return SEMI; }
 "(" { return OPAREN; }
 ")" { return CPAREN; }
 

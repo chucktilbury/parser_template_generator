@@ -1,3 +1,4 @@
+HIDE = @
 TARGET = pgen
 DEPS = $(TARGET).deps
 OBJS = 	parser.o \
@@ -26,10 +27,12 @@ CARGS = -Wall -g
 CC = clang
 
 %.o:%.c
-	$(CC) $(CARGS) -c -o $@ $<
+	@ echo "compile: $@"
+	$(HIDE) $(CC) $(CARGS) -c -o $@ $<
 
 $(TARGET): $(OBJS) $(DEPS)
-	$(CC) -g -o $(TARGET) $(OBJS)
+	@ echo "link: $(TARGET)"
+	$(HIDE) $(CC) -g -o $(TARGET) $(OBJS)
 
 template.c template.h: template.l
 	flex template.l
@@ -41,12 +44,15 @@ parser.c parser.h: parser.y
 	bison parser.y
 
 $(DEPS): $(OBJS:.o=.c)
-	$(CC) -MM $^ > $(DEPS)
+	@ echo "depends"
+	$(HIDE) $(CC) -MM $^ > $(DEPS)
 
 include $(DEPS)
 
+.PHONY: clean
 clean:
-	@ $(RM) $(TARGET) $(OBJS) $(DEPS) \
+	@ echo "clean"
+	$(HIDE) $(RM) $(TARGET) $(OBJS) $(DEPS) \
 	scanner.c scanner.h \
 	parser.c parser.h parser.output \
 	template.c template.h

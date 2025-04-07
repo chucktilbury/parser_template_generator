@@ -11,6 +11,7 @@
 
 #include "ast.h"
 #include "errors.h"
+#include "parser.h"
 
 #define USE_TRACE
 #include "trace.h"
@@ -23,11 +24,9 @@
 
 static void grammar(grammar_t* node);
 static void grammar_list(grammar_list_t* node);
-static void non_terminal_rule(non_terminal_rule_t* node);
+static void grammar_rule(grammar_rule_t* node);
 static void rule_element_list(rule_element_list_t* node);
 static void rule_element(rule_element_t* node);
-static void terminal_rule_element(terminal_rule_element_t* node);
-static void non_terminal_rule_element(non_terminal_rule_element_t* node);
 static void or_function(or_function_t* node);
 static void zero_or_more_function(zero_or_more_function_t* node);
 static void zero_or_one_function(zero_or_one_function_t* node);
@@ -59,26 +58,26 @@ static void grammar_list(grammar_list_t* node) {
 
     ENTER;
     int mark = 0;
-    non_terminal_rule_t* rule;
+    grammar_rule_t* rule;
 
-    while(NULL != (rule = (non_terminal_rule_t*)iterate_ast_node_list(node->list, &mark)))
-        non_terminal_rule(rule);
+    while(NULL != (rule = (grammar_rule_t*)iterate_ast_node_list(node->list, &mark)))
+        grammar_rule(rule);
 
     RETURN();
 }
 
 
 /*
-non_terminal_rule
- : NON_TERMINAL COLON rule_element_list
+grammar_rule
+ : NON_TERMINAL grouping_function
  ;
  */
-static void non_terminal_rule(non_terminal_rule_t* node) {
+static void grammar_rule(grammar_rule_t* node) {
 
     ENTER;
 
     TRACE_TOKEN(node->NON_TERMINAL);
-    rule_element_list(node->rule_element_list);
+    grouping_function(node->grouping_function);
 
     RETURN();
 }
@@ -105,84 +104,67 @@ static void rule_element_list(rule_element_list_t* node) {
 
 /*
 rule_element
- : terminal_rule_element
- | non_terminal_rule_element
- ;
- */
-static void rule_element(rule_element_t* node) {
-
-    ENTER;
-
-    switch(node->nterm->type) {
-        case AST_TERMINAL_RULE_ELEMENT:
-            terminal_rule_element((terminal_rule_element_t*)node->nterm);
-            break;
-        case AST_NON_TERMINAL_RULE_ELEMENT:
-            non_terminal_rule_element((non_terminal_rule_element_t*)node->nterm);
-            break;
-        default:
-            FATAL("unknown node type: %d", node->nterm->type);
-    }
-
-    RETURN();
-}
-
-/*
-terminal_rule_element
  : NON_TERMINAL
  | TERMINAL_NAME
  | TERMINAL_OPER
  | TERMINAL_SYMBOL
- ;
- */
-static void terminal_rule_element(terminal_rule_element_t* node) {
-
-    ENTER;
-
-    TRACE_TOKEN(node->token);
-
-    RETURN();
-}
-
-/*
-non_terminal_rule_element
- : or_function
+ | or_function
  | zero_or_more_function
  | zero_or_one_function
  | one_or_more_function
  | grouping_function
  ;
  */
-static void non_terminal_rule_element(non_terminal_rule_element_t* node) {
+static void rule_element(rule_element_t* node) {
 
     ENTER;
 
-    switch(node->nterm->type) {
-        case AST_OR_FUNCTION:
-            or_function((or_function_t*)node->nterm);
-            break;
-        case AST_ZERO_OR_MORE_FUNCTION:
-            zero_or_more_function((zero_or_more_function_t*)node->nterm);
-            break;
-        case AST_ZERO_OR_ONE_FUNCTION:
-            zero_or_one_function((zero_or_one_function_t*)node->nterm);
-            break;
-        case AST_ONE_OR_MORE_FUNCTION:
-            one_or_more_function((one_or_more_function_t*)node->nterm);
-            break;
-        case AST_GROUPING_FUNCTION:
-            grouping_function((grouping_function_t*)node->nterm);
-            break;
-        default:
-            FATAL("unknown node type: %d", node->nterm->type);
+    if(node->token != NULL) {
+        TRACE_TOKEN(node->token);
+        switch(node->token->type) {
+            case TERMINAL_NAME:
+                break;
+            case TERMINAL_OPER:
+                break;
+            case TERMINAL_SYMBOL:
+                break;
+            case NON_TERMINAL:
+                break;
+            default:
+                FATAL("unknown terminal type: %s", tok_to_str(node->token->type));
+        }
     }
+    else if(node->nterm != NULL) {
+        switch(node->nterm->type) {
+            case AST_OR_FUNCTION:
+                or_function((or_function_t*)node->nterm);
+                break;
+            case AST_ZERO_OR_MORE_FUNCTION:
+                zero_or_more_function((zero_or_more_function_t*)node->nterm);
+                break;
+            case AST_ZERO_OR_ONE_FUNCTION:
+                zero_or_one_function((zero_or_one_function_t*)node->nterm);
+                break;
+            case AST_ONE_OR_MORE_FUNCTION:
+                one_or_more_function((one_or_more_function_t*)node->nterm);
+                break;
+            case AST_GROUPING_FUNCTION:
+                grouping_function((grouping_function_t*)node->nterm);
+                break;
+            default:
+                FATAL("unknown non-terminal type: %s", nterm_to_str(node->nterm->type));
+
+        }
+    }
+    else
+        FATAL("invalid rule element");
 
     RETURN();
 }
 
 /*
 or_function
- : rule_element PIPE
+ : rule_element PIPE rule_element
  ;
  */
 static void or_function(or_function_t* node) {
@@ -258,11 +240,9 @@ static size_t get_node_size(ast_type_t type) {
 
     return (type == AST_GRAMMAR)? sizeof(grammar_t) :
         (type == AST_GRAMMAR_LIST)? sizeof(grammar_list_t) :
-        (type == AST_NON_TERMINAL_RULE)? sizeof(non_terminal_rule_t) :
+        (type == AST_GRAMMAR_RULE)? sizeof(grammar_rule_t) :
         (type == AST_RULE_ELEMENT_LIST)? sizeof(rule_element_list_t) :
         (type == AST_RULE_ELEMENT)? sizeof(rule_element_t) :
-        (type == AST_TERMINAL_RULE_ELEMENT)? sizeof(terminal_rule_element_t) :
-        (type == AST_NON_TERMINAL_RULE_ELEMENT)? sizeof(non_terminal_rule_element_t) :
         (type == AST_OR_FUNCTION)? sizeof(or_function_t) :
         (type == AST_ZERO_OR_MORE_FUNCTION)? sizeof(zero_or_more_function_t) :
         (type == AST_ZERO_OR_ONE_FUNCTION)? sizeof(zero_or_one_function_t) :
@@ -303,4 +283,16 @@ int len_ast_node_list(ast_node_list_t* lst) {
     return len_ptr_list((ptr_list_t*)lst);
 }
 
+const char* nterm_to_str(ast_type_t type) {
 
+    return (type == AST_GRAMMAR)? "AST_GRAMMAR":
+        (type == AST_GRAMMAR_LIST)? "AST_GRAMMAR_LIST":
+        (type == AST_GRAMMAR_RULE)? "AST_GRAMMAR_RULE":
+        (type == AST_RULE_ELEMENT_LIST)? "AST_RULE_ELEMENT_LIST":
+        (type == AST_RULE_ELEMENT)? "AST_RULE_ELEMENT":
+        (type == AST_OR_FUNCTION)? "AST_OR_FUNCTION":
+        (type == AST_ZERO_OR_MORE_FUNCTION)? "AST_ZERO_OR_MORE_FUNCTION":
+        (type == AST_ZERO_OR_ONE_FUNCTION)? "AST_ZERO_OR_ONE_FUNCTION":
+        (type == AST_ONE_OR_MORE_FUNCTION)? "AST_ONE_OR_MORE_FUNCTION":
+        (type == AST_GROUPING_FUNCTION)? "AST_GROUPING_FUNCTION": "UNKNOWN";
+}

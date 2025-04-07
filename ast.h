@@ -18,11 +18,9 @@ typedef enum
 {
     AST_GRAMMAR,
     AST_GRAMMAR_LIST,
-    AST_NON_TERMINAL_RULE,
+    AST_GRAMMAR_RULE,
     AST_RULE_ELEMENT_LIST,
     AST_RULE_ELEMENT,
-    AST_TERMINAL_RULE_ELEMENT,
-    AST_NON_TERMINAL_RULE_ELEMENT,
     AST_OR_FUNCTION,
     AST_ZERO_OR_MORE_FUNCTION,
     AST_ZERO_OR_ONE_FUNCTION,
@@ -45,32 +43,32 @@ grammar
 typedef struct _grammar_t_
 {
     ast_node_t node;
-    struct _grammar_list_t_ *grammar_list;
+    struct _grammar_list_t_* grammar_list;
 } grammar_t;
 
 /*
 grammar_list
-    : non_terminal_rule  SEMI
-    | grammar non_terminal_rule SEMI
+    : grammar_rule
+    | grammar grammar_rule
     ;
  */
 typedef struct _grammar_list_t_
 {
     ast_node_t node;
-    ast_node_list_t *list;
+    ast_node_list_t* list;
 } grammar_list_t;
 
 /*
- non_terminal_rule
-    : NON_TERMINAL COLON rule_element_list
+ grammar_rule
+    : NON_TERMINAL grouping_function
     ;
  */
-typedef struct _non_terminal_rule_t_
+typedef struct _grammar_rule_t_
 {
     ast_node_t node;
     token_t *NON_TERMINAL;
-    struct _rule_element_list_t_ *rule_element_list;
-} non_terminal_rule_t;
+    struct _grouping_function_t_* grouping_function;
+} grammar_rule_t;
 
 /*
 rule_element_list
@@ -85,45 +83,24 @@ typedef struct _rule_element_list_t_
 } rule_element_list_t;
 
 /*
-rule_element
-    : terminal_rule_element
-    | non_terminal_rule_element
-    ;
- */
-typedef struct _rule_element_t_
-{
-    ast_node_t node;
-    ast_node_t *nterm;
-} rule_element_t;
-
-/*
-terminal_rule_element
+ rule_element
     : NON_TERMINAL
     | TERMINAL_NAME
     | TERMINAL_OPER
     | TERMINAL_SYMBOL
-    ;
- */
-typedef struct _terminal_rule_element_t_
-{
-    ast_node_t node;
-    token_t *token;
-} terminal_rule_element_t;
-
-/*
-non_terminal_rule_element
-    : or_function
+    | or_function
     | zero_or_more_function
     | zero_or_one_function
     | one_or_more_function
     | grouping_function
     ;
  */
-typedef struct _non_terminal_rule_element_t_
+typedef struct _rule_element_t_
 {
     ast_node_t node;
+    token_t* token;
     ast_node_t *nterm;
-} non_terminal_rule_element_t;
+} rule_element_t;
 
 /*
 or_function
@@ -188,5 +165,6 @@ ast_node_list_t *create_ast_node_list(void);
 void append_ast_node_list(ast_node_list_t *lst, ast_node_t *ptr);
 ast_node_t *iterate_ast_node_list(ast_node_list_t *lst, int *post);
 int len_ast_node_list(ast_node_list_t *lst);
+const char* nterm_to_str(ast_type_t type);
 
 #endif /* _AST_H_ */

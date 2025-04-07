@@ -33,11 +33,9 @@ term_list_t* term_list;
 
 static void grammar(grammar_t* node);
 static void grammar_list(grammar_list_t* node);
-static void non_terminal_rule(non_terminal_rule_t* node);
+static void grammar_rule(grammar_rule_t* node);
 static void rule_element_list(rule_element_list_t* node);
 static void rule_element(rule_element_t* node);
-static void terminal_rule_element(terminal_rule_element_t* node);
-static void non_terminal_rule_element(non_terminal_rule_element_t* node);
 static void or_function(or_function_t* node);
 static void zero_or_more_function(zero_or_more_function_t* node);
 static void zero_or_one_function(zero_or_one_function_t* node);
@@ -69,10 +67,10 @@ static void grammar_list(grammar_list_t* node) {
 
     ENTER;
     int mark = 0;
-    non_terminal_rule_t* rule;
+    grammar_rule_t* rule;
 
-    while(NULL != (rule = (non_terminal_rule_t*)iterate_ast_node_list(node->list, &mark)))
-        non_terminal_rule(rule);
+    while(NULL != (rule = (grammar_rule_t*)iterate_ast_node_list(node->list, &mark)))
+        grammar_rule(rule);
 
     RETURN();
 }
@@ -80,17 +78,17 @@ static void grammar_list(grammar_list_t* node) {
 
 /*
 non_terminal_rule
- : NON_TERMINAL COLON rule_element_list
+ : NON_TERMINAL grouping_function
  ;
  */
-static void non_terminal_rule(non_terminal_rule_t* node) {
+static void grammar_rule(grammar_rule_t* node) {
 
     ENTER;
 
     TRACE_TOKEN(node->NON_TERMINAL);
 
     append_nterm_list(nterm_list, create_nterm_item(node->NON_TERMINAL->str));
-    rule_element_list(node->rule_element_list);
+    grouping_function(node->grouping_function);
 
     RETURN();
 }
@@ -117,123 +115,96 @@ static void rule_element_list(rule_element_list_t* node) {
 
 /*
 rule_element
- : terminal_rule_element
- | non_terminal_rule_element
- ;
- */
-static void rule_element(rule_element_t* node) {
-
-    ENTER;
-
-    switch(node->nterm->type) {
-        case AST_TERMINAL_RULE_ELEMENT:
-            terminal_rule_element((terminal_rule_element_t*)node->nterm);
-            break;
-        case AST_NON_TERMINAL_RULE_ELEMENT:
-            non_terminal_rule_element((non_terminal_rule_element_t*)node->nterm);
-            break;
-        default:
-            FATAL("unknown node type: %d", node->nterm->type);
-    }
-
-    RETURN();
-}
-
-/*
-terminal_rule_element
  : NON_TERMINAL
  | TERMINAL_NAME
  | TERMINAL_OPER
  | TERMINAL_SYMBOL
- ;
- */
-static void terminal_rule_element(terminal_rule_element_t* node) {
-
-    ENTER;
-
-    TRACE_TOKEN(node->token);
-
-    switch(node->token->type) {
-        case TERMINAL_NAME: {
-                string_t term = create_string(node->token->str);
-                strip_quotes(term);
-
-                string_t tok = copy_string(term);
-                upcase(tok);
-                tok = create_string_fmt("TOK_%s", tok);
-
-                append_term_list(term_list, create_term_item(term, tok));
-
-                destroy_string(term);
-                destroy_string(tok);
-            }
-            break;
-        case TERMINAL_OPER: {
-                string_t term = create_string(node->token->str);
-                strip_quotes(term);
-
-                string_t tok = copy_string(term);
-                tok = convert(tok);
-                tok = create_string_fmt("TOK_%s", tok);
-
-                append_term_list(term_list, create_term_item(term, tok));
-
-                destroy_string(term);
-                destroy_string(tok);
-            }
-            break;
-        case TERMINAL_SYMBOL: {
-                string_t term = copy_string(node->token->str);
-                string_t tok = create_string_fmt("TOK_%s", node->token->str);
-
-                append_term_list(term_list, create_term_item(term, tok));
-
-                destroy_string(term);
-                destroy_string(tok);
-            }
-            break;
-        case NON_TERMINAL:
-            /* do nothing */
-            break;
-        default:
-            FATAL("invalid token type: %s", tok_to_str(node->token->type));
-    }
-
-    RETURN();
-}
-
-/*
-non_terminal_rule_element
- : or_function
+ | non_terminal_rule_element
+ | or_function
  | zero_or_more_function
  | zero_or_one_function
  | one_or_more_function
  | grouping_function
  ;
  */
-static void non_terminal_rule_element(non_terminal_rule_element_t* node) {
+static void rule_element(rule_element_t* node) {
 
     ENTER;
 
-    switch(node->nterm->type) {
-        case AST_OR_FUNCTION:
-            or_function((or_function_t*)node->nterm);
-            break;
-        case AST_ZERO_OR_MORE_FUNCTION:
-            zero_or_more_function((zero_or_more_function_t*)node->nterm);
-            break;
-        case AST_ZERO_OR_ONE_FUNCTION:
-            zero_or_one_function((zero_or_one_function_t*)node->nterm);
-            break;
-        case AST_ONE_OR_MORE_FUNCTION:
-            one_or_more_function((one_or_more_function_t*)node->nterm);
-            break;
-        case AST_GROUPING_FUNCTION:
-            grouping_function((grouping_function_t*)node->nterm);
-            break;
-        default:
-            FATAL("unknown node type: %d", node->nterm->type);
+    if(node->token != NULL) {
+
+        TRACE_TOKEN(node->token);
+
+        switch(node->token->type) {
+            case TERMINAL_NAME: {
+                    string_t term = create_string(node->token->str);
+                    strip_quotes(term);
+
+                    string_t tok = copy_string(term);
+                    upcase(tok);
+                    tok = create_string_fmt("TOK_%s", tok);
+
+                    append_term_list(term_list, create_term_item(term, tok));
+
+                    destroy_string(term);
+                    destroy_string(tok);
+                }
+                break;
+            case TERMINAL_OPER: {
+                    string_t term = create_string(node->token->str);
+                    strip_quotes(term);
+
+                    string_t tok = copy_string(term);
+                    tok = convert(tok);
+                    tok = create_string_fmt("TOK_%s", tok);
+
+                    append_term_list(term_list, create_term_item(term, tok));
+
+                    destroy_string(term);
+                    destroy_string(tok);
+                }
+                break;
+            case TERMINAL_SYMBOL: {
+                    string_t term = copy_string(node->token->str);
+                    string_t tok = create_string_fmt("TOK_%s", node->token->str);
+
+                    append_term_list(term_list, create_term_item(term, tok));
+
+                    destroy_string(term);
+                    destroy_string(tok);
+                }
+                break;
+            case NON_TERMINAL:
+                /* do nothing */
+                break;
+            default:
+                FATAL("invalid token type: %s", tok_to_str(node->token->type));
+        }
     }
+    else if(node->nterm != NULL) {
+
+        switch(node->nterm->type) {
+            case AST_OR_FUNCTION:
+                or_function((or_function_t*)node->nterm);
+                break;
+            case AST_ZERO_OR_MORE_FUNCTION:
+                zero_or_more_function((zero_or_more_function_t*)node->nterm);
+                break;
+            case AST_ZERO_OR_ONE_FUNCTION:
+                zero_or_one_function((zero_or_one_function_t*)node->nterm);
+                break;
+            case AST_ONE_OR_MORE_FUNCTION:
+                one_or_more_function((one_or_more_function_t*)node->nterm);
+                break;
+            case AST_GROUPING_FUNCTION:
+                grouping_function((grouping_function_t*)node->nterm);
+                break;
+            default:
+                FATAL("unknown node type: %d", node->nterm->type);
+        }
+    }
+    else
+        FATAL("invalid rule element");
 
     RETURN();
 }

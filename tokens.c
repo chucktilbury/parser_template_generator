@@ -28,8 +28,6 @@ const char* tok_to_str(int type) {
         (type == STAR)? "STAR" :
         (type == QUESTION)? "QUESTION" :
         (type == PIPE)? "PIPE" :
-        (type == COLON)? "COLON" :
-        (type == SEMI)? "SEMI" :
         (type == OPAREN)? "OPAREN" :
         (type == CPAREN)? "CPAREN" :
         (type == NON_TERMINAL)? "NON_TERMINAL" :
