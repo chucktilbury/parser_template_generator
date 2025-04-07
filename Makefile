@@ -22,8 +22,9 @@ HEADERS = trace.h \
 		errors.h \
 		common.h
 
-#CARGS = -Wall -DUSE_TRACE -g
-CARGS = -Wall -g
+#DEBUG = -DUSE_TRACE -g
+DEBUG = -g
+CARGS = -Wall -Wextra $(DEBUG)
 CC = clang
 
 %.o:%.c

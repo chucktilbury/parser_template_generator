@@ -33,7 +33,7 @@ void append_ptr_list(ptr_list_t* lst, void* ptr) {
 
 void* index_ptr_list(ptr_list_t* lst, int index) {
 
-    if(index >= 0 && index < lst->len)
+    if(index >= 0 && (size_t)index < lst->len)
         return lst->buffer[index];
     else
         return NULL;
@@ -67,7 +67,7 @@ void* iterate_ptr_list(ptr_list_t* lst, int* post) {
 
     void* ptr = NULL;
 
-    if((*post >= 0) && (*post < lst->len)) {
+    if((*post >= 0) && ((size_t)*post < lst->len)) {
         ptr = lst->buffer[*post];
         *post = *post + 1;
     }
