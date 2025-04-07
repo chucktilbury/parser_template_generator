@@ -4,7 +4,7 @@
 #include <stddef.h>
 
 typedef struct {
-    char *buffer;
+    char* buffer;
     int len;
     int cap;
 } string_t;

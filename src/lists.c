@@ -152,7 +152,7 @@ static void rule_element(rule_element_t* node) {
                 strip_quotes(term);
 
                 string_t* tok = copy_string(term);
-                tok          = convert(tok);
+                tok           = convert(tok);
 
                 append_term_list(term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
 

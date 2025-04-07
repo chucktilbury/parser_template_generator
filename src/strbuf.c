@@ -19,9 +19,9 @@
 string_t* create_string(const char* str) {
 
     string_t* ptr = _ALLOC_TYPE(string_t);
-    ptr->cap = 1 << 3;
-    ptr->len = 0;
-    ptr->buffer = _ALLOC_ARRAY(char, ptr->cap);
+    ptr->cap      = 1 << 3;
+    ptr->len      = 0;
+    ptr->buffer   = _ALLOC_ARRAY(char, ptr->cap);
 
     if(str != NULL)
         append_string(ptr, str);

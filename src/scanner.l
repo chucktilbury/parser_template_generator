@@ -9,8 +9,8 @@
 %option noinput
 %option nounput
 %option noyywrap
-%option header-file="scanner.h"
-%option outfile="scanner.c"
+    //%option header-file="scanner.h"
+    //%option outfile="scanner.c"
 
 %%
 

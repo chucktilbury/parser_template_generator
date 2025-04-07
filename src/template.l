@@ -13,8 +13,8 @@ char template_buffer[1024];
 %option noinput
 %option nounput
 %option noyywrap
-%option header-file="template.h"
-%option outfile="template.c"
+    //%option header-file="template.h"
+    //%option outfile="template.c"
 %option prefix="template_"
 
 %x NAME

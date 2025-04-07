@@ -58,8 +58,8 @@ extern grammar_t* root_node;
 %define parse.error detailed
 %locations
 %verbose
-%output "parser.c"
-%defines
+    //%output "parser.c"
+    //%defines
 
 %left PIPE
 %left QUESTION STAR PLUS

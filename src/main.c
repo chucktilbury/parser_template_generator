@@ -18,7 +18,7 @@ extern term_list_t* term_list;
 int main(int argc, char** argv) {
 
     if(argc < 2) {
-        fprintf(stderr, "%s: filename\n", argv[0]);
+        fprintf(stderr, "Use: %s filename\n", argv[0]);
         exit(1);
     }
 
