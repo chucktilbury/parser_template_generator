@@ -27,14 +27,14 @@ extern int trace_depth;
 
 #define ENTER \
     do { \
-        fprintf(stdout, "%*sENTER: %s: %s: %d\n", trace_depth, "", __FILE__, __func__, __LINE__); \
+        fprintf(stdout, "%*sENTER: %s: %s()\n", trace_depth, "", __FILE__, __func__); \
         trace_depth+=2; \
     } while(0)
 
 #define RETURN(...) \
     do { \
         trace_depth-=2; \
-        fprintf(stdout, "%*sRETURN(%s) %s\n", trace_depth, "", #__VA_ARGS__, __func__); \
+        fprintf(stdout, "%*sRETURN(%s) %s()\n", trace_depth, "", #__VA_ARGS__, __func__); \
         return __VA_ARGS__ ; \
     } while(0)
 

@@ -5,9 +5,9 @@
 ptr_list_t* create_ptr_list(void) {
 
     ptr_list_t* ptr = _ALLOC_TYPE(ptr_list_t);
-    ptr->len = 0;
-    ptr->cap = 1 << 3;
-    ptr->buffer = _ALLOC_ARRAY(void*, ptr->cap);
+    ptr->len        = 0;
+    ptr->cap        = 1 << 3;
+    ptr->buffer     = _ALLOC_ARRAY(void*, ptr->cap);
 
     return ptr;
 }
@@ -22,7 +22,7 @@ void destroy_ptr_list(ptr_list_t* lst) {
 
 void append_ptr_list(ptr_list_t* lst, void* ptr) {
 
-    if(lst->len+1 > lst->cap) {
+    if(lst->len + 1 > lst->cap) {
         lst->cap <<= 1;
         lst->buffer = _REALLOC_ARRAY(lst->buffer, void*, lst->cap);
     }
@@ -57,7 +57,7 @@ void* pop_ptr_list(ptr_list_t* lst) {
 void* peek_ptr_list(ptr_list_t* lst) {
 
     if(lst->len > 0) {
-        return lst->buffer[lst->len-1];
+        return lst->buffer[lst->len - 1];
     }
     else
         return NULL;
@@ -68,7 +68,7 @@ void* iterate_ptr_list(ptr_list_t* lst, int* post) {
     void* ptr = NULL;
 
     if((*post >= 0) && ((size_t)*post < lst->len)) {
-        ptr = lst->buffer[*post];
+        ptr   = lst->buffer[*post];
         *post = *post + 1;
     }
 
@@ -79,4 +79,3 @@ int len_ptr_list(ptr_list_t* lst) {
 
     return (int)lst->len;
 }
-

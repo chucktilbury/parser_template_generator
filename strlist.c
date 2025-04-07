@@ -51,6 +51,3 @@ void add_str_list(str_list_t* lst, string_t str) {
 
     append_str_list(lst, str);
 }
-
-
-

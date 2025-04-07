@@ -29,7 +29,7 @@ string_t create_string_fmt(const char* fmt, ...) {
     size_t len = vsnprintf(NULL, 0, fmt, args);
     va_end(args);
 
-    char* str = _ALLOC(len+1);
+    char* str = _ALLOC(len + 1);
 
     va_start(args, fmt);
     vsprintf(str, fmt, args);
@@ -49,7 +49,7 @@ string_t append_string(string_t buf, const char* str) {
 
     size_t len1 = strlen(str);
     size_t len2 = strlen(buf);
-    char* ptr = _ALLOC(len1 + len2 + 1);
+    char* ptr   = _ALLOC(len1 + len2 + 1);
 
     strcpy(ptr, buf);
     strcat(ptr, str);
@@ -66,7 +66,7 @@ string_t append_string_fmt(string_t buf, const char* fmt, ...) {
     va_end(args);
 
     size_t len2 = strlen(buf);
-    char* str = _ALLOC(len1 + len2 + 1);
+    char* str   = _ALLOC(len1 + len2 + 1);
     strcpy(str, buf);
 
     va_start(args, fmt);
@@ -79,11 +79,11 @@ string_t append_string_fmt(string_t buf, const char* fmt, ...) {
 string_t append_string_char(string_t buf, int ch) {
 
     size_t len = strlen(buf);
-    char* str = _ALLOC(len + 2);
+    char* str  = _ALLOC(len + 2);
 
     strcpy(str, buf);
-    str[len] = (char)ch;
-    str[len+1] = '\0';
+    str[len]     = (char)ch;
+    str[len + 1] = '\0';
 
     return str;
 }
@@ -117,12 +117,13 @@ string_t strip_quotes(string_t buf) {
 string_t strip_space(string_t buf) {
 
     size_t len;
-    for(len=strlen(buf); (isspace(buf[len])||buf[len]==0)&&len>= 0; len--)
+    for(len = strlen(buf); (isspace(buf[len]) || buf[len] == 0) && len >= 0; len--)
         ((char*)buf)[len] = '\0';
 
-    for(len=0; buf[len]!='\0'&&isspace(buf[len]); len++) {}
+    for(len = 0; buf[len] != '\0' && isspace(buf[len]); len++) {
+    }
 
-    memmove(&((char*)buf)[0], &buf[len], strlen(&buf[len])+1);
+    memmove(&((char*)buf)[0], &buf[len], strlen(&buf[len]) + 1);
 
     return buf;
 }
@@ -141,39 +142,101 @@ string_t convert(const char* str) {
 
     for(int i = 0; str[i] != '\0'; i++) {
         switch(str[i]) {
-            case '~': buf = append_string(buf, "TILDE"); break;
-            case '`': buf = append_string(buf, "BQUOTE"); break;
-            case '!': buf = append_string(buf, "BANG"); break;
-            case '@': buf = append_string(buf, "AT"); break;
-            case '#': buf = append_string(buf, "POUND"); break;
-            case '$': buf = append_string(buf, "DOLLAR"); break;
-            case '%': buf = append_string(buf, "PERCENT"); break;
-            case '^': buf = append_string(buf, "CARET"); break;
-            case '&': buf = append_string(buf, "AMP"); break;
-            case '*': buf = append_string(buf, "STAR"); break;
-            case '(': buf = append_string(buf, "OPAREN"); break;
-            case ')': buf = append_string(buf, "CPAREN"); break;
-            case '-': buf = append_string(buf, "MINUS"); break;
-            case '=': buf = append_string(buf, "EQUAL"); break;
-            case '+': buf = append_string(buf, "PLUS"); break;
-            case '[': buf = append_string(buf, "OSBRACE"); break;
-            case '{': buf = append_string(buf, "OCBRACE"); break;
-            case ']': buf = append_string(buf, "CSBRACE"); break;
-            case '}': buf = append_string(buf, "CCBRACE"); break;
-            case '\\': buf = append_string(buf, "BSLASH"); break;
-            case '|': buf = append_string(buf, "BAR"); break;
-            case ';': buf = append_string(buf, "SCOLON"); break;
-            case ':': buf = append_string(buf, "COLON"); break;
-            case '\'': buf = append_string(buf, "SQUOTE"); break;
-            case '\"': buf = append_string(buf, "DQUOTE"); break;
-            case ',': buf = append_string(buf, "COMMA"); break;
-            case '<': buf = append_string(buf, "OPBRACE"); break;
-            case '.': buf = append_string(buf, "DOT"); break;
-            case '>': buf = append_string(buf, "CPBRACE"); break;
-            case '/': buf = append_string(buf, "SLASH"); break;
-            case '?': buf = append_string(buf, "QUESTION"); break;
+            case '~':
+                buf = append_string(buf, "TILDE");
+                break;
+            case '`':
+                buf = append_string(buf, "BQUOTE");
+                break;
+            case '!':
+                buf = append_string(buf, "BANG");
+                break;
+            case '@':
+                buf = append_string(buf, "AT");
+                break;
+            case '#':
+                buf = append_string(buf, "POUND");
+                break;
+            case '$':
+                buf = append_string(buf, "DOLLAR");
+                break;
+            case '%':
+                buf = append_string(buf, "PERCENT");
+                break;
+            case '^':
+                buf = append_string(buf, "CARET");
+                break;
+            case '&':
+                buf = append_string(buf, "AMP");
+                break;
+            case '*':
+                buf = append_string(buf, "STAR");
+                break;
+            case '(':
+                buf = append_string(buf, "OPAREN");
+                break;
+            case ')':
+                buf = append_string(buf, "CPAREN");
+                break;
+            case '-':
+                buf = append_string(buf, "MINUS");
+                break;
+            case '=':
+                buf = append_string(buf, "EQUAL");
+                break;
+            case '+':
+                buf = append_string(buf, "PLUS");
+                break;
+            case '[':
+                buf = append_string(buf, "OSBRACE");
+                break;
+            case '{':
+                buf = append_string(buf, "OCBRACE");
+                break;
+            case ']':
+                buf = append_string(buf, "CSBRACE");
+                break;
+            case '}':
+                buf = append_string(buf, "CCBRACE");
+                break;
+            case '\\':
+                buf = append_string(buf, "BSLASH");
+                break;
+            case '|':
+                buf = append_string(buf, "BAR");
+                break;
+            case ';':
+                buf = append_string(buf, "SCOLON");
+                break;
+            case ':':
+                buf = append_string(buf, "COLON");
+                break;
+            case '\'':
+                buf = append_string(buf, "SQUOTE");
+                break;
+            case '\"':
+                buf = append_string(buf, "DQUOTE");
+                break;
+            case ',':
+                buf = append_string(buf, "COMMA");
+                break;
+            case '<':
+                buf = append_string(buf, "OPBRACE");
+                break;
+            case '.':
+                buf = append_string(buf, "DOT");
+                break;
+            case '>':
+                buf = append_string(buf, "CPBRACE");
+                break;
+            case '/':
+                buf = append_string(buf, "SLASH");
+                break;
+            case '?':
+                buf = append_string(buf, "QUESTION");
+                break;
         }
-        if(str[i+1] != '\0')
+        if(str[i + 1] != '\0')
             buf = append_string_char(buf, '_');
     }
 

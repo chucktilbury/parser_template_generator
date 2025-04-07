@@ -153,7 +153,6 @@ static void rule_element(rule_element_t* node) {
                 break;
             default:
                 FATAL("unknown non-terminal type: %s", nterm_to_str(node->nterm->type));
-
         }
     }
     else
@@ -238,22 +237,23 @@ static void grouping_function(grouping_function_t* node) {
 
 static size_t get_node_size(ast_type_t type) {
 
-    return (type == AST_GRAMMAR)? sizeof(grammar_t) :
-        (type == AST_GRAMMAR_LIST)? sizeof(grammar_list_t) :
-        (type == AST_GRAMMAR_RULE)? sizeof(grammar_rule_t) :
-        (type == AST_RULE_ELEMENT_LIST)? sizeof(rule_element_list_t) :
-        (type == AST_RULE_ELEMENT)? sizeof(rule_element_t) :
-        (type == AST_OR_FUNCTION)? sizeof(or_function_t) :
-        (type == AST_ZERO_OR_MORE_FUNCTION)? sizeof(zero_or_more_function_t) :
-        (type == AST_ZERO_OR_ONE_FUNCTION)? sizeof(zero_or_one_function_t) :
-        (type == AST_ONE_OR_MORE_FUNCTION)? sizeof(one_or_more_function_t) :
-        (type == AST_GROUPING_FUNCTION)? sizeof(grouping_function_t) : (size_t)-1;
+    return (type == AST_GRAMMAR)                ? sizeof(grammar_t) :
+            (type == AST_GRAMMAR_LIST)          ? sizeof(grammar_list_t) :
+            (type == AST_GRAMMAR_RULE)          ? sizeof(grammar_rule_t) :
+            (type == AST_RULE_ELEMENT_LIST)     ? sizeof(rule_element_list_t) :
+            (type == AST_RULE_ELEMENT)          ? sizeof(rule_element_t) :
+            (type == AST_OR_FUNCTION)           ? sizeof(or_function_t) :
+            (type == AST_ZERO_OR_MORE_FUNCTION) ? sizeof(zero_or_more_function_t) :
+            (type == AST_ZERO_OR_ONE_FUNCTION)  ? sizeof(zero_or_one_function_t) :
+            (type == AST_ONE_OR_MORE_FUNCTION)  ? sizeof(one_or_more_function_t) :
+            (type == AST_GROUPING_FUNCTION)     ? sizeof(grouping_function_t) :
+                                                  (size_t)-1;
 }
 
 ast_node_t* create_ast_node(ast_type_t type) {
 
     ast_node_t* node = _ALLOC(get_node_size(type));
-    node->type = type;
+    node->type       = type;
 
     return node;
 }
@@ -285,14 +285,15 @@ int len_ast_node_list(ast_node_list_t* lst) {
 
 const char* nterm_to_str(ast_type_t type) {
 
-    return (type == AST_GRAMMAR)? "AST_GRAMMAR":
-        (type == AST_GRAMMAR_LIST)? "AST_GRAMMAR_LIST":
-        (type == AST_GRAMMAR_RULE)? "AST_GRAMMAR_RULE":
-        (type == AST_RULE_ELEMENT_LIST)? "AST_RULE_ELEMENT_LIST":
-        (type == AST_RULE_ELEMENT)? "AST_RULE_ELEMENT":
-        (type == AST_OR_FUNCTION)? "AST_OR_FUNCTION":
-        (type == AST_ZERO_OR_MORE_FUNCTION)? "AST_ZERO_OR_MORE_FUNCTION":
-        (type == AST_ZERO_OR_ONE_FUNCTION)? "AST_ZERO_OR_ONE_FUNCTION":
-        (type == AST_ONE_OR_MORE_FUNCTION)? "AST_ONE_OR_MORE_FUNCTION":
-        (type == AST_GROUPING_FUNCTION)? "AST_GROUPING_FUNCTION": "UNKNOWN";
+    return (type == AST_GRAMMAR)                ? "AST_GRAMMAR" :
+            (type == AST_GRAMMAR_LIST)          ? "AST_GRAMMAR_LIST" :
+            (type == AST_GRAMMAR_RULE)          ? "AST_GRAMMAR_RULE" :
+            (type == AST_RULE_ELEMENT_LIST)     ? "AST_RULE_ELEMENT_LIST" :
+            (type == AST_RULE_ELEMENT)          ? "AST_RULE_ELEMENT" :
+            (type == AST_OR_FUNCTION)           ? "AST_OR_FUNCTION" :
+            (type == AST_ZERO_OR_MORE_FUNCTION) ? "AST_ZERO_OR_MORE_FUNCTION" :
+            (type == AST_ZERO_OR_ONE_FUNCTION)  ? "AST_ZERO_OR_ONE_FUNCTION" :
+            (type == AST_ONE_OR_MORE_FUNCTION)  ? "AST_ONE_OR_MORE_FUNCTION" :
+            (type == AST_GROUPING_FUNCTION)     ? "AST_GROUPING_FUNCTION" :
+                                                  "UNKNOWN";
 }

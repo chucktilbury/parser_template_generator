@@ -50,10 +50,13 @@ $(DEPS): $(OBJS:.o=.c)
 
 include $(DEPS)
 
-.PHONY: clean
+.PHONY: clean format
 clean:
 	@ echo "clean"
 	$(HIDE) $(RM) $(TARGET) $(OBJS) $(DEPS) \
 	scanner.c scanner.h \
 	parser.c parser.h parser.output \
 	template.c template.h
+
+format:
+	clang-format -i --verbose $(OBJS:.o=.c)

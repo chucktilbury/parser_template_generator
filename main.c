@@ -32,14 +32,14 @@ int main(int argc, char** argv) {
 
     make_raw_lists(root_node);
 
-    int mark = 0;
+    int mark  = 0;
     int count = 1;
     printf("\n");
     term_item_t* term;
     while(NULL != (term = iterate_term_list(term_list, &mark)))
         printf("%3d. %-15s%s\n", count++, term->term, term->token);
 
-    mark = 0;
+    mark  = 0;
     count = 1;
     printf("\n");
     nterm_item_t* nterm;

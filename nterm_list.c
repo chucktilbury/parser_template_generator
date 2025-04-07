@@ -42,7 +42,7 @@ nterm_item_t* iterate_nterm_list(nterm_list_t* lst, int* mark) {
 nterm_item_t* create_nterm_item(const char* nterm) {
 
     nterm_item_t* ptr = _ALLOC_TYPE(nterm_item_t);
-    ptr->nterm = _COPY_STRING(nterm);
+    ptr->nterm        = _COPY_STRING(nterm);
 
     return ptr;
 }
@@ -54,4 +54,3 @@ void destroy_nterm_item(nterm_item_t* item) {
         _FREE(item);
     }
 }
-

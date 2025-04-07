@@ -50,8 +50,8 @@ term_item_t* iterate_term_list(term_list_t* lst, int* mark) {
 term_item_t* create_term_item(const char* term, const char* tok) {
 
     term_item_t* ptr = _ALLOC_TYPE(term_item_t);
-    ptr->term = _COPY_STRING(term);
-    ptr->token = _COPY_STRING(tok);
+    ptr->term        = _COPY_STRING(term);
+    ptr->token       = _COPY_STRING(tok);
 
     return ptr;
 }
@@ -64,4 +64,3 @@ void destroy_term_item(term_item_t* item) {
         _FREE(item);
     }
 }
-

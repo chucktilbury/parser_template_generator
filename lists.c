@@ -137,43 +137,40 @@ static void rule_element(rule_element_t* node) {
 
         switch(node->token->type) {
             case TERMINAL_NAME: {
-                    string_t term = create_string(node->token->str);
-                    strip_quotes(term);
+                string_t term = create_string(node->token->str);
+                strip_quotes(term);
 
-                    string_t tok = copy_string(term);
-                    upcase(tok);
-                    tok = create_string_fmt("TOK_%s", tok);
+                string_t tok = copy_string(term);
+                upcase(tok);
+                tok = create_string_fmt("TOK_%s", tok);
 
-                    append_term_list(term_list, create_term_item(term, tok));
+                append_term_list(term_list, create_term_item(term, tok));
 
-                    destroy_string(term);
-                    destroy_string(tok);
-                }
-                break;
+                destroy_string(term);
+                destroy_string(tok);
+            } break;
             case TERMINAL_OPER: {
-                    string_t term = create_string(node->token->str);
-                    strip_quotes(term);
+                string_t term = create_string(node->token->str);
+                strip_quotes(term);
 
-                    string_t tok = copy_string(term);
-                    tok = convert(tok);
-                    tok = create_string_fmt("TOK_%s", tok);
+                string_t tok = copy_string(term);
+                tok          = convert(tok);
+                tok          = create_string_fmt("TOK_%s", tok);
 
-                    append_term_list(term_list, create_term_item(term, tok));
+                append_term_list(term_list, create_term_item(term, tok));
 
-                    destroy_string(term);
-                    destroy_string(tok);
-                }
-                break;
+                destroy_string(term);
+                destroy_string(tok);
+            } break;
             case TERMINAL_SYMBOL: {
-                    string_t term = copy_string(node->token->str);
-                    string_t tok = create_string_fmt("TOK_%s", node->token->str);
+                string_t term = copy_string(node->token->str);
+                string_t tok  = create_string_fmt("TOK_%s", node->token->str);
 
-                    append_term_list(term_list, create_term_item(term, tok));
+                append_term_list(term_list, create_term_item(term, tok));
 
-                    destroy_string(term);
-                    destroy_string(tok);
-                }
-                break;
+                destroy_string(term);
+                destroy_string(tok);
+            } break;
             case NON_TERMINAL:
                 /* do nothing */
                 break;
@@ -218,7 +215,9 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
+    TRACE("LEFT");
     rule_element(node->left);
+    TRACE("RIGHT");
     rule_element(node->right);
 
     RETURN();
@@ -289,9 +288,7 @@ static void grouping_function(grouping_function_t* node) {
 void make_raw_lists(grammar_t* node) {
 
     nterm_list = create_nterm_list();
-    term_list = create_term_list();
+    term_list  = create_term_list();
 
     grammar((grammar_t*)node);
 }
-
-

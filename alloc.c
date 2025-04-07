@@ -61,7 +61,7 @@ char* _mem_copy_string(const char* str) {
     else
         len = 1;
 
-    char* ptr  = _MALLOC(len);
+    char* ptr = _MALLOC(len);
     if(ptr == NULL)
         FATAL("cannot allocate %lu bytes for string", len);
 
@@ -78,4 +78,3 @@ void _mem_free(void* ptr) {
     if(ptr != NULL)
         _FREE(ptr);
 }
-
