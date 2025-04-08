@@ -13,7 +13,7 @@
 
 #include <stdio.h>
 #include "ast.h"
-#include "strlist.h"
+#include "strg_list.h"
 
 extern str_list_t* nterm_list;
 

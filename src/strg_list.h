@@ -11,7 +11,7 @@
 #ifndef _STRLIST_H_
 #define _STRLIST_H_
 
-#include "strbuf.h"
+#include "strgs.h"
 #include "ptrlist.h"
 
 typedef ptr_list_t str_list_t;

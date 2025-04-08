@@ -10,7 +10,7 @@
  */
 #include <string.h>
 
-#include "strlist.h"
+#include "strg_list.h"
 
 str_list_t* create_str_list(void) {
 

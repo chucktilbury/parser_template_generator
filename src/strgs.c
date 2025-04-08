@@ -14,7 +14,7 @@
 #include <ctype.h>
 
 #include "alloc.h"
-#include "strbuf.h"
+#include "strgs.h"
 
 string_t* create_string(const char* str) {
 

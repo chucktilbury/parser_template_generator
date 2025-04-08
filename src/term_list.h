@@ -13,7 +13,7 @@
 #define _TERM_LIST_H_
 
 #include "ptrlist.h"
-#include "strbuf.h"
+#include "strgs.h"
 
 typedef ptr_list_t term_list_t;
 

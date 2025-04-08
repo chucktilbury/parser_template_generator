@@ -38,8 +38,8 @@ add_executable(${PROJECT_NAME}
     nterm_list.c
     ptrlist.c
     render.c
-    strbuf.c
-    strlist.c
+    strgs.c
+    strg_list.c
     term_list.c
     tokens.c
     trace.c

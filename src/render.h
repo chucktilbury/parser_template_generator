@@ -1,5 +1,5 @@
-#ifndef _TEMPLATE_H_
-#define _TEMPLATE_H_
+#ifndef _RENDER_H_
+#define _RENDER_H_
 
 #include <stdio.h>
 #include "hash.h"
@@ -23,4 +23,4 @@ template_t* create_render(FILE* inf, FILE* outf);
 void render(template_t* ptr);
 void add_render(template_t* ptr, template_item_t* item);
 
-#endif /* _TEMPLATE_H_ */
+#endif /* _RENDER_H_ */

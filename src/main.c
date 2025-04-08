@@ -7,7 +7,7 @@
 #include "scanner.h"
 #include "parser.h"
 #include "ast.h"
-#include "strlist.h"
+#include "strg_list.h"
 #include "term_list.h"
 #include "nterm_list.h"
 #include "lists.h"

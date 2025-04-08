@@ -11,7 +11,7 @@
 #ifndef _TOKENS_H_
 #define _TOKENS_H_
 
-#include "strbuf.h"
+#include "strgs.h"
 typedef struct {
     string_t* str;
     int type;
