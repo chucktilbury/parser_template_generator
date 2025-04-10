@@ -22,7 +22,7 @@
 nterm_list_t* nterm_list;
 term_list_t* term_list;
 
-#define USE_TRACE
+//#define USE_TRACE
 #include "trace.h"
 
 #ifdef USE_TRACE
@@ -87,7 +87,9 @@ static void grammar_rule(grammar_rule_t* node) {
 
     TRACE_TOKEN(node->NON_TERMINAL);
 
-    append_nterm_list(nterm_list, create_nterm_item(node->NON_TERMINAL->str));
+    string_t* type = create_string_fmt("AST_%s", node->NON_TERMINAL->str->buffer);
+    upcase(type);
+    append_nterm_list(nterm_list, create_nterm_item(node->NON_TERMINAL->str, type));
     grouping_function(node->grouping_function);
 
     RETURN();

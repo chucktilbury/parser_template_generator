@@ -39,10 +39,11 @@ nterm_item_t* iterate_nterm_list(nterm_list_t* lst, int* mark) {
     return (nterm_item_t*)iterate_ptr_list((ptr_list_t*)lst, mark);
 }
 
-nterm_item_t* create_nterm_item(string_t* nterm) {
+nterm_item_t* create_nterm_item(string_t* nterm, string_t* type) {
 
     nterm_item_t* ptr = _ALLOC_TYPE(nterm_item_t);
     ptr->nterm        = nterm;
+    ptr->type        = type;
 
     return ptr;
 }

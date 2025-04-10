@@ -16,6 +16,7 @@ char template_buffer[1024];
     //%option header-file="template.h"
     //%option outfile="template.c"
 %option prefix="template_"
+%option reentrant
 
 %x NAME
 
@@ -27,7 +28,7 @@ char template_buffer[1024];
 }
 
 <NAME>[[:alpha:][:digit:]]+ {
-    strncpy(template_buffer, template_text, sizeof(template_buffer)-1);
+    strncpy(template_buffer, yyget_text(), sizeof(template_buffer)-1);
     return 500;
 }
 
@@ -38,19 +39,19 @@ char template_buffer[1024];
 }
 
 <NAME>"{{" {
-    fprintf(stderr, "\nerror line %d: nested markers are not supported\n", template_lineno);
-    fprintf(template_out, "\n{{ error line %d: nested markers are not supported }}\n", template_lineno);
+    fprintf(stderr, "\nerror line %d: nested markers are not supported\n", yyget_lineno());
+    fprintf(yyget_out(), "\n{{ error line %d: nested markers are not supported }}\n", yyget_lineno());
     exit(1);
 }
 
 "}}" {
-    fprintf(stderr, "\nerror line %d: misplaced marker\n", template_lineno);
-    fprintf(template_out, "\n{{ error line %d: misplaced marker }}\n", template_lineno);
+    fprintf(stderr, "\nerror line %d: misplaced marker\n", yyget_lineno());
+    fprintf(yyget_out(), "\n{{ error line %d: misplaced marker }}\n", yyget_lineno());
     exit(1);
 }
 
 [\n\r]|[:print:]* {
-    fprintf(template_out, "%s",template_text);
+    fprintf(yyget_out(), "%s",yyget_text());
 }
 
 %%

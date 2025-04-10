@@ -15,6 +15,33 @@
 extern nterm_list_t* nterm_list;
 extern term_list_t* term_list;
 
+static void print_terminal_list(void) {
+
+    int mark  = 0;
+    int count = 1;
+
+    printf("\n-----------------------------\n");
+    printf("     Terminal List\n");
+    printf("-----------------------------\n");
+
+    term_item_t* term;
+    while(NULL != (term = iterate_term_list(term_list, &mark)))
+        printf("%3d. %-25s%s\n", count++, raw_string(term->term), raw_string(term->token));
+}
+
+static void print_nonterminal_list(void) {
+
+    int mark  = 0;
+    int count = 1;
+
+    printf("\n-----------------------------\n");
+    printf("     Non-terminal List\n");
+    printf("-----------------------------\n");
+    nterm_item_t* nterm;
+    while(NULL != (nterm = iterate_nterm_list(nterm_list, &mark)))
+        printf("%3d. %-25s%s\n", count++, raw_string(nterm->nterm), raw_string(nterm->type));
+}
+
 int main(int argc, char** argv) {
 
     if(argc < 2) {
@@ -32,19 +59,8 @@ int main(int argc, char** argv) {
 
     make_raw_lists(root_node);
 
-    int mark  = 0;
-    int count = 1;
-    printf("\n");
-    term_item_t* term;
-    while(NULL != (term = iterate_term_list(term_list, &mark)))
-        printf("%3d. %-15s%s\n", count++, raw_string(term->term), raw_string(term->token));
-
-    mark  = 0;
-    count = 1;
-    printf("\n");
-    nterm_item_t* nterm;
-    while(NULL != (nterm = iterate_nterm_list(nterm_list, &mark)))
-        printf("%3d. %s\n", count++, raw_string(nterm->nterm));
+    print_nonterminal_list();
+    print_terminal_list();
 
     return 0;
 }
