@@ -4,23 +4,16 @@
 #include <stdio.h>
 #include "hash.h"
 
-// defined in scanner.l
-extern char template_buffer[];
-
 typedef struct {
     const char* name;
     void* data;
     void (*render_func)(FILE*, void*);
-} template_item_t;
+} render_item_t;
 
-typedef struct {
-    FILE* infile;
-    FILE* outfile;
-    hash_table_t* table;
-} template_t;
+typedef hash_table_t render_table_t;
 
-template_t* create_render(FILE* inf, FILE* outf);
-void render(template_t* ptr);
-void add_render(template_t* ptr, template_item_t* item);
+render_table_t* create_render(void);
+void add_render(render_table_t* ptr, render_item_t* item);
+void render(const char* template, FILE* outf, render_table_t* ptr);
 
 #endif /* _RENDER_H_ */
