@@ -1,3 +1,13 @@
+/**
+ * @file render.c
+ *
+ * @brief Renderer library routines
+ *
+ * @author Chuck Tilbury (chucktilbury@gmail.com)
+ * @version 0.1
+ * @date 2025-04-10
+ * @copyright Copyright (c) 2025
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,9 +20,19 @@
 #include "errors.h"
 
 
-render_table_t* create_render(void) {
+render_table_t* create_render_table(void) {
 
     return (render_table_t*)create_hashtable();
+}
+
+render_item_t* create_render_item(const char* name, void* data, void (*render_func)(FILE*, void*)) {
+
+    render_item_t* ptr = _ALLOC_TYPE(render_item_t);
+    ptr->name = _COPY_STRING(name);
+    ptr->data = data;
+    ptr->render_func = render_func;
+
+    return ptr;
 }
 
 void add_render(render_table_t* ptr, render_item_t* item) {

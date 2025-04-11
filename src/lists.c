@@ -19,8 +19,7 @@
 #include "nterm_list.h"
 #include "term_list.h"
 // global product produced by this file
-nterm_list_t* nterm_list;
-term_list_t* term_list;
+master_list_t* master_list;
 
 //#define USE_TRACE
 #include "trace.h"
@@ -89,7 +88,7 @@ static void grammar_rule(grammar_rule_t* node) {
 
     string_t* type = create_string_fmt("AST_%s", node->NON_TERMINAL->str->buffer);
     upcase(type);
-    append_nterm_list(nterm_list, create_nterm_item(node->NON_TERMINAL->str, type));
+    append_nterm_list(master_list->nterm_list, create_nterm_item(node->NON_TERMINAL->str, type));
     grouping_function(node->grouping_function);
 
     RETURN();
@@ -146,7 +145,7 @@ static void rule_element(rule_element_t* node) {
                 upcase(tok);
                 // create_string copies the string
                 // the string term is simply assigned.
-                append_term_list(term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
+                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
                 destroy_string(tok);
             } break;
             case TERMINAL_OPER: {
@@ -156,7 +155,7 @@ static void rule_element(rule_element_t* node) {
                 string_t* tok = copy_string(term);
                 tok           = convert(tok);
 
-                append_term_list(term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
+                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
 
                 destroy_string(tok); // normally GC would handle this.
             } break;
@@ -164,7 +163,7 @@ static void rule_element(rule_element_t* node) {
                 string_t* term = copy_string(node->token->str);
                 string_t* tok  = create_string_fmt("TOK_%s", node->token->str->buffer);
 
-                append_term_list(term_list, create_term_item(term, tok));
+                append_term_list(master_list->term_list, create_term_item(term, tok));
             } break;
             case NON_TERMINAL:
                 /* do nothing */
@@ -282,8 +281,26 @@ static void grouping_function(grouping_function_t* node) {
  */
 void make_raw_lists(grammar_t* node) {
 
-    nterm_list = create_nterm_list();
-    term_list  = create_term_list();
+    master_list = create_master_list();
 
     grammar((grammar_t*)node);
+}
+
+master_list_t* create_master_list(void) {
+
+    master_list_t* ptr = _ALLOC_TYPE(master_list_t);
+
+    ptr->nterm_list = create_nterm_list();
+    ptr->term_list  = create_term_list();
+
+    return ptr;
+}
+
+void destroy_master_list(master_list_t* lst) {
+
+    if(lst != NULL) {
+        destroy_nterm_list(lst->nterm_list);
+        destroy_term_list(lst->term_list);
+        _FREE(lst);
+    }
 }

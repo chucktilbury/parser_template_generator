@@ -26,6 +26,7 @@ term_list_t* create_term_list(void);
 void destroy_term_list(term_list_t* lst);
 void append_term_list(term_list_t* lst, term_item_t* item);
 term_item_t* iterate_term_list(term_list_t* lst, int* mark);
+term_item_t* index_term_list(term_list_t* lst, int idx);
 
 term_item_t* create_term_item(string_t* term, string_t* tok);
 void destroy_term_item(term_item_t* item);

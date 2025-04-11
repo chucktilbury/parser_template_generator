@@ -46,6 +46,11 @@ term_item_t* iterate_term_list(term_list_t* lst, int* mark) {
     return (term_item_t*)iterate_ptr_list((ptr_list_t*)lst, mark);
 }
 
+term_item_t* index_term_list(term_list_t* lst, int idx) {
+
+    return (term_item_t*)index_ptr_list((ptr_list_t*)lst, idx);
+}
+
 term_item_t* create_term_item(string_t* term, string_t* tok) {
 
     term_item_t* ptr = _ALLOC_TYPE(term_item_t);
