@@ -8,6 +8,7 @@
  * @date 2025-04-10
  * @copyright Copyright (c) 2025
  */
+#include <sys/stat.h>
 #include <time.h>
 #include <string.h>
 
@@ -161,13 +162,13 @@ static void _type_name(FILE* fp, void* ptr) {
  * ast_nterm_name
  *
  */
-
-void render_init(void) {
+static void make_render_table(void) {
 
     render_table = create_render_table();
 
     add_render(render_table, create_render_item("ctime", NULL, _ctime));
     add_render(render_table, create_render_item("dev_name", NULL, _dev_name));
+
     add_render(render_table, create_render_item("ast_type_list", master_list, _type_list));
     add_render(render_table, create_render_item("ast_data_structures", master_list, _data_structures));
     add_render(render_table, create_render_item("ast_function_protos", master_list, _function_protos));
@@ -177,4 +178,41 @@ void render_init(void) {
     add_render(render_table, create_render_item("ast_type_to_str", master_list, _type_to_str));
     add_render(render_table, create_render_item("ast_first_node", master_list, _first_node));
 }
+
+
+// NOTE that these values will be supplied on the command line and have
+// reasonable defaults but for now, they are hard-coded.
+void make_render_dirs(void) {
+
+    remove("./out");
+    mkdir("./out", 0777);
+    mkdir("./out/ast", 0777);
+    mkdir("./out/parser", 0777);
+    mkdir("./out/scanner", 0777);
+}
+
+const char* make_ast_fname(char* buf, size_t size, const char* base) {
+
+    snprintf(buf, size, "./out/ast/%s", base);
+    return _COPY_STRING(buf);
+}
+
+const char* make_parser_fname(char* buf, size_t size, const char* base) {
+
+    snprintf(buf, size, "./out/parser/%s", base);
+    return _COPY_STRING(buf);
+}
+
+const char* make_scanner_fname(char* buf, size_t size, const char* base) {
+
+    snprintf(buf, size, "./out/scanner/%s", base);
+    return _COPY_STRING(buf);
+}
+
+void render_init(void) {
+
+    make_render_dirs();
+    make_render_table();
+}
+
 

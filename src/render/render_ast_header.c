@@ -13,7 +13,8 @@
 
 void render_ast_header(void) {
 
-    FILE* fp = fopen("ast.h", "w");
+    char buffer[1024];
+    FILE* fp = fopen(make_ast_fname(buffer, sizeof(buffer), "ast.h"), "w");
 
     render(ast_h_template, fp, render_table);
 }

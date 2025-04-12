@@ -12,7 +12,8 @@
 
 void render_ast_source(void) {
 
-    FILE* fp = fopen("ast.c", "w");
+    char buffer[1024];
+    FILE* fp = fopen(make_ast_fname(buffer, sizeof(buffer), "ast.c"), "w");
 
     render(ast_c_template, fp, render_table);
 }
