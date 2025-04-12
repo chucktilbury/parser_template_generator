@@ -15,5 +15,5 @@ void render_ast_header(void) {
 
     FILE* fp = fopen("ast.h", "w");
 
-    render("../templates/ast.h.txt", fp, render_table);
+    render(ast_h_template, fp, render_table);
 }

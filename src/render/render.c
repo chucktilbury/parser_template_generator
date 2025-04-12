@@ -16,6 +16,17 @@
 
 #include "render.h"
 
+static int get_char(const char* buffer, int* mark) {
+
+    int ch = EOF;
+
+    if(buffer[*mark] != '\0') {
+        ch = buffer[*mark];
+        *mark = *mark + 1;
+    }
+
+    return ch;
+}
 
 render_table_t* create_render_table(void) {
 
@@ -39,9 +50,7 @@ void add_render(render_table_t* ptr, render_item_t* item) {
 
 void render(const char* template, FILE* outf, render_table_t* ptr) {
 
-    FILE* inf = fopen(template, "r");
-    ASSERT(inf != NULL, "cannot open template file: \"%s\": %s\n", template, strerror(errno));
-
+    int mark = 0;
     int line_no = 1;
 
     char name[32];
@@ -50,7 +59,7 @@ void render(const char* template, FILE* outf, render_table_t* ptr) {
     int ch;
     int state = 0;
 
-    while(EOF != (ch = fgetc(inf))) {
+    while(EOF != (ch = get_char(template, &mark))) {
         switch(state) {
             case 0:
                 if(ch == '\n') {
@@ -115,6 +124,4 @@ void render(const char* template, FILE* outf, render_table_t* ptr) {
                 FATAL("unknown state in render engine: %d", state);
         }
     }
-
-    fclose(inf);
 }

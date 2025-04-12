@@ -50,8 +50,8 @@ static void _type_to_str(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render("../templates/ast_type_to_str.txt", fp, render_table);
-        fprintf(fp, "\n");
+        render(ast_type_to_str_template, fp, render_table);
+        //fprintf(fp, "\n");
     }
 }
 
@@ -64,8 +64,8 @@ static void _type_to_size(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render("../templates/ast_type_to_size.txt", fp, render_table);
-        fprintf(fp, "\n");
+        render(ast_type_to_size_template, fp, render_table);
+        //fprintf(fp, "\n");
     }
 }
 
@@ -94,7 +94,7 @@ static void _data_structures(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render("../templates/ast_data_struct.txt", fp, render_table);
+        render(ast_data_struct_template, fp, render_table);
         fprintf(fp, "\n\n");
     }
 }
@@ -109,8 +109,8 @@ static void _function_protos(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render("../templates/ast_func_proto.txt", fp, render_table);
-        fprintf(fp, "\n");
+        render(ast_func_proto_template, fp, render_table);
+        //fprintf(fp, "\n");
     }
 }
 

@@ -11,7 +11,8 @@
                 "${workspaceFolder}/src/render",
                 "${workspaceFolder}/src/lists",
                 "${workspaceFolder}/src/parser",
-                "${workspaceFolder}/build/src/parser"
+                "${workspaceFolder}/build/src/parser",
+                "${workspaceFolder}/build/src/templates"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

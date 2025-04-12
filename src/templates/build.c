@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
     }
 
     strncpy(template_dir, argv[1], sizeof(template_dir));
-    fprintf(stderr, "%s\n", template_dir);
+    //fprintf(stderr, "%s\n", template_dir);
 
     gen_header();
     gen_source();

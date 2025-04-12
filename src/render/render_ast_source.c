@@ -14,5 +14,5 @@ void render_ast_source(void) {
 
     FILE* fp = fopen("ast.c", "w");
 
-    render("../templates/ast.c.txt", fp, render_table);
+    render(ast_c_template, fp, render_table);
 }

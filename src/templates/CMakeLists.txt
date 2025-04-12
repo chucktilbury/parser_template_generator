@@ -8,7 +8,7 @@ add_custom_command(
     DEPENDS build
 )
 
-add_library(template STATIC
+add_library(${PROJECT_NAME} STATIC
     templates.c
 )
 
