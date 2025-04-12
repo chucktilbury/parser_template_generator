@@ -5,7 +5,13 @@
             "includePath": [
                 "${default}",
                 "${workspaceFolder}/build/src",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/src/common",
+                "${workspaceFolder}/src/pgen",
+                "${workspaceFolder}/src/render",
+                "${workspaceFolder}/src/lists",
+                "${workspaceFolder}/src/parser",
+                "${workspaceFolder}/build/src/parser"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",
