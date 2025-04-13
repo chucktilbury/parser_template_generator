@@ -89,7 +89,7 @@ int len_ptr_list(ptr_list_t* lst) {
 void sort_ptr_list(ptr_list_t* lst, int (*comp_func)(void*, void*)) {
 
     for(size_t step = 0; step < lst->len - 1; step++) {
-        for(int i = 0; i < lst->len - step - 1; i++) {
+        for(size_t i = 0; i < lst->len - step - 1; i++) {
             if(comp_func(lst->buffer[i], lst->buffer[i+1]) > 0) {
                 void* tmp = lst->buffer[i];
                 lst->buffer[i] = lst->buffer[i+1];
