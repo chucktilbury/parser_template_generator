@@ -8,10 +8,8 @@
 #include "parser.h"
 #include "ast.h"
 #include "common.h"
-#include "render_ast_header.h"
-#include "render_ast_source.h"
-#include "render_init.h"
 #include "lists.h"
+#include "render.h"
 
 extern master_list_t* master_list;
 
@@ -62,9 +60,7 @@ int main(int argc, char** argv) {
     // print_nonterminal_list();
     // print_terminal_list();
 
-    render_init();
-    render_ast_header();
-    render_ast_source();
+    render();
 
     return 0;
 }

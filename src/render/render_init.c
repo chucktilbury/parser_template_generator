@@ -51,7 +51,7 @@ static void _type_to_str(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render(ast_type_to_str_template, fp, render_table);
+        render_template(ast_type_to_str_template, fp, render_table);
         //fprintf(fp, "\n");
     }
 }
@@ -65,7 +65,7 @@ static void _type_to_size(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render(ast_type_to_size_template, fp, render_table);
+        render_template(ast_type_to_size_template, fp, render_table);
         //fprintf(fp, "\n");
     }
 }
@@ -95,7 +95,7 @@ static void _data_structures(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render(ast_data_struct_template, fp, render_table);
+        render_template(ast_data_struct_template, fp, render_table);
         fprintf(fp, "\n");
     }
 }
@@ -109,7 +109,7 @@ static void _func_defs(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render(ast_func_def_template, fp, render_table);
+        render_template(ast_func_def_template, fp, render_table);
         fprintf(fp, "\n");
     }
 }
@@ -124,7 +124,7 @@ static void _function_protos(FILE* fp, void* ptr) {
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
-        render(ast_func_proto_template, fp, render_table);
+        render_template(ast_func_proto_template, fp, render_table);
         //fprintf(fp, "\n");
     }
 }

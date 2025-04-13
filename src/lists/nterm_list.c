@@ -62,7 +62,7 @@ void destroy_nterm_item(nterm_item_t* item) {
     }
 }
 
-// the nterm and the type are lexically the same order
+// the nterm and the type are the same lexical order
 static int comp_nterm(void* p1, void* p2) {
 
     return comp_string(((nterm_item_t*)p1)->nterm, ((nterm_item_t*)p2)->nterm);

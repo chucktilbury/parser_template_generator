@@ -33,8 +33,6 @@ void append_ptr_list(ptr_list_t* lst, void* ptr) {
     lst->is_sorted = false;
 }
 
-#include <stdio.h>
-
 void* index_ptr_list(ptr_list_t* lst, int index) {
 
     if(index >= 0 && (size_t)index < lst->len)
@@ -120,9 +118,9 @@ int find_ptr_list(ptr_list_t* lst, void* key, int (*comp_func)(void*, void*)) {
             low = mid + 1;
         else
             high = mid - 1;
-
     }
 
     // not found
     return -1;
 }
+

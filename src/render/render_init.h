@@ -11,7 +11,7 @@
 #ifndef _RENDER_INIT_H_
 #define _RENDER_INIT_H_
 
-#include "render.h"
+#include "render_template.h"
 
 #include "term_list.h"
 #include "nterm_list.h"
