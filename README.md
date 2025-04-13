@@ -54,7 +54,7 @@ grammar (
 )
 
 rule (
-    NON_TERMINAL grouping_function+
+    NON_TERMINAL grouping_function
 )
 
 rule_element (
