@@ -18,6 +18,7 @@
 #include "nterm_list.h"
 #include "term_list.h"
 typedef struct {
+    nterm_item_t* first_nterm;
     nterm_list_t* nterm_list;
     term_list_t* term_list;
     int nterm_idx;

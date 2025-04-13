@@ -38,7 +38,7 @@ static void _first_node(FILE* fp, void* ptr) {
 
     master_list_t* lst = (master_list_t*)ptr;
 
-    nterm_item_t* item = lst->nterm_list->buffer[0];
+    nterm_item_t* item = lst->first_nterm;
     fprintf(fp, "%s", item->nterm->buffer);
 }
 
@@ -96,7 +96,21 @@ static void _data_structures(FILE* fp, void* ptr) {
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         lst->nterm_idx = mark - 1;
         render(ast_data_struct_template, fp, render_table);
-        fprintf(fp, "\n\n");
+        fprintf(fp, "\n");
+    }
+}
+
+static void _func_defs(FILE* fp, void* ptr) {
+
+    master_list_t* lst = (master_list_t*)ptr;
+
+    int mark = 0;
+    nterm_item_t* item;
+
+    while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
+        lst->nterm_idx = mark - 1;
+        render(ast_func_def_template, fp, render_table);
+        fprintf(fp, "\n");
     }
 }
 
@@ -177,6 +191,7 @@ static void make_render_table(void) {
     add_render(render_table, create_render_item("ast_type_to_size", master_list, _type_to_size));
     add_render(render_table, create_render_item("ast_type_to_str", master_list, _type_to_str));
     add_render(render_table, create_render_item("ast_first_node", master_list, _first_node));
+    add_render(render_table, create_render_item("ast_function_defs", master_list, _func_defs));
 }
 
 

@@ -23,7 +23,9 @@ typedef struct _ast_node_t_ {
 } ast_node_t;
 
 {{ast_data_structures}}
-{{ast_function_protos}}
+/*
+ * public interface declarations.
+ */
 ast_node_t* create_ast_node(ast_type_t type);
 void traverse_ast(ast_node_t* node);
 const char* node_type_to_str(ast_type_t type);

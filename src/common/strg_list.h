@@ -21,6 +21,8 @@ void append_str_list(str_list_t* lst, string_t* str);
 string_t* index_str_list(str_list_t* lst, int index);
 string_t* iterate_str_list(str_list_t* lst, int* post);
 int len_str_list(str_list_t* lst);
+void sort_str_list(str_list_t* lst);
+int find_str_list(str_list_t* lst, string_t* key);
 
 void add_str_list(str_list_t* lst, string_t* str);
 

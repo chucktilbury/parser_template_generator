@@ -284,12 +284,16 @@ void make_raw_lists(grammar_t* node) {
     master_list = create_master_list();
 
     grammar((grammar_t*)node);
+
+    master_list->first_nterm = master_list->nterm_list->buffer[0];
+    sort_nterm_list(master_list->nterm_list);
 }
 
 master_list_t* create_master_list(void) {
 
     master_list_t* ptr = _ALLOC_TYPE(master_list_t);
 
+    ptr->first_nterm = NULL;
     ptr->nterm_list = create_nterm_list();
     ptr->term_list  = create_term_list();
 

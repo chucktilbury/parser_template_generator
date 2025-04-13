@@ -37,6 +37,22 @@ int len_str_list(str_list_t* lst) {
     return len_ptr_list((ptr_list_t*)lst);
 }
 
+static int comp_func(void* p1, void* p2) {
+
+    return comp_string((string_t*)p1, (string_t*)p2);
+}
+
+void sort_str_list(str_list_t* lst) {
+
+    sort_ptr_list((ptr_list_t*)lst, comp_func);
+}
+
+int find_str_list(str_list_t* lst, string_t* key) {
+
+    return find_ptr_list((ptr_list_t*)lst, (void*)key, comp_func);
+}
+
+
 /*
  * Add to the string into the list if it does not already exist.
  */

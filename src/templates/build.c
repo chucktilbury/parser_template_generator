@@ -27,6 +27,7 @@ static const char* template_list[] = {
     "ast_func_proto",
     "ast_type_to_size",
     "ast_type_to_str",
+    "ast_func_def",
     "parser_c",
     "parser_h",
     NULL

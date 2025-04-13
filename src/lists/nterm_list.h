@@ -27,6 +27,9 @@ void destroy_nterm_list(nterm_list_t* lst);
 void append_nterm_list(nterm_list_t* lst, nterm_item_t* item);
 nterm_item_t* iterate_nterm_list(nterm_list_t* lst, int* mark);
 nterm_item_t* index_nterm_list(nterm_list_t* lst, int idx);
+void sort_nterm_list(nterm_list_t* lst);
+int find_nterm_type(nterm_list_t* lst, const char* type);
+int find_nterm(nterm_list_t* lst, const char* name);
 
 nterm_item_t* create_nterm_item(string_t* nterm, string_t* type);
 void destroy_nterm_item(nterm_item_t* item);

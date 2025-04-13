@@ -57,6 +57,31 @@ void destroy_nterm_item(nterm_item_t* item) {
 
     if(item != NULL) {
         destroy_string(item->nterm);
+        destroy_string(item->type);
         _FREE(item);
     }
 }
+
+// the nterm and the type are lexically the same order
+static int comp_nterm(void* p1, void* p2) {
+
+    return comp_string(((nterm_item_t*)p1)->nterm, ((nterm_item_t*)p2)->nterm);
+}
+
+void sort_nterm_list(nterm_list_t* lst) {
+
+    sort_ptr_list((ptr_list_t*)lst, comp_nterm);
+}
+
+// using the nterm or the type creates the same result
+int find_nterm(nterm_list_t* lst, const char* str) {
+
+    string_t* ptr = create_string(str);
+    nterm_item_t* item = create_nterm_item(ptr, ptr);
+    int retv = find_ptr_list((ptr_list_t*)lst, item, comp_nterm);
+    destroy_string(ptr);
+
+    return retv;
+}
+
+
