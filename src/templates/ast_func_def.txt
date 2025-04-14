@@ -1,4 +1,7 @@
-static void traverse_{{ast_nterm_name}}(ast_{{ast_nterm_name}}_t* node) {
+/*
+ * Traverse the {{ast_nterm_name}} data structure.
+ */
+static void _{{ast_nterm_name}}(ast_{{ast_nterm_name}}_t* node) {
 
     ENTER;
 

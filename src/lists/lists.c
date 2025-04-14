@@ -294,6 +294,7 @@ master_list_t* create_master_list(void) {
     master_list_t* ptr = _ALLOC_TYPE(master_list_t);
 
     ptr->first_nterm = NULL;
+    ptr->current_file = NULL;
     ptr->nterm_list = create_nterm_list();
     ptr->term_list  = create_term_list();
 
@@ -303,8 +304,10 @@ master_list_t* create_master_list(void) {
 void destroy_master_list(master_list_t* lst) {
 
     if(lst != NULL) {
+        destroy_nterm_item(lst->first_nterm);
         destroy_nterm_list(lst->nterm_list);
         destroy_term_list(lst->term_list);
+        destroy_string(lst->current_file);
         _FREE(lst);
     }
 }

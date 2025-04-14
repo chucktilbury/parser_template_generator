@@ -23,6 +23,7 @@ typedef struct {
     term_list_t* term_list;
     int nterm_idx;
     int term_idx;
+    string_t* current_file;
 } master_list_t;
 
 extern master_list_t* master_list;

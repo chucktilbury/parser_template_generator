@@ -1,5 +1,5 @@
 /**
- * @file nnterm_list.c
+ * @file nterm_list.c
  *
  * @brief
  *

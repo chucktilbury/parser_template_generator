@@ -1,0 +1,10 @@
+/**
+ * @file {{file_name}}
+ *
+ * This is a generated file.
+ * DO NOT EDIT.
+ *
+ * @date {{ctime}}
+ * @author {{dev_name}}
+ *
+ */

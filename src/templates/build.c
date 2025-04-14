@@ -25,11 +25,14 @@ static const char* template_list[] = {
     "ast_c",
     "ast_data_struct",
     "ast_func_proto",
+    "ast_func_def",
     "ast_type_to_size",
     "ast_type_to_str",
-    "ast_func_def",
     "parser_c",
     "parser_h",
+    "parser_func_def",
+    "parser_func_proto",
+    "file_header",
     NULL
 };
 

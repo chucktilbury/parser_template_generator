@@ -1,13 +1,4 @@
-/**
- * AST.c
- *
- * This is a generated file.
- * DO NOT EDIT.
- *
- * Generated on {{ctime}}
- * By {{dev_name}}
- *
- */
+{{file_header}}
 #include <stdio.h>
 #include <stdlib.h>
 

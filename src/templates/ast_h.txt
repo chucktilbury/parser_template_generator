@@ -1,13 +1,4 @@
-/**
- * AST.h
- *
- * This is a generated file.
- * DO NOT EDIT.
- *
- * Generated on {{ctime}}
- * By {{dev_name}}
- *
- */
+{{file_header}}
 #ifndef _AST_H_
 #define _AST_H_
 
