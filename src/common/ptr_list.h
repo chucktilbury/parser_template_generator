@@ -22,5 +22,6 @@ void* iterate_ptr_list(ptr_list_t* lst, int* post);
 int len_ptr_list(ptr_list_t* lst);
 void sort_ptr_list(ptr_list_t* lst, int (*comp_func)(void*, void*));
 int find_ptr_list(ptr_list_t* lst, void* key, int (*comp_func)(void*, void*));
+ptr_list_t* copy_ptr_list(ptr_list_t* lst);
 
 #endif /* _PTR_LIST_H_ */

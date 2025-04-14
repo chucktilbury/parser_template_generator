@@ -124,3 +124,16 @@ int find_ptr_list(ptr_list_t* lst, void* key, int (*comp_func)(void*, void*)) {
     return -1;
 }
 
+/*
+ * Note that this does not copy the pointers in the list, only the list
+ * itself.
+ */
+ptr_list_t* copy_ptr_list(ptr_list_t* lst) {
+
+    ptr_list_t* ptr = create_ptr_list();
+
+    for(size_t i = 0; i < lst->len; i++)
+        append_ptr_list(ptr, lst->buffer[i]);
+
+    return ptr;
+}
