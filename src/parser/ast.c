@@ -121,7 +121,7 @@ static void rule_element(rule_element_t* node) {
     if(node->token != NULL) {
         TRACE_TOKEN(node->token);
         switch(node->token->type) {
-            case TERMINAL_NAME:
+            case TERMINAL_KEYWORD:
                 break;
             case TERMINAL_OPER:
                 break;

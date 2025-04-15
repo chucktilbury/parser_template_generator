@@ -137,7 +137,7 @@ static void rule_element(rule_element_t* node) {
         TRACE_TOKEN(node->token);
 
         switch(node->token->type) {
-            case TERMINAL_NAME: {
+            case TERMINAL_KEYWORD: {
                 string_t* term = copy_string(node->token->str);
                 //strip_quotes(term);
 

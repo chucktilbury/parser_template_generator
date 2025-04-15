@@ -125,7 +125,7 @@ static void rule_element(rule_element_t* node) {
         TRACE_TOKEN(node->token);
         switch(node->token->type) {
             case TERMINAL_OPER:
-            case TERMINAL_NAME: {
+            case TERMINAL_KEYWORD: {
                     term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
                     printf("%s ", term->token->buffer);
                 }

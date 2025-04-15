@@ -79,7 +79,7 @@ typedef struct _rule_element_list_t_ {
 /*
  rule_element
     : NON_TERMINAL
-    | TERMINAL_NAME
+    | TERMINAL_KEYWORD
     | TERMINAL_OPER
     | TERMINAL_SYMBOL
     | or_function

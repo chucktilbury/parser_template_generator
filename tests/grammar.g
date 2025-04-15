@@ -11,8 +11,8 @@ rule (
 
 rule_element (
     NON_TERMINAL |
-    TERMINAL_NAME |
     TERMINAL_SYMBOL |
+    TERMINAL_KEYWORD |
     TERMINAL_OPER |
     or_function |
     one_or_more_function |
@@ -22,7 +22,7 @@ rule_element (
 )
 
 or_function (
-    rule_element PIPE rule_element
+    rule_element PIPE
 )
 
 one_or_more_function (

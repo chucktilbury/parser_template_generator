@@ -31,7 +31,7 @@ const char* tok_to_str(int type) {
             (type == CPAREN)          ? "CPAREN" :
             (type == NON_TERMINAL)    ? "NON_TERMINAL" :
             (type == TERMINAL_SYMBOL) ? "TERMINAL_SYMBOL" :
-            (type == TERMINAL_NAME)   ? "TERMINAL_NAME" :
+            (type == TERMINAL_KEYWORD)   ? "TERMINAL_KEYWORD" :
             (type == TERMINAL_OPER)   ? "TERMINAL_OPER" :
                                         "UNKNOWN";
 }

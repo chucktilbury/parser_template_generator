@@ -41,7 +41,7 @@ extern grammar_t* root_node;
 };
 
 %token PLUS STAR QUESTION PIPE OPAREN CPAREN
-%token<token> NON_TERMINAL TERMINAL_SYMBOL TERMINAL_NAME TERMINAL_OPER
+%token<token> NON_TERMINAL TERMINAL_SYMBOL TERMINAL_KEYWORD TERMINAL_OPER
 
 %type <grammar> grammar
 %type <grammar_list> grammar_list
@@ -108,7 +108,7 @@ rule_element
         $$ = (rule_element_t*)create_ast_node(AST_RULE_ELEMENT);
         $$->token = $1;
     }
-    | TERMINAL_NAME {
+    | TERMINAL_KEYWORD {
         $$ = (rule_element_t*)create_ast_node(AST_RULE_ELEMENT);
         strip_quotes($1->str);
         $$->token = $1;

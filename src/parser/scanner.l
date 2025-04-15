@@ -9,6 +9,7 @@
 %option noinput
 %option nounput
 %option noyywrap
+    // for cmake...
     //%option header-file="scanner.h"
     //%option outfile="scanner.c"
 
@@ -32,8 +33,8 @@
 }
 
 \'[a-zA-Z_][a-zA-Z0-9_]*\' {
-    yylval.token = create_token(yytext, TERMINAL_NAME);
-    return TERMINAL_NAME;
+    yylval.token = create_token(yytext, TERMINAL_KEYWORD);
+    return TERMINAL_KEYWORD;
 }
 
 \'[^a-zA-Z0-9_\']+\' {
