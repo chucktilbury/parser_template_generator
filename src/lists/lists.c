@@ -139,7 +139,7 @@ static void rule_element(rule_element_t* node) {
         switch(node->token->type) {
             case TERMINAL_NAME: {
                 string_t* term = copy_string(node->token->str);
-                strip_quotes(term);
+                //strip_quotes(term);
 
                 string_t* tok = copy_string(term);
                 upcase(tok);
@@ -150,7 +150,7 @@ static void rule_element(rule_element_t* node) {
             } break;
             case TERMINAL_OPER: {
                 string_t* term = copy_string(node->token->str);
-                strip_quotes(term);
+                //strip_quotes(term);
 
                 string_t* tok = copy_string(term);
                 tok           = convert(tok);
@@ -209,10 +209,7 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
-    TRACE("LEFT");
-    rule_element(node->left);
-    TRACE("RIGHT");
-    rule_element(node->right);
+   rule_element(node->rule_element);
 
     RETURN();
 }

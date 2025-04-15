@@ -125,10 +125,14 @@ static void rule_element(rule_element_t* node) {
         TRACE_TOKEN(node->token);
         switch(node->token->type) {
             case TERMINAL_OPER:
-            case TERMINAL_NAME:
+            case TERMINAL_NAME: {
+                    term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
+                    printf("%s ", term->token->buffer);
+                }
+                break;
             case TERMINAL_SYMBOL:
             case NON_TERMINAL:
-                printf(" %s", node->token->str->buffer);
+                printf("%s ", node->token->str->buffer);
                 break;
             default:
                 FATAL("unknown terminal type: %s", tok_to_str(node->token->type));
@@ -170,9 +174,8 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
-    rule_element(node->left);
-    printf(" |");
-    rule_element(node->right);
+    rule_element(node->rule_element);
+    printf("| ");
 
     RETURN();
 }
@@ -187,7 +190,7 @@ static void zero_or_more_function(zero_or_more_function_t* node) {
     ENTER;
 
     rule_element(node->rule_element);
-    printf("*");
+    printf("* ");
 
     RETURN();
 }
@@ -202,7 +205,7 @@ static void zero_or_one_function(zero_or_one_function_t* node) {
     ENTER;
 
     rule_element(node->rule_element);
-    printf("?");
+    printf("? ");
 
     RETURN();
 }
@@ -218,7 +221,7 @@ static void one_or_more_function(one_or_more_function_t* node) {
     ENTER;
 
     rule_element(node->rule_element);
-    printf("+");
+    printf("+ ");
 
     RETURN();
 }
@@ -232,9 +235,9 @@ static void grouping_function(grouping_function_t* node) {
 
     ENTER;
 
-    printf("(");
+    printf("( ");
     rule_element_list(node->rule_element_list);
-    printf(")");
+    printf(") ");
 
     RETURN();
 }

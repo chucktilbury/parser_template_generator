@@ -110,10 +110,12 @@ rule_element
     }
     | TERMINAL_NAME {
         $$ = (rule_element_t*)create_ast_node(AST_RULE_ELEMENT);
+        strip_quotes($1->str);
         $$->token = $1;
     }
     | TERMINAL_OPER {
         $$ = (rule_element_t*)create_ast_node(AST_RULE_ELEMENT);
+        strip_quotes($1->str);
         $$->token = $1;
     }
     | TERMINAL_SYMBOL {
@@ -164,10 +166,9 @@ one_or_more_function
     ;
 
 or_function
-    : rule_element PIPE rule_element {
+    : rule_element PIPE  {
         $$ = (or_function_t*)create_ast_node(AST_OR_FUNCTION);
-        $$->left = $1;
-        $$->right = $3;
+        $$->rule_element = $1;
     }
     ;
 

@@ -84,11 +84,11 @@ pow_expr (
 )
 
 unary_minus_expr (
-    unary_not_expr ( '-' unary_not_expr )*
+    ( '-' unary_not_expr )*
 )
 
 unary_not_expr (
-    primary_expr ( ( '!' | 'not' ) primary_expr )*
+    ( ( '!' | 'not' ) primary_expr )*
 )
 
 primary_expr (
