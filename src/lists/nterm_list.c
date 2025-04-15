@@ -74,13 +74,18 @@ void sort_nterm_list(nterm_list_t* lst) {
 }
 
 // using the nterm or the type creates the same result
-int find_nterm(nterm_list_t* lst, const char* str) {
+nterm_item_t* find_nterm(nterm_list_t* lst, const char* str) {
 
     string_t* ptr = create_string(str);
     nterm_item_t* item = create_nterm_item(ptr, ptr);
-    int retv = find_ptr_list((ptr_list_t*)lst, item, comp_nterm);
-    destroy_string(ptr);
 
+    nterm_item_t* retv = NULL;
+    int val = find_ptr_list((ptr_list_t*)lst, item, comp_nterm);
+    if(val >= 0)
+        retv = lst->buffer[val];
+
+    destroy_string(ptr);
+    _FREE(item);
     return retv;
 }
 

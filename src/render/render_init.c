@@ -88,7 +88,7 @@ static void _type_list(FILE* fp, void* ptr) {
 
     int mark = 0;
     nterm_item_t* item;
-    int val = 256;
+    int val = 512;
 
     while(NULL != (item = iterate_nterm_list(lst->nterm_list, &mark))) {
         fprintf(fp, "    %s = %d", item->type->buffer, val);
@@ -182,40 +182,52 @@ static void _type_name(FILE* fp, void* ptr) {
     fprintf(fp, "%s", item->type->buffer);
 }
 
+static void _token_type_list(FILE* fp, void* ptr) {
 
-/*
- * This is a list of all of the objects that could be rendered by template name
- *
- * -- generics
- * ctime
- * dev_name
- *
- * -- ast.c.txt
- * ast_first_node
- * ast_type_to_str
- * ast_type_to_size
- *
- * -- ast.h.txt
- * ast_type_list
- * ast_data_structures
- * ast_function_protos
- *
- * -- ast_data_struct.txt
- * ast_nterm_name
- * ast_struct_elements
- *
- * -- ast_func_proto.txt
- * ast_nterm_name
- *
- * -- ast_type_to_size.txt
- * ast_type_name
- * ast_nterm_name
- *
- * -- ast_type_to_str.txt
- * ast_type_name
- * ast_nterm_name
- *
- */
+    master_list_t* lst = (master_list_t*)ptr;
+
+    int mark = 0;
+    term_item_t* item;
+    int val = 258;
+
+    while(NULL != (item = iterate_term_list(lst->term_list, &mark))) {
+        fprintf(fp, "    %s = %d", item->token->buffer, val);
+        if((size_t)mark + 1 <= lst->term_list->len)
+            fprintf(fp, ",\n");
+        val++;
+    }
+}
+
+static void _tok_type_to_str(FILE* fp, void* ptr) {
+
+    master_list_t* lst = (master_list_t*)ptr;
+
+    int mark = 0;
+    term_item_t* item;
+
+    while(NULL != (item = iterate_term_list(lst->term_list, &mark))) {
+        fprintf(fp, "        (tok->type == %s)? \"%s\":\n", item->token->buffer, item->term->buffer);
+    }
+}
+
+static void _ast_struct_elements(FILE* fp, void* ptr) {
+
+    (void)ptr;
+    fprintf(fp, "// struct elements TBD\n");
+}
+
+static void _parser_func_implementation(FILE* fp, void* ptr) {
+
+    (void)ptr;
+    fprintf(fp, "// parser implementation is TBD\n");
+}
+
+static void _ast_func_implementation(FILE* fp, void* ptr) {
+
+    (void)ptr;
+    fprintf(fp, "// ast implementation is TBD\n");
+}
+
 static void make_render_table(void) {
 
     render_table = create_render_table();
@@ -234,9 +246,16 @@ static void make_render_table(void) {
     add_render(render_table, create_render_item("ast_type_to_str", master_list, _type_to_str));
     add_render(render_table, create_render_item("ast_first_node", master_list, _first_node));
     add_render(render_table, create_render_item("ast_function_defs", master_list, _ast_func_defs));
+    add_render(render_table, create_render_item("ast_struct_elements", master_list, _ast_struct_elements));
+    add_render(render_table, create_render_item("ast_func_implementation", master_list, _ast_func_implementation));
 
     add_render(render_table, create_render_item("parser_protos", master_list, _parser_func_protos));
     add_render(render_table, create_render_item("parser_funcs", master_list, _parser_func_defs));
+    add_render(render_table, create_render_item("parse_func_implementation", master_list, _parser_func_implementation));
+
+    add_render(render_table, create_render_item("token_type_list", master_list, _token_type_list));
+    add_render(render_table, create_render_item("tok_type_to_str", master_list, _tok_type_to_str));
+
 
 }
 

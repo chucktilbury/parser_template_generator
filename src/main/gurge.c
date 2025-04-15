@@ -1,8 +1,7 @@
 /**
- * @file lists.c
+ * @file gurge.c
  *
- * @brief Traverse the AST to create the base lists. Terminals and
- * nonterminals as well as their associated objects.
+ * @brief AST pass that prints the regurgitates the input after processing.
  *
  * @author Chuck Tilbury (chucktilbury@gmail.com)
  * @version 0.1
@@ -11,18 +10,11 @@
  */
 
 #include "ast.h"
-#include "errors.h"
-#include "lists.h"
 #include "parser.h"
-#include "alloc.h"
+#include "lists.h"
 
-#include "nterm_list.h"
-#include "term_list.h"
-// global product produced by this file
-master_list_t* master_list;
-
-// #define USE_TRACE
-#include "trace.h"
+#define USE_TRACE
+#include "common.h"
 
 #ifdef USE_TRACE
 #define TRACE_TOKEN(t) TRACE("token: \"%s\": %s", raw_string((t)->str), tok_to_str((t)->type))
@@ -76,7 +68,7 @@ static void grammar_list(grammar_list_t* node) {
 
 
 /*
-non_terminal_rule
+grammar_rule
  : NON_TERMINAL grouping_function
  ;
  */
@@ -85,11 +77,9 @@ static void grammar_rule(grammar_rule_t* node) {
     ENTER;
 
     TRACE_TOKEN(node->NON_TERMINAL);
-
-    string_t* type = create_string_fmt("AST_%s", node->NON_TERMINAL->str->buffer);
-    upcase(type);
-    append_nterm_list(master_list->nterm_list, create_nterm_item(node->NON_TERMINAL->str, type));
+    printf("\n%s ", node->NON_TERMINAL->str->buffer);
     grouping_function(node->grouping_function);
+    printf("\n");
 
     RETURN();
 }
@@ -120,7 +110,6 @@ rule_element
  | TERMINAL_NAME
  | TERMINAL_OPER
  | TERMINAL_SYMBOL
- | non_terminal_rule_element
  | or_function
  | zero_or_more_function
  | zero_or_one_function
@@ -133,47 +122,19 @@ static void rule_element(rule_element_t* node) {
     ENTER;
 
     if(node->token != NULL) {
-
         TRACE_TOKEN(node->token);
-
         switch(node->token->type) {
-            case TERMINAL_NAME: {
-                string_t* term = copy_string(node->token->str);
-                strip_quotes(term);
-
-                string_t* tok = copy_string(term);
-                upcase(tok);
-                // create_string copies the string
-                // the string term is simply assigned.
-                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
-                destroy_string(tok);
-            } break;
-            case TERMINAL_OPER: {
-                string_t* term = copy_string(node->token->str);
-                strip_quotes(term);
-
-                string_t* tok = copy_string(term);
-                tok           = convert(tok);
-
-                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
-
-                destroy_string(tok); // normally GC would handle this.
-            } break;
-            case TERMINAL_SYMBOL: {
-                string_t* term = copy_string(node->token->str);
-                string_t* tok  = create_string_fmt("TOK_%s", node->token->str->buffer);
-
-                append_term_list(master_list->term_list, create_term_item(term, tok));
-            } break;
+            case TERMINAL_OPER:
+            case TERMINAL_NAME:
+            case TERMINAL_SYMBOL:
             case NON_TERMINAL:
-                /* do nothing */
+                printf(" %s", node->token->str->buffer);
                 break;
             default:
-                FATAL("invalid token type: %s", tok_to_str(node->token->type));
+                FATAL("unknown terminal type: %s", tok_to_str(node->token->type));
         }
     }
     else if(node->nterm != NULL) {
-
         switch(node->nterm->type) {
             case AST_OR_FUNCTION:
                 or_function((or_function_t*)node->nterm);
@@ -191,7 +152,7 @@ static void rule_element(rule_element_t* node) {
                 grouping_function((grouping_function_t*)node->nterm);
                 break;
             default:
-                FATAL("unknown node type: %d", node->nterm->type);
+                FATAL("unknown non-terminal type: %s", nterm_to_str(node->nterm->type));
         }
     }
     else
@@ -202,16 +163,15 @@ static void rule_element(rule_element_t* node) {
 
 /*
 or_function
- : rule_element PIPE
+ : rule_element PIPE rule_element
  ;
  */
 static void or_function(or_function_t* node) {
 
     ENTER;
 
-    TRACE("LEFT");
     rule_element(node->left);
-    TRACE("RIGHT");
+    printf(" |");
     rule_element(node->right);
 
     RETURN();
@@ -227,6 +187,7 @@ static void zero_or_more_function(zero_or_more_function_t* node) {
     ENTER;
 
     rule_element(node->rule_element);
+    printf("*");
 
     RETURN();
 }
@@ -241,6 +202,7 @@ static void zero_or_one_function(zero_or_one_function_t* node) {
     ENTER;
 
     rule_element(node->rule_element);
+    printf("?");
 
     RETURN();
 }
@@ -256,6 +218,7 @@ static void one_or_more_function(one_or_more_function_t* node) {
     ENTER;
 
     rule_element(node->rule_element);
+    printf("+");
 
     RETURN();
 }
@@ -269,46 +232,15 @@ static void grouping_function(grouping_function_t* node) {
 
     ENTER;
 
+    printf("(");
     rule_element_list(node->rule_element_list);
+    printf(")");
 
     RETURN();
 }
 
-/**
- * @brief Create all of the basic lists.
- *
- * @param node
- */
-void make_raw_lists(grammar_t* node) {
+void regurgitate_ast(grammar_t* node) {
 
-    master_list = create_master_list();
-
-    grammar((grammar_t*)node);
-
-    master_list->first_nterm = master_list->nterm_list->buffer[0];
-    sort_nterm_list(master_list->nterm_list);
-    sort_term_list(master_list->term_list);
+    grammar(node);
 }
 
-master_list_t* create_master_list(void) {
-
-    master_list_t* ptr = _ALLOC_TYPE(master_list_t);
-
-    ptr->first_nterm = NULL;
-    ptr->current_file = NULL;
-    ptr->nterm_list = create_nterm_list();
-    ptr->term_list  = create_term_list();
-
-    return ptr;
-}
-
-void destroy_master_list(master_list_t* lst) {
-
-    if(lst != NULL) {
-        destroy_nterm_item(lst->first_nterm);
-        destroy_nterm_list(lst->nterm_list);
-        destroy_term_list(lst->term_list);
-        destroy_string(lst->current_file);
-        _FREE(lst);
-    }
-}

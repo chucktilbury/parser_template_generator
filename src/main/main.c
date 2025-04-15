@@ -11,6 +11,7 @@
 #include "lists.h"
 #include "render.h"
 
+void regurgitate_ast(grammar_t* node);
 extern master_list_t* master_list;
 
 void print_terminal_list(void) {
@@ -61,6 +62,7 @@ int main(int argc, char** argv) {
     // print_terminal_list();
 
     render();
+    regurgitate_ast(root_node);
 
     return 0;
 }

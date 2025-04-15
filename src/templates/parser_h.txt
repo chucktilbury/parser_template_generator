@@ -22,7 +22,7 @@ typedef struct {
     ptr_list_t* mode_stack;
 } parser_state_t;
 
-ast_node_t* parse(parser_state_t*);
+ast_node_t* parse(void);
 parser_state_t* create_parser_state(void);
 void push_parser_scope(parser_state_t* pstate, parser_scope_t scope);
 parser_scope_t pop_parser_scope(parser_state_t* pstate);

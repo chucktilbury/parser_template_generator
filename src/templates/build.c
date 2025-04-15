@@ -33,6 +33,9 @@ static const char* template_list[] = {
     "parser_func_def",
     "parser_func_proto",
     "file_header",
+    "tokens_h",
+    "tokens_c",
+    "scanner_h",
     NULL
 };
 

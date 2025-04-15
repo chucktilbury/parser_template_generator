@@ -67,3 +67,32 @@ void destroy_term_item(term_item_t* item) {
         _FREE(item);
     }
 }
+
+static int comp_term(void* p1, void* p2) {
+
+    return comp_string(((term_item_t*)p1)->term, ((term_item_t*)p2)->term);
+}
+
+void sort_term_list(term_list_t* lst) {
+
+    sort_ptr_list((ptr_list_t*)lst, comp_term);
+}
+
+//
+term_item_t* find_term(term_list_t* lst, const char* str) {
+
+    // need to match the types for the search routine
+    string_t* ptr = create_string(str);
+    term_item_t* item = create_term_item(ptr, ptr);
+
+    term_item_t* retv = NULL;
+    int val = find_ptr_list((ptr_list_t*)lst, item, comp_term);
+    if(val >= 0)
+        retv = lst->buffer[val];
+
+    destroy_string(ptr);
+    _FREE(item);
+    return retv;
+}
+
+
