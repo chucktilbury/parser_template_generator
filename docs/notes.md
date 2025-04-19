@@ -1,14 +1,47 @@
 # Random Notes
 These notes help me organize my thoughts.
 
+## Parser Functions
 Each parse function can be built up of state machine sections. A section corresponds to a function such as ``one or more``. A function has exactly one argument that can be another function. The exception to that is the ``grouping`` function which implements a list of arguments. Grouping always returns a list. Other functions return the type of object that they parse.
 
 A return object can be a terminal or a non-terminal, so there needs to be a wrapper object to make them the same but still tell the difference when traversing them in the AST.
 
 Each non-terminal has a single parsing function. While the parse function is being generated, the state number must be tracked so that it can be placed in a single switch/case statement. All parse functions have cases for match, no match, and error. All of the parse function also have a starting state.
 
-## Functions
 All elements in a rule are presented in functions. A rule can be considered to be a named regular expression. All functions accept exactly one argument except the grouping function which accepts a list of arguments. The ``or`` function is right-associative. The others are left-associative.
+### exactly-one
+When there is a construct in the grammar such as
+```
+while_statement (TOK_WHILE TOK_OPAREN expression TOK_CPAREN func_block)
+```
+Each item is single without being a part of a function other than the group that defines the non-terminal ``while_statement``. Then there are no functions defined except the grouping. So that means that these single items must be embedded with the grouping. So that means that there will be 5 states in this function, not including the stopping states.
+#### pattern
+##### for a terminal
+```
+    case XX:
+        if(token_match(TOK_WHILE)) {
+            consume_the_item();
+            state = whatever the next state is going to be
+        }
+        else
+            state = STATE_NO_MATCH;
+        break;
+```
+
+##### for a non-terminal
+```
+    case XX:
+        if(NULL != (item = expression(pstate))) {
+            consume_the_item();
+            state = whatever the next state is going to be
+        }
+        else {
+            // because an expression is required after "while("
+            state = STATE_ERROR;
+        }
+        break;
+```
+The function generator keeps track of the states and organizes the ``case`` statements to keep them unique and correct.
 
 ### zero-or-one
 Represented by the question mark (``?``) character.
@@ -158,7 +191,9 @@ switch(state) {
         else
             state = STATE_NO_MATCH;
         break;
+
     case XX1:
+        // first item in the group
         if(NULL != (item = rule_element(pstate))) {
             list = create_list();
             add_item_to_list(list, item);
@@ -168,7 +203,9 @@ switch(state) {
         else
             state = STATE_ERROR;
         break;
+
     case XX2:
+        // rest of the items in the group
         if(NULL != (item = rule_element(pstate))) {
             add_item_to_list(list, item);
             consume_the_item();

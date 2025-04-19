@@ -14,12 +14,14 @@
 
 #include "common.h"
 #include "strgs.h"
+#include "ast.h"
 
 typedef ptr_list_t nterm_list_t;
 
 typedef struct {
     string_t* nterm;
     string_t* type;
+    grouping_function_t* node;
 } nterm_item_t;
 
 nterm_list_t* create_nterm_list(void);
@@ -30,8 +32,9 @@ nterm_item_t* index_nterm_list(nterm_list_t* lst, int idx);
 void sort_nterm_list(nterm_list_t* lst);
 nterm_item_t* find_nterm(nterm_list_t* lst, const char* name);
 
-nterm_item_t* create_nterm_item(string_t* nterm, string_t* type);
+nterm_item_t* create_nterm_item(string_t* nterm, string_t* type, grouping_function_t* node);
 void destroy_nterm_item(nterm_item_t* item);
 
 
 #endif /* _NTERM_LIST_H_ */
+

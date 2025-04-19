@@ -88,7 +88,7 @@ static void grammar_rule(grammar_rule_t* node) {
 
     string_t* type = create_string_fmt("AST_%s", node->NON_TERMINAL->str->buffer);
     upcase(type);
-    append_nterm_list(master_list->nterm_list, create_nterm_item(node->NON_TERMINAL->str, type));
+    append_nterm_list(master_list->nterm_list, create_nterm_item(node->NON_TERMINAL->str, type, node->grouping_function));
     grouping_function(node->grouping_function);
 
     RETURN();

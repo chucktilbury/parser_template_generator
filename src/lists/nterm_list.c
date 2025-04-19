@@ -44,11 +44,12 @@ nterm_item_t* index_nterm_list(nterm_list_t* lst, int idx) {
     return (nterm_item_t*)index_ptr_list((ptr_list_t*)lst, idx);
 }
 
-nterm_item_t* create_nterm_item(string_t* nterm, string_t* type) {
+nterm_item_t* create_nterm_item(string_t* nterm, string_t* type, grouping_function_t* node) {
 
     nterm_item_t* ptr = _ALLOC_TYPE(nterm_item_t);
     ptr->nterm        = nterm;
     ptr->type         = type;
+    ptr->node = node;
 
     return ptr;
 }
@@ -77,7 +78,7 @@ void sort_nterm_list(nterm_list_t* lst) {
 nterm_item_t* find_nterm(nterm_list_t* lst, const char* str) {
 
     string_t* ptr = create_string(str);
-    nterm_item_t* item = create_nterm_item(ptr, ptr);
+    nterm_item_t* item = create_nterm_item(ptr, ptr, NULL);
 
     nterm_item_t* retv = NULL;
     int val = find_ptr_list((ptr_list_t*)lst, item, comp_nterm);
