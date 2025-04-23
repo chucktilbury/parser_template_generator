@@ -110,7 +110,7 @@ static void grouping_function(grouping_function_t* node) {
 void print_rule(nterm_item_t* rule) {
 
     printf("%s ", rule->nterm->buffer);
-    grouping_function(rule->node);
+    grouping_function((grouping_function_t*)rule->node);
 
 }
 

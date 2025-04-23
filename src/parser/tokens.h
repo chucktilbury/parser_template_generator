@@ -15,6 +15,7 @@
 typedef struct {
     string_t* str;
     int type;
+    int line_no;
 } token_t;
 
 token_t* create_token(const char* str, int type);

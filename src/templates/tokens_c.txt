@@ -127,3 +127,9 @@ token_t* consume_token(void) {
     return get_token();
 }
 
+bool expect_token(token_type_t type) {
+
+    token_t* tok = get_token();
+    return (tok->type == type)? true: false;
+}
+

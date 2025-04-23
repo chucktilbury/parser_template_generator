@@ -1,0 +1,30 @@
+
+// begin zero or more function
+case {{state_number}}:
+{{handle_create_list}} {
+    {{increment_state}}
+    state = {{state_number}};
+}
+else {
+    state = STATE_NO_MATCH;
+}
+break;
+
+case {{state_number}}:
+{{handle_list_item}} {
+    // no state change
+}
+else {
+    {{increment_state}}
+    state = {{state_number}};
+}
+
+case {{state_number}}:
+if(expect_token(STAR)) {
+    consume_token();
+    state = STATE_MATCH;
+}
+else
+    state = STATE_ERROR;
+break;
+// end zero or more function

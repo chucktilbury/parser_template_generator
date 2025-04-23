@@ -2,6 +2,7 @@
 #ifndef _TOKENS_H_
 #define _TOKENS_H_
 
+#include <stdbool.h>
 #include "common.h"
 
 typedef enum {
@@ -31,6 +32,7 @@ void restore_token_queue(void* mark);
 void consume_token_queue(void);
 
 token_t* get_token(void);
+bool expect_token(token_type_t type);
 token_t* consume_token(void);
 
 #endif /* _TOKENS_H_ */

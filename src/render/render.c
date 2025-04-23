@@ -9,6 +9,7 @@
  * @copyright Copyright (c) 2025
  */
 #include "render_init.h"
+#include "templates.h"
 
 static void rend_file(const char* buf, const char* name) {
 

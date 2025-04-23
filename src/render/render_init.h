@@ -13,11 +13,6 @@
 
 #include "render_template.h"
 
-#include "term_list.h"
-#include "nterm_list.h"
-#include "templates.h"
-
-
 extern render_table_t* render_table;
 
 void render_init(void);

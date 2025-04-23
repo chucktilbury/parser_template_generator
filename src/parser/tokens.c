@@ -11,12 +11,14 @@
 
 #include "tokens.h"
 #include "parser.h"
+extern int yylineno;
 
 token_t* create_token(const char* str, int type) {
 
     token_t* tok = _ALLOC_TYPE(token_t);
     tok->type    = type;
     tok->str     = create_string(str);
+    tok->line_no = yylineno;
 
     return tok;
 }

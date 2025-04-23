@@ -33,11 +33,10 @@ render_table_t* create_render_table(void) {
     return (render_table_t*)create_hashtable();
 }
 
-render_item_t* create_render_item(const char* name, void* data, void (*render_func)(FILE*, void*)) {
+render_item_t* create_render_item(const char* name, void (*render_func)(FILE*)) {
 
     render_item_t* ptr = _ALLOC_TYPE(render_item_t);
     ptr->name          = _COPY_STRING(name);
-    ptr->data          = data;
     ptr->render_func   = render_func;
 
     return ptr;
@@ -109,7 +108,7 @@ void render_template(const char* template, FILE* outf, render_table_t* ptr) {
                 render_item_t* item = NULL;
                 if(find_hashtable(ptr, name, (void**)&item)) {
                     // call the render function
-                    item->render_func(outf, item->data);
+                    item->render_func(outf);
                 }
                 else {
                     // if the tag is not found then output it as a tag but no error

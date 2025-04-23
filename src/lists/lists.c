@@ -17,6 +17,7 @@
 #include "alloc.h"
 
 #include "nterm_list.h"
+#include "nterm_ds.h"
 #include "term_list.h"
 // global product produced by this file
 master_list_t* master_list;
@@ -88,7 +89,7 @@ static void grammar_rule(grammar_rule_t* node) {
 
     string_t* type = create_string_fmt("AST_%s", node->NON_TERMINAL->str->buffer);
     upcase(type);
-    append_nterm_list(master_list->nterm_list, create_nterm_item(node->NON_TERMINAL->str, type, node->grouping_function));
+    append_nterm_list(master_list->nterm_list, create_nterm_item(node->NON_TERMINAL->str, type, (ast_node_t*)node->grouping_function));
     grouping_function(node->grouping_function);
 
     RETURN();
@@ -285,6 +286,8 @@ void make_raw_lists(grammar_t* node) {
     master_list->first_nterm = master_list->nterm_list->buffer[0];
     sort_nterm_list(master_list->nterm_list);
     sort_term_list(master_list->term_list);
+
+    find_ds();
 }
 
 master_list_t* create_master_list(void) {

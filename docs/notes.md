@@ -2,9 +2,13 @@
 These notes help me organize my thoughts.
 
 ## Parser Functions
+A parser function is a function that is implemented for ``PGEN``'s  input language. It is not a part of the user's grammar. The functions are used to form simple regular expressions that specify the syntax of the user's input. Every part of the input syntax to ``PGEN`` is defined by a function and the functions must be defined by the parser generator but they are not a part of the parser generators output. The parser generator's output implements a recursive parser and AST for the syntax defined by the user's grammar . 
+
 Each parse function can be built up of state machine sections. A section corresponds to a function such as ``one or more``. A function has exactly one argument that can be another function. The exception to that is the ``grouping`` function which implements a list of arguments. Grouping always returns a list. Other functions return the type of object that they parse.
 
 A return object can be a terminal or a non-terminal, so there needs to be a wrapper object to make them the same but still tell the difference when traversing them in the AST.
+
+Note that tokens in this document that are formed such as ``TOK_OPAREN`` are found in the user's source code as ``'('`` and tokens that are formed such as ``OPAREN`` are a part of the parser generators syntax.
 
 Each non-terminal has a single parsing function. While the parse function is being generated, the state number must be tracked so that it can be placed in a single switch/case statement. All parse functions have cases for match, no match, and error. All of the parse function also have a starting state.
 
@@ -15,6 +19,7 @@ When there is a construct in the grammar such as
 while_statement (TOK_WHILE TOK_OPAREN expression TOK_CPAREN func_block)
 ```
 Each item is single without being a part of a function other than the group that defines the non-terminal ``while_statement``. Then there are no functions defined except the grouping. So that means that these single items must be embedded with the grouping. So that means that there will be 5 states in this function, not including the stopping states.
+
 #### pattern
 ##### for a terminal
 ```
@@ -211,7 +216,12 @@ switch(state) {
             consume_the_item();
             // no state change
         }
-        else if(token_match(TOK_CPAREN)) {
+        else 
+        	state = XX3;
+        break;
+        
+    case XX3:	      
+        if(token_match(TOK_CPAREN)) {
             consume_the_item();
             state = STATE_MATCH;
         }
