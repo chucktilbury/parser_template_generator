@@ -49,8 +49,8 @@ nterm_item_t* create_nterm_item(string_t* nterm, string_t* type, ast_node_t* nod
     nterm_item_t* ptr = _ALLOC_TYPE(nterm_item_t);
     ptr->nterm        = nterm;
     ptr->type         = type;
-    ptr->node = node;
-    ptr->ds_names = create_ptr_list();
+    ptr->node         = node;
+    ptr->ds_names     = create_ptr_list();
 
     return ptr;
 }
@@ -78,11 +78,11 @@ void sort_nterm_list(nterm_list_t* lst) {
 // using the nterm or the type creates the same result
 nterm_item_t* find_nterm(nterm_list_t* lst, const char* str) {
 
-    string_t* ptr = create_string(str);
+    string_t* ptr      = create_string(str);
     nterm_item_t* item = create_nterm_item(ptr, ptr, NULL);
 
     nterm_item_t* retv = NULL;
-    int val = find_ptr_list((ptr_list_t*)lst, item, comp_nterm);
+    int val            = find_ptr_list((ptr_list_t*)lst, item, comp_nterm);
     if(val >= 0)
         retv = lst->buffer[val];
 
@@ -94,9 +94,8 @@ nterm_item_t* find_nterm(nterm_list_t* lst, const char* str) {
 void create_ds_name(nterm_item_t* item, string_t* name, int type) {
 
     nterm_ds_type_t* ptr = _ALLOC_TYPE(nterm_ds_type_t);
-    ptr->name = name;
-    ptr->type = type;
+    ptr->name            = name;
+    ptr->type            = type;
 
     append_ptr_list(item->ds_names, (void*)ptr);
 }
-

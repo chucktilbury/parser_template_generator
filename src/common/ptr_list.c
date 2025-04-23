@@ -8,7 +8,7 @@ ptr_list_t* create_ptr_list(void) {
     ptr->len        = 0;
     ptr->cap        = 1 << 3;
     ptr->buffer     = _ALLOC_ARRAY(void*, ptr->cap);
-    ptr->is_sorted = false;
+    ptr->is_sorted  = false;
 
     return ptr;
 }
@@ -88,10 +88,10 @@ void sort_ptr_list(ptr_list_t* lst, int (*comp_func)(void*, void*)) {
 
     for(size_t step = 0; step < lst->len - 1; step++) {
         for(size_t i = 0; i < lst->len - step - 1; i++) {
-            if(comp_func(lst->buffer[i], lst->buffer[i+1]) > 0) {
-                void* tmp = lst->buffer[i];
-                lst->buffer[i] = lst->buffer[i+1];
-                lst->buffer[i+1] = tmp;
+            if(comp_func(lst->buffer[i], lst->buffer[i + 1]) > 0) {
+                void* tmp          = lst->buffer[i];
+                lst->buffer[i]     = lst->buffer[i + 1];
+                lst->buffer[i + 1] = tmp;
             }
         }
     }
@@ -104,7 +104,7 @@ int find_ptr_list(ptr_list_t* lst, void* key, int (*comp_func)(void*, void*)) {
     if(!lst->is_sorted)
         return -1;
 
-    int low = 0;
+    int low  = 0;
     int high = lst->len - 1;
 
     while(low <= high) {

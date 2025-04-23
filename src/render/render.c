@@ -21,7 +21,7 @@ static void rend_file(const char* buf, const char* name) {
     fclose(fp);
 }
 
- void render(void) {
+void render(void) {
 
     render_init();
     rend_file(ast_h_template, "ast.h");
@@ -31,6 +31,4 @@ static void rend_file(const char* buf, const char* name) {
     rend_file(tokens_h_template, "tokens.h");
     rend_file(tokens_c_template, "tokens.c");
     rend_file(scanner_h_template, "scanner.h");
- }
-
-
+}

@@ -17,8 +17,8 @@
 
 #include "common.h"
 
-#define HEADER  "templates.h"
-#define SOURCE  "templates.c"
+#define HEADER "templates.h"
+#define SOURCE "templates.c"
 
 static const char* template_list[] = {
     "ast_h",
@@ -40,11 +40,11 @@ static const char* template_list[] = {
 };
 
 static const char* intro =
-"/*\n" \
-" * GENERTATED FILE. DO NOT EDIT.\n" \
-" */\n\n" ;
+        "/*\n"
+        " * GENERTATED FILE. DO NOT EDIT.\n"
+        " */\n\n";
 
-static char template_dir[1024*4];
+static char template_dir[1024 * 4];
 
 static void gen_header(void) {
 
@@ -111,10 +111,9 @@ int main(int argc, char** argv) {
     }
 
     strncpy(template_dir, argv[1], sizeof(template_dir));
-    //fprintf(stderr, "%s\n", template_dir);
+    // fprintf(stderr, "%s\n", template_dir);
 
     gen_header();
     gen_source();
     return 0;
 }
-

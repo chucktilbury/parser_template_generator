@@ -22,14 +22,14 @@ typedef struct _func_stack_t_ {
 } func_stack_t;
 
 static func_stack_t* func_stack = NULL;
-static int stack_depth = 0;
+static int stack_depth          = 0;
 static void push_func_stack(ast_type_t type) {
 
     ENTER;
     TRACE("stack depth: %d", stack_depth);
     func_stack_t* ptr = _ALLOC_TYPE(func_stack_t);
-    ptr->type = type;
-    ptr->next = NULL;
+    ptr->type         = type;
+    ptr->next         = NULL;
 
     if(func_stack != NULL)
         ptr->next = func_stack;
@@ -68,8 +68,8 @@ static void add_terminal(token_t* item) {
 
     ENTER;
     nterm_ds_type_t* ptr = _ALLOC_TYPE(nterm_ds_type_t);
-    ptr->name = item->str;
-    ptr->type = 1;
+    ptr->name            = item->str;
+    ptr->type            = 1;
 
     TRACE("token: %s", item->token->buffer);
     if(item->type == TERMINAL_SYMBOL)
@@ -82,8 +82,8 @@ static void add_non_terminal(nterm_item_t* item) {
 
     ENTER;
     nterm_ds_type_t* ptr = _ALLOC_TYPE(nterm_ds_type_t);
-    ptr->name = item->nterm;
-    ptr->type = 0;
+    ptr->name            = item->nterm;
+    ptr->type            = 0;
 
     TRACE("token: %s", item->nterm->buffer);
     append_ptr_list(crnt_rule->ds_names, (void*)ptr);
@@ -117,19 +117,17 @@ static void rule_element(rule_element_t* node) {
             case TERMINAL_SYMBOL:
             case TERMINAL_OPER:
             case TERMINAL_KEYWORD: {
-                    add_terminal(node->token);
-                }
-                break;
+                add_terminal(node->token);
+            } break;
             case NON_TERMINAL: {
-                    nterm_item_t* item = find_nterm(master_list->nterm_list, node->token->str->buffer);
-                    if(item == NULL) {
-                        fprintf(stderr, "syntax error: undefined non-terminal \"%s\" on line %d\n",
+                nterm_item_t* item = find_nterm(master_list->nterm_list, node->token->str->buffer);
+                if(item == NULL) {
+                    fprintf(stderr, "syntax error: undefined non-terminal \"%s\" on line %d\n",
                             node->token->str->buffer, node->token->line_no);
-                        exit(1);
-                    }
-                    add_non_terminal(item);
+                    exit(1);
                 }
-                break;
+                add_non_terminal(item);
+            } break;
             default:
                 FATAL("unknown terminal type: %s", tok_to_str(node->token->type));
         }
@@ -222,4 +220,3 @@ void find_ds(void) {
     pop_func_stack();
     RETURN();
 }
-

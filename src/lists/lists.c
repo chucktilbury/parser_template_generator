@@ -140,7 +140,7 @@ static void rule_element(rule_element_t* node) {
         switch(node->token->type) {
             case TERMINAL_KEYWORD: {
                 string_t* term = copy_string(node->token->str);
-                //strip_quotes(term);
+                // strip_quotes(term);
 
                 string_t* tok = copy_string(term);
                 upcase(tok);
@@ -151,7 +151,7 @@ static void rule_element(rule_element_t* node) {
             } break;
             case TERMINAL_OPER: {
                 string_t* term = copy_string(node->token->str);
-                //strip_quotes(term);
+                // strip_quotes(term);
 
                 string_t* tok = copy_string(term);
                 tok           = convert(tok);
@@ -210,7 +210,7 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
-   rule_element(node->rule_element);
+    rule_element(node->rule_element);
 
     RETURN();
 }
@@ -294,10 +294,10 @@ master_list_t* create_master_list(void) {
 
     master_list_t* ptr = _ALLOC_TYPE(master_list_t);
 
-    ptr->first_nterm = NULL;
+    ptr->first_nterm  = NULL;
     ptr->current_file = NULL;
-    ptr->nterm_list = create_nterm_list();
-    ptr->term_list  = create_term_list();
+    ptr->nterm_list   = create_nterm_list();
+    ptr->term_list    = create_term_list();
 
     return ptr;
 }

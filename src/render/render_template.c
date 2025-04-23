@@ -21,7 +21,7 @@ static int get_char(const char* buffer, int* mark) {
     int ch = EOF;
 
     if(buffer[*mark] != '\0') {
-        ch = buffer[*mark];
+        ch    = buffer[*mark];
         *mark = *mark + 1;
     }
 
@@ -49,7 +49,7 @@ void add_render(render_table_t* ptr, render_item_t* item) {
 
 void render_template(const char* template, FILE* outf, render_table_t* ptr) {
 
-    int mark = 0;
+    int mark    = 0;
     int line_no = 1;
 
     char name[32];

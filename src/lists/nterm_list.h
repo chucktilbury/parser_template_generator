@@ -21,7 +21,7 @@ typedef ptr_list_t nterm_list_t;
 // data structure for ds_names
 typedef struct {
     string_t* name;
-    int type;   // defined in parser.y as a token
+    int type; // defined in parser.y as a token
 } nterm_ds_type_t;
 
 typedef struct {
@@ -45,4 +45,3 @@ void destroy_nterm_item(nterm_item_t* item);
 void create_ds_name(nterm_item_t* item, string_t* name, int type);
 
 #endif /* _NTERM_LIST_H_ */
-

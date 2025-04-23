@@ -39,10 +39,9 @@ static void rule_element(rule_element_t* node) {
             case TERMINAL_SYMBOL:
             case TERMINAL_OPER:
             case TERMINAL_KEYWORD: {
-                    term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
-                    printf("%s ", term->token->buffer);
-                }
-                break;
+                term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
+                printf("%s ", term->token->buffer);
+            } break;
             case NON_TERMINAL:
                 printf("%s ", node->token->str->buffer);
                 break;
@@ -111,6 +110,4 @@ void print_rule(nterm_item_t* rule) {
 
     printf("%s ", rule->nterm->buffer);
     grouping_function((grouping_function_t*)rule->node);
-
 }
-

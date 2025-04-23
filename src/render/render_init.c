@@ -62,7 +62,7 @@ static void _type_to_str(FILE* fp) {
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->nterm_idx = mark - 1;
         render_template(ast_type_to_str_template, fp, render_table);
-        //fprintf(fp, "\n");
+        // fprintf(fp, "\n");
     }
 }
 
@@ -74,7 +74,7 @@ static void _type_to_size(FILE* fp) {
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->nterm_idx = mark - 1;
         render_template(ast_type_to_size_template, fp, render_table);
-        //fprintf(fp, "\n");
+        // fprintf(fp, "\n");
     }
 }
 
@@ -124,7 +124,7 @@ static void _ast_func_protos(FILE* fp) {
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->nterm_idx = mark - 1;
         render_template(ast_func_proto_template, fp, render_table);
-        //fprintf(fp, "\n");
+        // fprintf(fp, "\n");
     }
 }
 
@@ -136,7 +136,7 @@ static void _parser_func_protos(FILE* fp) {
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->nterm_idx = mark - 1;
         render_template(parser_func_proto_template, fp, render_table);
-        //fprintf(fp, "\n");
+        // fprintf(fp, "\n");
     }
 }
 
@@ -275,5 +275,3 @@ void render_init(void) {
     make_render_dirs();
     make_render_table();
 }
-
-

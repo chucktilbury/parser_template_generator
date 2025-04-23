@@ -82,11 +82,11 @@ void sort_term_list(term_list_t* lst) {
 term_item_t* find_term(term_list_t* lst, const char* str) {
 
     // need to match the types for the search routine
-    string_t* ptr = create_string(str);
+    string_t* ptr     = create_string(str);
     term_item_t* item = create_term_item(ptr, ptr);
 
     term_item_t* retv = NULL;
-    int val = find_ptr_list((ptr_list_t*)lst, item, comp_term);
+    int val           = find_ptr_list((ptr_list_t*)lst, item, comp_term);
     if(val >= 0)
         retv = lst->buffer[val];
 
@@ -94,5 +94,3 @@ term_item_t* find_term(term_list_t* lst, const char* str) {
     _FREE(item);
     return retv;
 }
-
-
