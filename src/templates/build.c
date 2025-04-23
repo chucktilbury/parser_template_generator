@@ -74,9 +74,9 @@ static void gen_source(void) {
     for(int i = 0; template_list[i] != NULL; i++) {
         memset(buf, 0, sizeof(buf));
         strncpy(buf, template_dir, sizeof(buf));
-        strncat(buf, "/", strlen(buf) - sizeof(buf) - 1);
-        strncat(buf, template_list[i], strlen(buf) - sizeof(buf) - 1);
-        strncat(buf, ".txt", strlen(buf) - sizeof(buf) - 1);
+        strncat(buf, "/", sizeof(buf) - strlen(buf) - 1);
+        strncat(buf, template_list[i], sizeof(buf) - strlen(buf) - 1);
+        strncat(buf, ".txt", sizeof(buf) - strlen(buf) - 1);
         inf = fopen(buf, "r");
         if(inf == NULL)
             FATAL("cannot open input file: \"%s\": %s\n", buf, strerror(errno));

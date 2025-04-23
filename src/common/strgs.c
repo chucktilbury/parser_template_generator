@@ -140,7 +140,7 @@ string_t* strip_quotes(string_t* buf) {
 
 string_t* strip_space(string_t* buf) {
 
-    size_t len;
+    int len;
     for(len = strlen(buf->buffer); (isspace(buf->buffer[len]) || buf->buffer[len] == 0) && len >= 0; len--)
         buf->buffer[len] = '\0';
 
