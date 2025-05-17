@@ -1,3 +1,0 @@
-
-// begin or function
-// end or function

@@ -3,11 +3,8 @@
 #include <stdlib.h>
 
 #include "ast.h"
+#include "ast_protos.h"
 #include "common.h"
-
-{{ast_function_protos}}
-
-{{ast_function_defs}}
 
 /*
  * public interface
@@ -22,7 +19,7 @@ ast_node_t* create_ast_node(ast_type_t type) {
 
 void traverse_ast(ast_node_t* node) {
 
-    _{{ast_first_node}}((ast_{{ast_first_node}}_t*)node);
+    traverse_{{ast_first_node}}((ast_{{ast_first_node}}_t*)node);
 }
 
 const char* node_type_to_str(ast_type_t type) {

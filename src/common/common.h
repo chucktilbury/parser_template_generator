@@ -8,5 +8,6 @@
 #include "strg_list.h"
 #include "errors.h"
 #include "trace.h"
+#include "fileio.h"
 
 #endif /* _COMMON_H_ */

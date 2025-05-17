@@ -11,5 +11,6 @@ token_t* get_scanner_token(void);
 const char* get_scanner_fname(void);
 int get_scanner_line_no(void);
 int get_scanner_col_no(void);
+const char* find_file(const char* fname);
 
 #endif /* _SCANNER_H_ */

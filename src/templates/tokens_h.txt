@@ -6,8 +6,9 @@
 #include "common.h"
 
 typedef enum {
-    TOK_END_OF_INPUT = 256,
-    TOK_ERROR = 257,
+    TOK_END_OF_FILE = 256,
+    TOK_END_OF_INPUT = 257,
+    TOK_ERROR = 258,
 {{token_type_list}}
 } token_type_t;
 
@@ -20,7 +21,7 @@ typedef struct _token_t_ {
     struct _token_t_* next;
 } token_t;
 
-token_t* create_token(const char* str, token_type_t type);
+token_t* create_token(string_t* str, token_type_t type);
 void destroy_token(token_t* tok);
 const char* tok_type_to_str(token_t* tok);
 

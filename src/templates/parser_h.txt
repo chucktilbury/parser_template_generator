@@ -30,6 +30,7 @@ parser_scope_t peek_parser_scope(parser_state_t* pstate);
 void push_parser_mode(parser_state_t* pstate, parser_mode_t mode);
 parser_mode_t pop_parser_mode(parser_state_t* pstate);
 parser_mode_t peek_parser_mode(parser_state_t* pstate);
+void recover_parser_error(parser_state_t* pstate);
 
 #endif /* _PARSER_H_ */
 

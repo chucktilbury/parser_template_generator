@@ -24,6 +24,7 @@ typedef struct {
     int nterm_idx;
     int term_idx;
     string_t* current_file;
+    string_t* project_name;
 } master_list_t;
 
 extern master_list_t* master_list;

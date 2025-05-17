@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include "lists.h"
 
-void render_parser_funcs(FILE* fp);
+void render_parser_funcs(void);
 void render_parser_implementation(FILE* fp);
 
 #endif /* _RENDER_PARSER_H_ */

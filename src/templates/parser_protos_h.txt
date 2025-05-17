@@ -1,0 +1,23 @@
+{{file_header}}
+#ifndef _PARSER_PROTOS_H_
+#define _PARSER_PROTOS_H_
+
+#include "ast.h"
+#include "parser.h"
+
+#define STATE_START     0
+#define STATE_MATCH     1000
+#define STATE_NO_MATCH  1001
+#define STATE_ERROR     1002
+
+#ifdef USE_TRACE
+#define TRACE_STATE { \
+        TRACE("state: %d", state); \
+    } while(0)
+#else
+#define TRACE_STATE
+#endif
+
+{{parser_protos}}
+
+#endif /* _PARSER_PROTOS_H_ */

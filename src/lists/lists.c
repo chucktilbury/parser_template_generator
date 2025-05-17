@@ -146,7 +146,7 @@ static void rule_element(rule_element_t* node) {
                 upcase(tok);
                 // create_string copies the string
                 // the string term is simply assigned.
-                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
+                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer), 1));
                 destroy_string(tok);
             } break;
             case TERMINAL_OPER: {
@@ -156,7 +156,7 @@ static void rule_element(rule_element_t* node) {
                 string_t* tok = copy_string(term);
                 tok           = convert(tok);
 
-                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer)));
+                append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer), 1));
 
                 destroy_string(tok); // normally GC would handle this.
             } break;
@@ -164,7 +164,7 @@ static void rule_element(rule_element_t* node) {
                 string_t* term = copy_string(node->token->str);
                 string_t* tok  = create_string_fmt("TOK_%s", node->token->str->buffer);
 
-                append_term_list(master_list->term_list, create_term_item(term, tok));
+                append_term_list(master_list->term_list, create_term_item(term, tok, 0));
             } break;
             case NON_TERMINAL:
                 /* do nothing */
@@ -210,7 +210,8 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
-    rule_element(node->rule_element);
+    rule_element(node->left);
+    rule_element(node->right);
 
     RETURN();
 }

@@ -15,6 +15,7 @@ void destroy_string(string_t* buf);
 string_t* append_string(string_t* buf, const char* str);
 string_t* append_string_fmt(string_t* buf, const char* fmt, ...);
 string_t* append_string_char(string_t* buf, int ch);
+void clear_string(string_t* buf);
 int len_string(string_t* buf);
 int comp_string(string_t* buf1, string_t* buf2);
 const char* raw_string(string_t* str);

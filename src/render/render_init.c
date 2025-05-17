@@ -11,7 +11,9 @@
 #include <sys/stat.h>
 #include <time.h>
 #include <string.h>
+#include <unistd.h>
 
+#include "strgs.h"
 #include "term_list.h"
 #include "nterm_list.h"
 #include "nterm_ds.h"
@@ -52,6 +54,11 @@ static void _first_node(FILE* fp) {
 
     nterm_item_t* item = master_list->first_nterm;
     fprintf(fp, "%s", item->nterm->buffer);
+}
+
+static void _project_name(FILE* fp) {
+
+    fprintf(fp, "%s", master_list->project_name->buffer);
 }
 
 static void _type_to_str(FILE* fp) {
@@ -100,18 +107,6 @@ static void _data_structures(FILE* fp) {
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->nterm_idx = mark - 1;
         render_template(ast_data_struct_template, fp, render_table);
-        fprintf(fp, "\n");
-    }
-}
-
-static void _ast_func_defs(FILE* fp) {
-
-    int mark = 0;
-    nterm_item_t* item;
-
-    while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
-        master_list->nterm_idx = mark - 1;
-        render_template(ast_func_def_template, fp, render_table);
         fprintf(fp, "\n");
     }
 }
@@ -183,13 +178,69 @@ static void _ast_struct_elements(FILE* fp) {
     int mark = 0;
 
     while(NULL != (item = iterate_ptr_list(nterm->ds_names, &mark))) {
-        fprintf(fp, "// name = %s: %d\n", item->name->buffer, item->type);
+        if(item->type) {
+            // terminal symbol
+            fprintf(fp, "    // token_t* %s;\n", item->name->buffer);
+        }
+        else {
+            // non-terminal
+            fprintf(fp, "    // struct _ast_%s_t_* %s;\n", item->name->buffer, item->name->buffer);
+        }
+    }
+}
+
+static void _parser_struct_elements(FILE* fp) {
+
+    nterm_item_t* nterm = index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_ds_type_t* item;
+    int mark = 0;
+
+    while(NULL != (item = iterate_ptr_list(nterm->ds_names, &mark))) {
+        if(item->type) {
+            // terminal symbol
+            fprintf(fp, "// token_t* %s = NULL;\n", item->name->buffer);
+        }
+        else {
+            // non-terminal
+            fprintf(fp, "// ast_%s_t* %s = NULL;\n", item->name->buffer, item->name->buffer);
+        }
+    }
+}
+
+static void _parser_assignment_elements(FILE* fp) {
+
+    nterm_item_t* nterm = index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_ds_type_t* item;
+    int mark = 0;
+
+    while(NULL != (item = iterate_ptr_list(nterm->ds_names, &mark))) {
+        fprintf(fp, "// retv->%s = %s;\n", item->name->buffer, item->name->buffer);
     }
 }
 
 static void _ast_func_implementation(FILE* fp) {
 
     fprintf(fp, "// ast implementation is TBD\n");
+}
+
+void dump_rule(FILE* fp, nterm_item_t* rule);
+static void _dump_rule(FILE* fp) {
+
+    dump_rule(fp, index_nterm_list(master_list->nterm_list, master_list->nterm_idx));
+}
+
+static void _gen_scanner_rules(FILE* fp) {
+
+    term_item_t* term;
+    int mark = 0;
+
+    while(NULL != (term = iterate_term_list(master_list->term_list, &mark))) {
+        if(term->type) {
+            fprintf(fp, "\"%s\"\t{\n", term->term->buffer);
+            fprintf(fp, "    add_token_queue(create_token(create_string(yytext), %s));\n", term->token->buffer);
+            fprintf(fp, "    return %s;\n}\n\n", term->token->buffer);
+        }
+    }
 }
 
 static void make_render_table(void) {
@@ -209,17 +260,22 @@ static void make_render_table(void) {
     add_render(render_table, create_render_item("ast_type_to_size", _type_to_size));
     add_render(render_table, create_render_item("ast_type_to_str", _type_to_str));
     add_render(render_table, create_render_item("ast_first_node", _first_node));
-    add_render(render_table, create_render_item("ast_function_defs", _ast_func_defs));
-    add_render(render_table, create_render_item("ast_struct_elements", _ast_struct_elements));
     add_render(render_table, create_render_item("ast_func_implementation", _ast_func_implementation));
+
+    add_render(render_table, create_render_item("ast_struct_elements", _ast_struct_elements));
+    add_render(render_table, create_render_item("data_structures", _parser_struct_elements));
+    add_render(render_table, create_render_item("assign_data_structures", _parser_assignment_elements));
 
     add_render(render_table, create_render_item("parser_protos", _parser_func_protos));
     // functions defined in render_parser.c
-    add_render(render_table, create_render_item("parser_funcs", render_parser_funcs));
     add_render(render_table, create_render_item("parse_func_implementation", render_parser_implementation));
 
     add_render(render_table, create_render_item("token_type_list", _token_type_list));
     add_render(render_table, create_render_item("tok_type_to_str", _tok_type_to_str));
+    add_render(render_table, create_render_item("gen_scanner_rules", _gen_scanner_rules));
+
+    add_render(render_table, create_render_item("dump_rule", _dump_rule));
+    add_render(render_table, create_render_item("project_name", _project_name));
 }
 
 
@@ -227,11 +283,12 @@ static void make_render_table(void) {
 // reasonable defaults but for now, they are hard-coded.
 void make_render_dirs(void) {
 
-    remove("./out");
+    //remove("./out");
+    system("rm -rf ./out/");
     mkdir("./out", 0777);
-    // mkdir("./out/ast", 0777);
-    // mkdir("./out/parser", 0777);
-    // mkdir("./out/scanner", 0777);
+    mkdir("./out/ast", 0777);
+    mkdir("./out/parser", 0777);
+    mkdir("./out/scanner", 0777);
 }
 
 const char* make_fname(char* buf, size_t size, const char* base) {
@@ -243,35 +300,59 @@ const char* make_fname(char* buf, size_t size, const char* base) {
     return master_list->current_file->buffer;
 }
 
-// const char* make_ast_fname(char* buf, size_t size, const char* base) {
+const char* make_ast_fname(const char* base) {
 
-//     snprintf(buf, size, "./out/ast/%s", base);
-//     if(master_list->current_file != NULL)
-//         destroy_string(master_list->current_file);
-//     master_list->current_file = create_string(buf);
-//     return master_list->current_file->buffer;
-// }
+    // snprintf(buf, size, "./out/ast/%s", base);
+    if(master_list->current_file == NULL)
+        master_list->current_file = create_string_fmt("./out/ast/%s.c", base);
+    else {
+        clear_string(master_list->current_file);
+        append_string_fmt(master_list->current_file, "./out/ast/%s.c", base);
+    }
+    // master_list->current_file = create_string(buf);
+    return master_list->current_file->buffer;
+}
 
-// const char* make_parser_fname(char* buf, size_t size, const char* base) {
+const char* make_parser_fname(const char* base) {
 
-//     snprintf(buf, size, "./out/parser/%s", base);
-//     if(master_list->current_file != NULL)
-//         destroy_string(master_list->current_file);
-//     master_list->current_file = create_string(buf);
-//     return master_list->current_file->buffer;
-// }
+    if(master_list->current_file == NULL)
+        master_list->current_file = create_string_fmt("./out/parser/%s.c", base);
+    else {
+        clear_string(master_list->current_file);
+        append_string_fmt(master_list->current_file, "./out/parser/%s.c", base);
+    }
+    return master_list->current_file->buffer;
+}
 
-// const char* make_scanner_fname(char* buf, size_t size, const char* base) {
+const char* make_scanner_fname(const char* base) {
 
-//     snprintf(buf, size, "./out/scanner/%s", base);
-//     if(master_list->current_file != NULL)
-//         destroy_string(master_list->current_file);
-//     master_list->current_file = create_string(buf);
-//     return master_list->current_file->buffer;
-// }
+    if(master_list->current_file == NULL)
+        master_list->current_file = create_string_fmt("./out/scanner/%s.c", base);
+    else {
+        clear_string(master_list->current_file);
+        append_string_fmt(master_list->current_file, "./out/scanner/%s.c", base);
+    }
+    return master_list->current_file->buffer;
+}
+
+static void render_ast_funcs(void) {
+
+    int mark = 0;
+    nterm_item_t* item;
+
+    while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
+        master_list->nterm_idx = mark - 1;
+        FILE* fp               = fopen(make_ast_fname(item->nterm->buffer), "w");
+        render_template(ast_func_def_template, fp, render_table);
+        fprintf(fp, "\n");
+        fclose(fp);
+    }
+}
 
 void render_init(void) {
 
     make_render_dirs();
     make_render_table();
+    render_parser_funcs();
+    render_ast_funcs();
 }

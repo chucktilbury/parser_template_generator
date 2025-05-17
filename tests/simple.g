@@ -80,7 +80,7 @@ var_decl (
 )
 
 func_parm_decl (
-    typename ( IDENT )?
+    type_name ( IDENT )?
 )
 
 func_parm_decl_list (
@@ -156,7 +156,7 @@ cast_statement (
     type_name ':' expression
 )
 
-expr_or (
+expression (
     expr_and ( 'or' expr_and )*
 )
 

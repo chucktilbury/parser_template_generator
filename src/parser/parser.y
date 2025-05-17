@@ -166,9 +166,10 @@ one_or_more_function
     ;
 
 or_function
-    : rule_element PIPE  {
+    : rule_element PIPE rule_element {
         $$ = (or_function_t*)create_ast_node(AST_OR_FUNCTION);
-        $$->rule_element = $1;
+        $$->left = $1;
+        $$->right = $3;
     }
     ;
 

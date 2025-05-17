@@ -64,16 +64,32 @@ static int pop_func_stack(void) {
 
 static nterm_item_t* crnt_rule = NULL;
 
-static void add_terminal(token_t* item) {
+// add if unique
+static void add_list(ptr_list_t* lst, nterm_ds_type_t* ptr) {
+
+    // nterm_ds_type_t* item;
+    // int mark = 0;
+    //
+    // while(NULL != (item = iterate_ptr_list(lst, &mark))) {
+    //     if(!comp_string(ptr->name, item->name))
+    //         return; // do not add a match
+    // }
+
+    append_ptr_list(lst, ptr);
+}
+
+static void add_terminal(string_t* name) {
 
     ENTER;
     nterm_ds_type_t* ptr = _ALLOC_TYPE(nterm_ds_type_t);
-    ptr->name            = item->str;
-    ptr->type            = 1;
+    if(name == NULL)
+        ptr->name = create_string("OPER");
+    else
+        ptr->name = name;
+    ptr->type = 1;
 
-    TRACE("token: %s", item->token->buffer);
-    if(item->type == TERMINAL_SYMBOL)
-        append_ptr_list(crnt_rule->ds_names, (void*)ptr);
+    TRACE("token: %s", name->buffer);
+    add_list(crnt_rule->ds_names, ptr);
 
     RETURN();
 }
@@ -86,7 +102,7 @@ static void add_non_terminal(nterm_item_t* item) {
     ptr->type            = 0;
 
     TRACE("token: %s", item->nterm->buffer);
-    append_ptr_list(crnt_rule->ds_names, (void*)ptr);
+    add_list(crnt_rule->ds_names, ptr);
     RETURN();
 }
 
@@ -109,16 +125,21 @@ static void rule_element_list(rule_element_list_t* node) {
     RETURN();
 }
 
+const char* tok_to_str(int);
 static void rule_element(rule_element_t* node) {
 
     ENTER;
     if(node->token != NULL) {
         switch(node->token->type) {
+            case TERMINAL_KEYWORD:
+                break;
             case TERMINAL_SYMBOL:
+                add_terminal(node->token->str);
+                break;
             case TERMINAL_OPER:
-            case TERMINAL_KEYWORD: {
-                add_terminal(node->token);
-            } break;
+                //add_terminal(NULL);
+                add_terminal(create_string(tok_to_str(node->token->type)));
+                break;
             case NON_TERMINAL: {
                 nterm_item_t* item = find_nterm(master_list->nterm_list, node->token->str->buffer);
                 if(item == NULL) {
@@ -162,7 +183,8 @@ static void or_function(or_function_t* node) {
 
     ENTER;
     push_func_stack(AST_OR_FUNCTION);
-    rule_element(node->rule_element);
+    rule_element(node->left);
+    rule_element(node->right);
     pop_func_stack();
     RETURN();
 }

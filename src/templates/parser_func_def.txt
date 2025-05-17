@@ -1,6 +1,17 @@
+{{file_header}}
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "common.h"
+#include "parser_protos.h"
+
+/*
+ * {{dump_rule}}
+ */
 ast_{{ast_nterm_name}}_t* parse_{{ast_nterm_name}}(parser_state_t* pstate) {
 
 ENTER;
+ASSERT(pstate != NULL, "null pstate is not allowed");
 ast_{{ast_nterm_name}}_t* retv = NULL;
 int state = 0;
 bool finished = false;
@@ -8,16 +19,19 @@ void* post = mark_token_queue();
 
 {{data_structures}}
 
+{{parse_func_implementation}}
 while(!finished) {
     switch(state) {
 
-{{parse_func_implementation}}
+        case STATE_START:
+            TRACE_STATE;
+            break;
 
         case STATE_MATCH:
             TRACE_STATE;
             consume_token_queue();
             retv = (ast_{{ast_nterm_name}}_t*)create_ast_node({{ast_type_name}});
-            {{assign_data_structures}}
+{{assign_data_structures}}
             break;
         case STATE_NO_MATCH:
             TRACE_STATE;
@@ -27,7 +41,7 @@ while(!finished) {
         case STATE_ERROR:
             TRACE_STATE;
             restore_token_queue(post);
-            recover_error();
+            recover_parser_error(pstate);
             finished = true;
             break;
         default:

@@ -105,6 +105,12 @@ string_t* append_string_char(string_t* buf, int ch) {
     return buf;
 }
 
+void clear_string(string_t* buf) {
+
+    buf->len       = 0;
+    buf->buffer[0] = 0;
+}
+
 int len_string(string_t* buf) {
 
     return buf->len;

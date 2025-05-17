@@ -102,7 +102,8 @@ or_function
  */
 typedef struct _or_function_t_ {
     ast_node_t node;
-    struct _rule_element_t_* rule_element;
+    struct _rule_element_t_* left;
+    struct _rule_element_t_* right;
 } or_function_t;
 
 /*

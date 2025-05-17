@@ -20,6 +20,7 @@ typedef ptr_list_t term_list_t;
 typedef struct {
     string_t* term;
     string_t* token;
+    int type;
 } term_item_t;
 
 term_list_t* create_term_list(void);
@@ -30,7 +31,7 @@ term_item_t* index_term_list(term_list_t* lst, int idx);
 void sort_term_list(term_list_t* lst);
 term_item_t* find_term(term_list_t* lst, const char* name);
 
-term_item_t* create_term_item(string_t* term, string_t* tok);
+term_item_t* create_term_item(string_t* term, string_t* tok, int type);
 void destroy_term_item(term_item_t* item);
 
 #endif /* _TERM_LIST_H_ */

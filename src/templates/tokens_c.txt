@@ -13,10 +13,10 @@ typedef struct _token_queue_t_ {
 static token_queue_t* token_queue = NULL;
 static token_t end_of_input;
 
-token_t* create_token(const char* str, token_type_t type) {
+token_t* create_token(string_t* str, token_type_t type) {
 
     token_t* ptr = _ALLOC_TYPE(token_t);
-    ptr->str = create_string(str);
+    ptr->str = str;
     ptr->type = type;
     ptr->fname = get_scanner_fname();
     ptr->line_no = get_scanner_line_no();
@@ -120,7 +120,9 @@ token_t* consume_token(void) {
             token_queue->crnt = token_queue->crnt->next;
 
     if(token_queue->crnt == NULL) {
-        add_token_queue(get_scanner_token());
+        // accomodate a FLEX scanner
+        // add_token_queue(get_scanner_token());
+        get_scanner_token();
         token_queue->crnt = token_queue->tail;
     }
 

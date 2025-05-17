@@ -22,6 +22,7 @@
 
 static const char* template_list[] = {
     "ast_h",
+    "ast_protos_h",
     "ast_c",
     "ast_data_struct",
     "ast_func_proto",
@@ -30,12 +31,16 @@ static const char* template_list[] = {
     "ast_type_to_str",
     "parser_c",
     "parser_h",
+    "parser_protos_h",
     "parser_func_def",
     "parser_func_proto",
     "file_header",
     "tokens_h",
     "tokens_c",
     "scanner_h",
+    "cmake",
+    "scanner_l",
+    "cmake_l",
     NULL
 };
 
@@ -92,6 +97,8 @@ static void gen_source(void) {
             for(int j = 0; buf[j] != '\0'; j++) {
                 if(buf[j] == '\"')
                     fputs("\\\"", fp);
+                else if(buf[j] == '\\')
+                    fputs("\\\\", fp);
                 else
                     fputc(buf[j], fp);
             }

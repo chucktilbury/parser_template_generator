@@ -169,7 +169,8 @@ static void or_function(or_function_t* node) {
 
     ENTER;
 
-    rule_element(node->rule_element);
+    rule_element(node->left);
+    rule_element(node->right);
 
     RETURN();
 }
