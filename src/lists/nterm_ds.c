@@ -137,7 +137,7 @@ static void rule_element(rule_element_t* node) {
                 add_terminal(node->token->str);
                 break;
             case TERMINAL_OPER:
-                //add_terminal(NULL);
+                // add_terminal(NULL);
                 add_terminal(create_string(tok_to_str(node->token->type)));
                 break;
             case NON_TERMINAL: {

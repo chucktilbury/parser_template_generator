@@ -55,7 +55,7 @@ term_item_t* create_term_item(string_t* term, string_t* tok, int type) {
     term_item_t* ptr = _ALLOC_TYPE(term_item_t);
     ptr->term        = term;
     ptr->token       = tok;
-    ptr->type = type;
+    ptr->type        = type;
 
     return ptr;
 }

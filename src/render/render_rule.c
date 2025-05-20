@@ -1,5 +1,5 @@
 /**
- * @file gurge.c
+ * @file render_rule.c
  *
  * @brief AST pass that prints the regurgitates the input after processing.
  *

@@ -10,6 +10,7 @@ build/
 docs/out/
 bin/
 lib/
+.cache/
 
 # Prerequisites
 *.d

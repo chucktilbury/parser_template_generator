@@ -283,7 +283,7 @@ static void make_render_table(void) {
 // reasonable defaults but for now, they are hard-coded.
 void make_render_dirs(void) {
 
-    //remove("./out");
+    // remove("./out");
     system("rm -rf ./out/");
     mkdir("./out", 0777);
     mkdir("./out/ast", 0777);

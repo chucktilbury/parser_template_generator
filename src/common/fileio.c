@@ -1,7 +1,7 @@
 /**
  * @file fileio.c
  * @brief Handle operating system specific file operations.
- * 
+ *
  * @author Chuck Tilbury (chucktilbury@gmail.com)
  * @date 2025-02-28
  * @version 0.0.1
@@ -21,18 +21,18 @@
 #include "alloc.h"
 #include "errors.h"
 
-//#define USE_TRACE
+// #define USE_TRACE
 #include "trace.h"
 
 static const char* base_file_name = NULL;
-static str_list_t* common_env = NULL;
+static str_list_t* common_env     = NULL;
 static char buffer[PATH_MAX]; // returning a pointer to this
 
 /**
  * @brief Handle errors around realpath().
- * 
- * @param str 
- * @return const char* 
+ *
+ * @param str
+ * @return const char*
  */
 static inline const char* get_path(const char* str) {
 
@@ -44,8 +44,8 @@ static inline const char* get_path(const char* str) {
 
 /**
  * @brief Add a path defined in the environment to the internal finder path.
- * 
- * @param str 
+ *
+ * @param str
  */
 static void add_env(const char* str) {
 
@@ -53,12 +53,12 @@ static void add_env(const char* str) {
         char* tmp = getenv(str);
         if(tmp != NULL) {
             tmp = _COPY_STRING(tmp);
-            //printf("%s = %s\n", str, tmp);
+            // printf("%s = %s\n", str, tmp);
             if(tmp != NULL) {
                 char* s;
-                //char* save;
+                // char* save;
                 char* f = ":";
-                s = strtok(tmp, f);
+                s       = strtok(tmp, f);
                 while(s != NULL) {
                     append_str_list(common_env, create_string(s));
                     s = strtok(NULL, f);
@@ -72,8 +72,8 @@ static void add_env(const char* str) {
 
 /**
  * @brief Add a directory and all sub directories to the internal finder path.
- * 
- * @param dname 
+ *
+ * @param dname
  */
 static void add_dirs(const char* dname) {
 
@@ -84,19 +84,19 @@ static void add_dirs(const char* dname) {
     glob_t gstruct;
     glob(tmp, GLOB_ONLYDIR, NULL, &gstruct);
 
-    //printf("paths: %lu\n", gstruct.gl_pathc);
+    // printf("paths: %lu\n", gstruct.gl_pathc);
     for(size_t i = 0; i < gstruct.gl_pathc; i++) {
-        //printf("%d. %s\n", i+1, gstruct.gl_pathv[i]);
+        // printf("%d. %s\n", i+1, gstruct.gl_pathv[i]);
         append_ptr_list(common_env, create_string(gstruct.gl_pathv[i]));
     }
 }
 
 /**
  * @brief See if the file exists.
- * 
- * @param fname 
- * @return true 
- * @return false 
+ *
+ * @param fname
+ * @return true
+ * @return false
  */
 static bool file_exists(const char* fname) {
 
@@ -106,7 +106,7 @@ static bool file_exists(const char* fname) {
 
 /**
  * @brief Create the internal finder path environment.
- * 
+ *
  */
 static void setup_env(void) {
 
@@ -119,9 +119,9 @@ static void setup_env(void) {
 
 /**
  * @brief Find a file. Returns the full path given just the name.
- * 
- * @param fname 
- * @return const char* 
+ *
+ * @param fname
+ * @return const char*
  */
 const char* find_file(const char* fname) {
 
@@ -170,8 +170,8 @@ const char* find_file(const char* fname) {
 
 /**
  * @brief Get the base file name object
- * 
- * @return const char* 
+ *
+ * @return const char*
  */
 const char* get_base_file_name(void) {
 
@@ -180,8 +180,8 @@ const char* get_base_file_name(void) {
 
 /**
  * @brief Set the base file name object
- * 
- * @param fname 
+ *
+ * @param fname
  */
 void set_base_file_name(const char* fname) {
 
