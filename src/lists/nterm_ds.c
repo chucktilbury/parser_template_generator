@@ -13,8 +13,11 @@
 #include "parser.h"
 
 #include "common.h"
-#include "render_init.h"
-#include "render_parser.h"
+#include "nterm_list.h"
+#include "lists.h"
+
+// Note that if it's in an OR, and it's in a group, and it has the same name,
+// then it's a duplicate.
 
 typedef struct _func_stack_t_ {
     ast_type_t type;

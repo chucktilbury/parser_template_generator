@@ -19,6 +19,9 @@
 #include "nterm_list.h"
 #include "nterm_ds.h"
 #include "term_list.h"
+#include "nterm_comment.h"
+#include "nterm_rules.h"
+
 // global product produced by this file
 master_list_t* master_list;
 
@@ -203,7 +206,7 @@ static void rule_element(rule_element_t* node) {
 
 /*
 or_function
- : rule_element PIPE
+ : rule_element PIPE rule_element
  ;
  */
 static void or_function(or_function_t* node) {
@@ -273,21 +276,28 @@ static void grouping_function(grouping_function_t* node) {
     RETURN();
 }
 
+static void raw_list(void) {
+
+    grammar(root_node);
+}
+
 /**
  * @brief Create all of the basic lists.
  *
  * @param node
  */
-void make_raw_lists(grammar_t* node) {
+void make_raw_lists(void) {
 
     master_list = create_master_list();
 
-    grammar((grammar_t*)node);
+    raw_list();
 
     master_list->first_nterm = master_list->nterm_list->buffer[0];
     sort_nterm_list(master_list->nterm_list);
     sort_term_list(master_list->term_list);
 
+    init_rule_states();
+    add_comments();
     find_ds();
 }
 

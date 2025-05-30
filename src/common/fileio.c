@@ -25,7 +25,7 @@
 #include "trace.h"
 
 static const char* base_file_name = NULL;
-static str_list_t* common_env     = NULL;
+static string_list_t* common_env  = NULL;
 static char buffer[PATH_MAX]; // returning a pointer to this
 
 /**
@@ -60,7 +60,7 @@ static void add_env(const char* str) {
                 char* f = ":";
                 s       = strtok(tmp, f);
                 while(s != NULL) {
-                    append_str_list(common_env, create_string(s));
+                    append_string_list(common_env, create_string(s));
                     s = strtok(NULL, f);
                 }
 
@@ -110,7 +110,7 @@ static bool file_exists(const char* fname) {
  */
 static void setup_env(void) {
 
-    common_env = create_str_list();
+    common_env = create_string_list();
 
     add_env("TOY_PATH");
     add_dirs("..");
@@ -147,7 +147,7 @@ const char* find_file(const char* fname) {
     int mark = 0;
     string_t* s;
 
-    while(NULL != (s = iterate_str_list(common_env, &mark))) {
+    while(NULL != (s = iterate_string_list(common_env, &mark))) {
         strncpy(buffer, raw_string(s), PATH_MAX);
         strcat(buffer, "/");
         strcat(buffer, tmp_name);

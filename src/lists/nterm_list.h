@@ -13,8 +13,8 @@
 #define _NTERM_LIST_H_
 
 #include "common.h"
-#include "strgs.h"
 #include "ast.h"
+#include "strg_list.h"
 
 typedef ptr_list_t nterm_list_t;
 
@@ -29,6 +29,8 @@ typedef struct {
     string_t* type;
     ast_node_t* node;
     ptr_list_t* ds_names;
+    //ptr_list_t* rule_states;
+    string_list_t* rule_comment;
 } nterm_item_t;
 
 nterm_list_t* create_nterm_list(void);

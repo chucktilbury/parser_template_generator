@@ -8,7 +8,6 @@
  * @date 2025-03-25
  * @copyright Copyright (c) 2025
  */
-#include <stdio.h>
 #include <string.h>
 #include <stdarg.h>
 #include <ctype.h>
@@ -121,6 +120,11 @@ int comp_string(string_t* buf1, string_t* buf2) {
     return strcmp(buf1->buffer, buf2->buffer);
 }
 
+int comp_string_str(string_t* buf1, const char* buf2) {
+
+    return strcmp(buf1->buffer, buf2);
+}
+
 const char* raw_string(string_t* str) {
 
     return str->buffer;
@@ -162,6 +166,14 @@ string_t* upcase(string_t* buf) {
 
     for(int i = 0; buf->buffer[i] != '\0'; i++)
         buf->buffer[i] = toupper(buf->buffer[i]);
+
+    return buf;
+}
+
+string_t* downcase(string_t* buf) {
+
+    for(int i = 0; buf->buffer[i] != '\0'; i++)
+        buf->buffer[i] = tolower(buf->buffer[i]);
 
     return buf;
 }
@@ -276,6 +288,29 @@ string_t* convert(string_t* str) {
 string_t* copy_string(string_t* buf) {
 
     return create_string(buf->buffer);
+}
+
+void emit_string(FILE* fp, string_t* ptr) {
+
+    fputs(ptr->buffer, fp);
+}
+
+void emit_string_fmt(FILE* fp, const char* fmt, ...) {
+
+    va_list args;
+
+    va_start(args, fmt);
+    size_t len = vsnprintf(NULL, 0, fmt, args);
+    va_end(args);
+
+    char* str = _ALLOC(len + 1);
+
+    va_start(args, fmt);
+    vsprintf(str, fmt, args);
+    va_end(args);
+
+    fputs(str, fp);
+    _FREE(str);
 }
 
 #if 0

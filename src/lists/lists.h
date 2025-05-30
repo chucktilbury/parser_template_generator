@@ -11,17 +11,16 @@
 #ifndef _LISTS_H_
 #define _LISTS_H_
 
-#include <stdio.h>
-#include "ast.h"
-#include "strg_list.h"
-
+#include "strgs.h"
 #include "nterm_list.h"
 #include "term_list.h"
+
 typedef struct {
     nterm_item_t* first_nterm;
+    nterm_item_t* crnt_nterm;
     nterm_list_t* nterm_list;
     term_list_t* term_list;
-    int nterm_idx;
+    //int nterm_idx;
     int term_idx;
     string_t* current_file;
     string_t* project_name;
@@ -31,6 +30,6 @@ extern master_list_t* master_list;
 
 master_list_t* create_master_list(void);
 void destroy_master_list(master_list_t* lst);
-void make_raw_lists(grammar_t* node);
+void make_raw_lists(void);
 
 #endif /* _LISTS_H_ */

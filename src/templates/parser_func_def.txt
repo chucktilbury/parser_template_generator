@@ -13,19 +13,17 @@ ast_{{ast_nterm_name}}_t* parse_{{ast_nterm_name}}(parser_state_t* pstate) {
 ENTER;
 ASSERT(pstate != NULL, "null pstate is not allowed");
 ast_{{ast_nterm_name}}_t* retv = NULL;
-int state = 0;
+int state = 1000;
 bool finished = false;
 void* post = mark_token_queue();
 
 {{data_structures}}
 
-{{parse_func_implementation}}
+{{parse_func_comment}}
 while(!finished) {
     switch(state) {
 
-        case STATE_START:
-            TRACE_STATE;
-            break;
+{{parse_func_implementation}}
 
         case STATE_MATCH:
             TRACE_STATE;

@@ -104,6 +104,9 @@ typedef struct _or_function_t_ {
     ast_node_t node;
     struct _rule_element_t_* left;
     struct _rule_element_t_* right;
+    int state;
+    int level;
+    string_list_t* impl;
 } or_function_t;
 
 /*
@@ -114,6 +117,9 @@ zero_or_more_function
 typedef struct _zero_or_more_function_t_ {
     ast_node_t node;
     struct _rule_element_t_* rule_element;
+    int state;
+    int level;
+    string_list_t* impl;
 } zero_or_more_function_t;
 
 /*
@@ -124,6 +130,9 @@ zero_or_one_function
 typedef struct _zero_or_one_function_t_ {
     ast_node_t node;
     struct _rule_element_t_* rule_element;
+    int state;
+    int level;
+    string_list_t* impl;
 } zero_or_one_function_t;
 
 /*
@@ -134,6 +143,9 @@ one_or_more_function
 typedef struct _one_or_more_function_t_ {
     ast_node_t node;
     struct _rule_element_t_* rule_element;
+    int state;
+    int level;
+    string_list_t* impl;
 } one_or_more_function_t;
 
 /*
@@ -144,6 +156,9 @@ grouping_function
 typedef struct _grouping_function_t_ {
     ast_node_t node;
     struct _rule_element_list_t_* rule_element_list;
+    int state;
+    int level;
+    string_list_t* impl;
 } grouping_function_t;
 
 ast_node_t* create_ast_node(ast_type_t type);

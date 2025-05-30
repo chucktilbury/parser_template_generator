@@ -1,0 +1,507 @@
+	.text
+	.file	"test_func1.c"
+	.globl	parse_expr_equal                # -- Begin function parse_expr_equal
+	.p2align	4, 0x90
+	.type	parse_expr_equal,@function
+parse_expr_equal:                       # @parse_expr_equal
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$80, %rsp
+	movq	%rdi, -8(%rbp)
+	movl	$0, -52(%rbp)
+	movb	$0, -53(%rbp)
+	callq	mark_token_queue@PLT
+	movq	%rax, -64(%rbp)
+.LBB0_1:                                # =>This Inner Loop Header: Depth=1
+	movb	-53(%rbp), %al
+	xorb	$-1, %al
+	testb	$1, %al
+	jne	.LBB0_2
+	jmp	.LBB0_10
+.LBB0_2:                                #   in Loop: Header=BB0_1 Depth=1
+	movl	-52(%rbp), %eax
+	movl	%eax, -68(%rbp)                 # 4-byte Spill
+	testl	%eax, %eax
+	je	.LBB0_3
+	jmp	.LBB0_13
+.LBB0_13:                               #   in Loop: Header=BB0_1 Depth=1
+	movl	-68(%rbp), %eax                 # 4-byte Reload
+	subl	$1000, %eax                     # imm = 0x3E8
+	je	.LBB0_4
+	jmp	.LBB0_14
+.LBB0_14:                               #   in Loop: Header=BB0_1 Depth=1
+	movl	-68(%rbp), %eax                 # 4-byte Reload
+	subl	$1001, %eax                     # imm = 0x3E9
+	je	.LBB0_5
+	jmp	.LBB0_15
+.LBB0_15:                               #   in Loop: Header=BB0_1 Depth=1
+	movl	-68(%rbp), %eax                 # 4-byte Reload
+	subl	$1002, %eax                     # imm = 0x3EA
+	je	.LBB0_6
+	jmp	.LBB0_7
+.LBB0_3:                                #   in Loop: Header=BB0_1 Depth=1
+	movq	-8(%rbp), %rsi
+	leaq	-48(%rbp), %rdi
+	callq	func_0
+	movl	%eax, -52(%rbp)
+	jmp	.LBB0_9
+.LBB0_4:                                #   in Loop: Header=BB0_1 Depth=1
+	callq	consume_token_queue@PLT
+	jmp	.LBB0_9
+.LBB0_5:                                #   in Loop: Header=BB0_1 Depth=1
+	movq	-64(%rbp), %rdi
+	callq	restore_token_queue@PLT
+	movb	$1, -53(%rbp)
+	jmp	.LBB0_9
+.LBB0_6:                                #   in Loop: Header=BB0_1 Depth=1
+	movq	-64(%rbp), %rdi
+	callq	restore_token_queue@PLT
+	movq	-8(%rbp), %rdi
+	callq	recover_parser_error@PLT
+	movb	$1, -53(%rbp)
+	jmp	.LBB0_9
+.LBB0_7:
+	jmp	.LBB0_8
+.LBB0_8:
+	movq	stderr@GOTPCREL(%rip), %rax
+	movq	(%rax), %rdi
+	leaq	.L.str(%rip), %rsi
+	leaq	.L.str.1(%rip), %rdx
+	leaq	.L__func__.parse_expr_equal(%rip), %rcx
+	movl	$181, %r8d
+	movb	$0, %al
+	callq	fprintf@PLT
+	movq	stderr@GOTPCREL(%rip), %rax
+	movq	(%rax), %rdi
+	movl	-52(%rbp), %edx
+	leaq	.L.str.2(%rip), %rsi
+	movb	$0, %al
+	callq	fprintf@PLT
+	movq	stderr@GOTPCREL(%rip), %rax
+	movq	(%rax), %rsi
+	movl	$10, %edi
+	callq	fputc@PLT
+	movl	$1, %edi
+	callq	exit@PLT
+.LBB0_9:                                #   in Loop: Header=BB0_1 Depth=1
+	jmp	.LBB0_1
+.LBB0_10:
+	jmp	.LBB0_11
+.LBB0_11:
+	jmp	.LBB0_12
+.LBB0_12:
+	leaq	-48(%rbp), %rax
+	addq	$80, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end0:
+	.size	parse_expr_equal, .Lfunc_end0-parse_expr_equal
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_0
+	.type	func_0,@function
+func_0:                                 # @func_0
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_1
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end1:
+	.size	func_0, .Lfunc_end1-func_0
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_1
+	.type	func_1,@function
+func_1:                                 # @func_1
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_2
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end2:
+	.size	func_1, .Lfunc_end2-func_1
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_2
+	.type	func_2,@function
+func_2:                                 # @func_2
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$32, %rsp
+	movq	%rdi, -16(%rbp)
+	movq	%rsi, -24(%rbp)
+	movq	-24(%rbp), %rdi
+	callq	parse_expr_magnitude@PLT
+	movq	%rax, %rcx
+	movq	-16(%rbp), %rax
+	movq	%rcx, 32(%rax)
+	xorl	%eax, %eax
+                                        # kill: def $rax killed $eax
+	cmpq	%rcx, %rax
+	je	.LBB3_2
+# %bb.1:
+	movq	-16(%rbp), %rdi
+	movq	-24(%rbp), %rsi
+	callq	func_3
+	movl	%eax, -4(%rbp)
+	jmp	.LBB3_3
+.LBB3_2:
+	movl	$1001, -4(%rbp)                 # imm = 0x3E9
+.LBB3_3:
+	movl	-4(%rbp), %eax
+	addq	$32, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end3:
+	.size	func_2, .Lfunc_end3-func_2
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_3
+	.type	func_3,@function
+func_3:                                 # @func_3
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_4
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end4:
+	.size	func_3, .Lfunc_end4-func_3
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_4
+	.type	func_4,@function
+func_4:                                 # @func_4
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_5
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end5:
+	.size	func_4, .Lfunc_end5-func_4
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_5
+	.type	func_5,@function
+func_5:                                 # @func_5
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_6
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end6:
+	.size	func_5, .Lfunc_end6-func_5
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_6
+	.type	func_6,@function
+func_6:                                 # @func_6
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$32, %rsp
+	movq	%rdi, -16(%rbp)
+	movq	%rsi, -24(%rbp)
+	callq	get_token@PLT
+	movq	%rax, -32(%rbp)
+	movq	-32(%rbp), %rax
+	cmpl	$278, (%rax)                    # imm = 0x116
+	je	.LBB7_2
+# %bb.1:
+	movq	-32(%rbp), %rax
+	cmpl	$323, (%rax)                    # imm = 0x143
+	jne	.LBB7_3
+.LBB7_2:
+	movq	-32(%rbp), %rcx
+	movq	-16(%rbp), %rax
+	movq	%rcx, 24(%rax)
+	movl	$1000, -4(%rbp)                 # imm = 0x3E8
+	jmp	.LBB7_4
+.LBB7_3:
+	movq	-16(%rbp), %rdi
+	movq	-24(%rbp), %rsi
+	callq	func_7
+	movl	%eax, -4(%rbp)
+.LBB7_4:
+	movl	-4(%rbp), %eax
+	addq	$32, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end7:
+	.size	func_6, .Lfunc_end7-func_6
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_7
+	.type	func_7,@function
+func_7:                                 # @func_7
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$32, %rsp
+	movq	%rdi, -16(%rbp)
+	movq	%rsi, -24(%rbp)
+	movq	-24(%rbp), %rdi
+	callq	parse_expr_magnitude@PLT
+	movq	%rax, %rcx
+	movq	-16(%rbp), %rax
+	movq	%rcx, 32(%rax)
+	xorl	%eax, %eax
+                                        # kill: def $rax killed $eax
+	cmpq	%rcx, %rax
+	je	.LBB8_2
+# %bb.1:
+	movq	-16(%rbp), %rdi
+	movq	-24(%rbp), %rsi
+	callq	func_8
+	movl	%eax, -4(%rbp)
+	jmp	.LBB8_3
+.LBB8_2:
+	movl	$1001, -4(%rbp)                 # imm = 0x3E9
+.LBB8_3:
+	movl	-4(%rbp), %eax
+	addq	$32, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end8:
+	.size	func_7, .Lfunc_end8-func_7
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_8
+	.type	func_8,@function
+func_8:                                 # @func_8
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_9
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end9:
+	.size	func_8, .Lfunc_end9-func_8
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_9
+	.type	func_9,@function
+func_9:                                 # @func_9
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_10
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end10:
+	.size	func_9, .Lfunc_end10-func_9
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_10
+	.type	func_10,@function
+func_10:                                # @func_10
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$16, %rsp
+	movq	%rdi, -8(%rbp)
+	movq	%rsi, -16(%rbp)
+	movq	-8(%rbp), %rdi
+	movq	-16(%rbp), %rsi
+	callq	func_11
+	addq	$16, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end11:
+	.size	func_10, .Lfunc_end11-func_10
+	.cfi_endproc
+                                        # -- End function
+	.p2align	4, 0x90                         # -- Begin function func_11
+	.type	func_11,@function
+func_11:                                # @func_11
+	.cfi_startproc
+# %bb.0:
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset %rbp, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register %rbp
+	subq	$32, %rsp
+	movq	%rdi, -16(%rbp)
+	movq	%rsi, -24(%rbp)
+	callq	get_token@PLT
+	movq	%rax, -32(%rbp)
+	movq	-32(%rbp), %rax
+	cmpl	$259, (%rax)                    # imm = 0x103
+	je	.LBB12_2
+# %bb.1:
+	movq	-32(%rbp), %rax
+	cmpl	$341, (%rax)                    # imm = 0x155
+	jne	.LBB12_3
+.LBB12_2:
+	movq	-32(%rbp), %rcx
+	movq	-16(%rbp), %rax
+	movq	%rcx, 24(%rax)
+	movl	$1000, -4(%rbp)                 # imm = 0x3E8
+	jmp	.LBB12_4
+.LBB12_3:
+	movl	$1001, -4(%rbp)                 # imm = 0x3E9
+.LBB12_4:
+	movl	-4(%rbp), %eax
+	addq	$32, %rsp
+	popq	%rbp
+	.cfi_def_cfa %rsp, 8
+	retq
+.Lfunc_end12:
+	.size	func_11, .Lfunc_end12-func_11
+	.cfi_endproc
+                                        # -- End function
+	.type	.L.str,@object                  # @.str
+	.section	.rodata.str1.1,"aMS",@progbits,1
+.L.str:
+	.asciz	"fatal error: %s: %s: %d: "
+	.size	.L.str, 26
+
+	.type	.L.str.1,@object                # @.str.1
+.L.str.1:
+	.asciz	"test_func1.c"
+	.size	.L.str.1, 13
+
+	.type	.L__func__.parse_expr_equal,@object # @__func__.parse_expr_equal
+.L__func__.parse_expr_equal:
+	.asciz	"parse_expr_equal"
+	.size	.L__func__.parse_expr_equal, 17
+
+	.type	.L.str.2,@object                # @.str.2
+.L.str.2:
+	.asciz	"unknown state: %d"
+	.size	.L.str.2, 18
+
+	.ident	"Ubuntu clang version 18.1.3 (1ubuntu1)"
+	.section	".note.GNU-stack","",@progbits
+	.addrsig
+	.addrsig_sym mark_token_queue
+	.addrsig_sym func_0
+	.addrsig_sym consume_token_queue
+	.addrsig_sym restore_token_queue
+	.addrsig_sym recover_parser_error
+	.addrsig_sym fprintf
+	.addrsig_sym fputc
+	.addrsig_sym exit
+	.addrsig_sym func_1
+	.addrsig_sym func_2
+	.addrsig_sym parse_expr_magnitude
+	.addrsig_sym func_3
+	.addrsig_sym func_4
+	.addrsig_sym func_5
+	.addrsig_sym func_6
+	.addrsig_sym get_token
+	.addrsig_sym func_7
+	.addrsig_sym func_8
+	.addrsig_sym func_9
+	.addrsig_sym func_10
+	.addrsig_sym func_11
+	.addrsig_sym stderr

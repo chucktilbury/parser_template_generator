@@ -14,16 +14,17 @@
 #include "strgs.h"
 #include "ptr_list.h"
 
-typedef ptr_list_t str_list_t;
+typedef ptr_list_t string_list_t;
 
-str_list_t* create_str_list(void);
-void append_str_list(str_list_t* lst, string_t* str);
-string_t* index_str_list(str_list_t* lst, int index);
-string_t* iterate_str_list(str_list_t* lst, int* post);
-int len_str_list(str_list_t* lst);
-void sort_str_list(str_list_t* lst);
-int find_str_list(str_list_t* lst, string_t* key);
+string_list_t* create_string_list(void);
+void destroy_string_list(string_list_t* lst);
+void append_string_list(string_list_t* lst, string_t* str);
+string_t* index_string_list(string_list_t* lst, int index);
+string_t* iterate_string_list(string_list_t* lst, int* post);
+int len_string_list(string_list_t* lst);
+void sort_string_list(string_list_t* lst);
+int find_string_list(string_list_t* lst, string_t* key);
 
-void add_str_list(str_list_t* lst, string_t* str);
+void add_string_list(string_list_t* lst, string_t* str);
 
 #endif /* _STRG_LIST_H_ */

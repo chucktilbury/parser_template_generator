@@ -11,6 +11,9 @@
 
 #include "nterm_list.h"
 #include "alloc.h"
+#include "ptr_list.h"
+#include "strg_list.h"
+#include "nterm_rules.h"
 
 nterm_list_t* create_nterm_list(void) {
 
@@ -51,6 +54,7 @@ nterm_item_t* create_nterm_item(string_t* nterm, string_t* type, ast_node_t* nod
     ptr->type         = type;
     ptr->node         = node;
     ptr->ds_names     = create_ptr_list();
+    ptr->rule_comment = create_string_list();
 
     return ptr;
 }
@@ -60,6 +64,7 @@ void destroy_nterm_item(nterm_item_t* item) {
     if(item != NULL) {
         destroy_string(item->nterm);
         destroy_string(item->type);
+        destroy_string_list(item->rule_comment);
         _FREE(item);
     }
 }

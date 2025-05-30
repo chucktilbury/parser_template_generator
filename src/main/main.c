@@ -4,12 +4,18 @@
 #include <string.h>
 #include <errno.h>
 
+#include "nterm_list.h"
+#include "ptr_list.h"
 #include "scanner.h"
 #include "parser.h"
 #include "ast.h"
 #include "common.h"
 #include "lists.h"
 #include "render.h"
+#include "strg_list.h"
+#include "strgs.h"
+#include "nterm_rules.h"
+#include "generate.h"
 
 extern master_list_t* master_list;
 
@@ -42,9 +48,35 @@ int main(int argc, char** argv) {
 
     yyparse();
 
-    make_raw_lists(root_node);
-
+    make_raw_lists();
+    generate_rules();
     render();
+
+    // int mark = 0;
+    // nterm_item_t* node;
+    //
+    // while(NULL != (node = iterate_ptr_list(master_list->nterm_list, &mark))) {
+    //     int point = 0;
+    //     string_t* str;
+    //     emit_string_fmt(stdout, "\n// rule_name: %s\n", node->nterm->buffer);
+    //     while(NULL != (str = iterate_string_list(node->rule_comment, &point)))
+    //         emit_string(stdout, str);
+    // }
+    //
+    // mark = 0;
+    // while(NULL != (node = iterate_ptr_list(master_list->nterm_list, &mark))) {
+    //     int point = 0;
+    //     rule_state_t* rule;
+    //     emit_string_fmt(stdout, "\n// rule_name: %s\n", node->nterm->buffer);
+    //     while(NULL != (rule = iterate_ptr_list(node->rule_states, &point))) {
+    //         int thing = 0;
+    //         string_t* str;
+    //         while(NULL != (str = iterate_string_list(rule->out, &thing)))
+    //             emit_string(stdout, str);
+    //     }
+    // }
+
+
 
     return 0;
 }

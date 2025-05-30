@@ -12,9 +12,6 @@
 #ifndef _NTERM_DS_H_
 #define _NTERM_DS_H_
 
-#include <stdio.h>
-#include "lists.h"
-
 void find_ds(void);
 
 #endif /* _NTERM_DS_H_ */
