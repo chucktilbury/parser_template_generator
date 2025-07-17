@@ -157,7 +157,7 @@ static void rule_element(rule_element_t* node) {
                 // strip_quotes(term);
 
                 string_t* tok = copy_string(term);
-                tok           = convert(tok);
+                tok = convert(tok);
 
                 append_term_list(master_list->term_list, create_term_item(term, create_string_fmt("TOK_%s", tok->buffer), 1));
 
@@ -165,7 +165,7 @@ static void rule_element(rule_element_t* node) {
             } break;
             case TERMINAL_SYMBOL: {
                 string_t* term = copy_string(node->token->str);
-                string_t* tok  = create_string_fmt("TOK_%s", node->token->str->buffer);
+                string_t* tok = create_string_fmt("TOK_%s", node->token->str->buffer);
 
                 append_term_list(master_list->term_list, create_term_item(term, tok, 0));
             } break;
@@ -305,10 +305,10 @@ master_list_t* create_master_list(void) {
 
     master_list_t* ptr = _ALLOC_TYPE(master_list_t);
 
-    ptr->first_nterm  = NULL;
+    ptr->first_nterm = NULL;
     ptr->current_file = NULL;
-    ptr->nterm_list   = create_nterm_list();
-    ptr->term_list    = create_term_list();
+    ptr->nterm_list = create_nterm_list();
+    ptr->term_list = create_term_list();
 
     return ptr;
 }

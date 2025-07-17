@@ -78,7 +78,6 @@ static void or_function(or_function_t* node) {
     rule_element(node->impl, node->left);
     rule_element(node->impl, node->right);
     EMIT_LINE(node->impl, "break;\n// end or_function rule at state %d\n\n", node->state);
-
 }
 
 static void zero_or_more_function(zero_or_more_function_t* node) {

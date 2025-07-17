@@ -75,7 +75,6 @@ static void or_function(or_function_t* node) {
     rule_element(node->right);
 
     level--;
-
 }
 
 static void zero_or_more_function(zero_or_more_function_t* node) {
@@ -104,7 +103,6 @@ static void zero_or_one_function(zero_or_one_function_t* node) {
     rule_element(node->rule_element);
 
     level--;
-
 }
 
 
@@ -146,4 +144,3 @@ void init_rule_states(void) {
         grouping_function((grouping_function_t*)item->node);
     }
 }
-

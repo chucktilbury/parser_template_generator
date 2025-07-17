@@ -41,6 +41,7 @@ static const char* template_list[] = {
     "cmake",
     "scanner_l",
     "cmake_l",
+    "cmake_d",
     NULL
 };
 

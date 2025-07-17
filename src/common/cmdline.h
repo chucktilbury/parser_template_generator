@@ -14,15 +14,15 @@ typedef enum {
     CMD_ARGS = 0x01, // args required
 
     // data type helpers
-    CMD_STR  = 0x02, // type is a string
-    CMD_NUM  = 0x04, // type is a number
+    CMD_STR = 0x02,  // type is a string
+    CMD_NUM = 0x04,  // type is a number
     CMD_BOOL = 0x08, // type is bool, requires "true" or "false"
     CMD_LIST = 0x10, // a list is accepted by the arg. implies CMD_ARGS.
     CMD_ANON = 0x20, // an anonymous list
 
     // arg attributes
     CMD_REQD = 0x40, // item is required
-    CMD_DIV  = 0x80, // item is a divider for the help screen
+    CMD_DIV = 0x80,  // item is a divider for the help screen
 
     // internal flags, do not use
     CMD_SEEN = 0x100,

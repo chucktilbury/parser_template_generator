@@ -53,8 +53,8 @@ static void rule_element(FILE* fp, rule_element_t* node) {
             case TERMINAL_SYMBOL:
             case TERMINAL_OPER:
             case TERMINAL_KEYWORD: {
-                //term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
-                // fprintf(fp, "// %*sterminal rule element: %s\n", level * indent, "", term->token->buffer);
+                // term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
+                //  fprintf(fp, "// %*sterminal rule element: %s\n", level * indent, "", term->token->buffer);
             } break;
             case NON_TERMINAL:
                 // fprintf(fp, "// %*snon-terminal rule element: %s\n", level * indent, "", node->token->str->buffer);
@@ -122,6 +122,6 @@ static void grouping_function(FILE* fp, grouping_function_t* node) {
 
 void emit_parser_implementation(FILE* fp) {
 
-    //grouping_function((grouping_function_t*)((nterm_item_t*)(master_list->nterm_list->buffer[master_list->nterm_idx]))->node);
+    // grouping_function((grouping_function_t*)((nterm_item_t*)(master_list->nterm_list->buffer[master_list->nterm_idx]))->node);
     grouping_function(fp, (grouping_function_t*)master_list->crnt_nterm->node);
 }

@@ -15,7 +15,7 @@
 #define LST crnt_rule->rule_comment
 #define EMIT_LINE(...) append_string_list(LST, create_string_fmt(__VA_ARGS__))
 
-static int level        = 0;
+static int level = 0;
 static const int indent = 2;
 static nterm_item_t* crnt_rule;
 
@@ -49,10 +49,10 @@ static void rule_element(rule_element_t* node) {
             case TERMINAL_OPER:
             case TERMINAL_KEYWORD: {
                 term_item_t* term = find_term(master_list->term_list, node->token->str->buffer);
-                EMIT_LINE("// %*sterminal rule element: %s\n", level * indent, "", term->token->buffer);
+                EMIT_LINE(" * %*sterminal rule element: %s\n", level * indent, "", term->token->buffer);
             } break;
             case NON_TERMINAL:
-                EMIT_LINE("// %*snon-terminal rule element: %s\n", level * indent, "", node->token->str->buffer);
+                EMIT_LINE(" * %*snon-terminal rule element: %s\n", level * indent, "", node->token->str->buffer);
                 break;
             default:
                 FATAL("unknown terminal type: %s", tok_to_str(node->token->type));
@@ -87,49 +87,49 @@ static void rule_element(rule_element_t* node) {
 
 static void or_function(or_function_t* node) {
 
-    EMIT_LINE("// %*sbegin or_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*sbegin or_function (%d)\n", level * indent, "", node->state);
     level++;
     rule_element(node->left);
     rule_element(node->right);
     level--;
-    EMIT_LINE("// %*send or_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*send or_function (%d)\n", level * indent, "", node->state);
 }
 
 static void zero_or_more_function(zero_or_more_function_t* node) {
 
-    EMIT_LINE("// %*sbegin zero_or_more_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*sbegin zero_or_more_function (%d)\n", level * indent, "", node->state);
     level++;
     rule_element(node->rule_element);
     level--;
-    EMIT_LINE("// %*send zero_or_more_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*send zero_or_more_function (%d)\n", level * indent, "", node->state);
 }
 
 static void zero_or_one_function(zero_or_one_function_t* node) {
 
-    EMIT_LINE("// %*sbegin zero_or_one_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*sbegin zero_or_one_function (%d)\n", level * indent, "", node->state);
     level++;
     rule_element(node->rule_element);
     level--;
-    EMIT_LINE("// %*send zero_or_one_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*send zero_or_one_function (%d)\n", level * indent, "", node->state);
 }
 
 
 static void one_or_more_function(one_or_more_function_t* node) {
 
-    EMIT_LINE("// %*sbegin one_or_more_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*sbegin one_or_more_function (%d)\n", level * indent, "", node->state);
     level++;
     rule_element(node->rule_element);
     level--;
-    EMIT_LINE("// %*send one_or_more_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*send one_or_more_function (%d)\n", level * indent, "", node->state);
 }
 
 static void grouping_function(grouping_function_t* node) {
 
-    EMIT_LINE("// %*sbegin grouping_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*sbegin grouping_function (%d)\n", level * indent, "", node->state);
     level++;
     rule_element_list(node->rule_element_list);
     level--;
-    EMIT_LINE("// %*send grouping_function (%d)\n", level * indent, "", node->state);
+    EMIT_LINE(" * %*send grouping_function (%d)\n", level * indent, "", node->state);
 }
 
 void add_comments(void) {
@@ -139,6 +139,8 @@ void add_comments(void) {
 
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         crnt_rule = item;
+        // EMIT_LINE("/*\n");
         grouping_function((grouping_function_t*)item->node);
+        EMIT_LINE(" *");
     }
 }

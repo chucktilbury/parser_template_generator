@@ -1,5 +1,7 @@
 /*
  * {{dump_rule}}
+ *
+{{parse_func_comment}}
  */
 typedef struct _ast_{{ast_nterm_name}}_t_ {
     ast_node_t node;

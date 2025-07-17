@@ -20,7 +20,7 @@ typedef struct {
     nterm_item_t* crnt_nterm;
     nterm_list_t* nterm_list;
     term_list_t* term_list;
-    //int nterm_idx;
+    // int nterm_idx;
     int term_idx;
     string_t* current_file;
     string_t* project_name;

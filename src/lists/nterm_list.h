@@ -29,7 +29,7 @@ typedef struct {
     string_t* type;
     ast_node_t* node;
     ptr_list_t* ds_names;
-    //ptr_list_t* rule_states;
+    // ptr_list_t* rule_states;
     string_list_t* rule_comment;
 } nterm_item_t;
 

@@ -49,9 +49,9 @@ typedef struct _cmdline_t_ {
 /*********************************************
  * Private functions
  */
-static const char** cmds  = NULL;
-static int cmds_idx       = 0;
-static int max_cmds_idx   = 0;
+static const char** cmds = NULL;
+static int cmds_idx = 0;
+static int max_cmds_idx = 0;
 static cmdline_t* cmdline = NULL;
 
 
@@ -127,9 +127,9 @@ static void show_cmdline_help(void) {
 
 static void init_cmd(int argc, char** argv) {
 
-    cmds_idx     = 0;
+    cmds_idx = 0;
     max_cmds_idx = argc;
-    cmds         = (const char**)argv;
+    cmds = (const char**)argv;
 }
 
 static const char* get_cmd(void) {
@@ -255,7 +255,7 @@ static void add_cmdline_arg(cmdline_entry_t* item, const char* str) {
         append_string_list(item->value, create_string(str));
     }
     else if(item->value != NULL) {
-        int mark    = 0;
+        int mark = 0;
         string_t* s = iterate_string_list(item->value, &mark); // get the first item.
         clear_string(s);
         append_string(s, str);
@@ -304,7 +304,7 @@ static void parse_short_option(const char* str) {
     // printf("sstr: %s\n", str);
 
     cmdline_entry_t* item;
-    int idx      = 0;
+    int idx = 0;
     int finished = 0;
 
     while(!finished) {
@@ -446,7 +446,7 @@ static void parse_long_option(const char* str) {
 const string_t* get_cmd_opt(const char* name) {
 
     cmdline_entry_t* opt = get_opt_by_name(name);
-    int mark             = 0;
+    int mark = 0;
 
     if(opt != NULL)
         return iterate_string_list(opt->value, &mark);
@@ -517,7 +517,7 @@ void parse_cmdline(int argc, char** argv) {
 
     init_cmd(argc, argv);
 
-    cmdline->pname  = create_string(argv[0]);
+    cmdline->pname = create_string(argv[0]);
     const char* ptr = consume_cmd(); // discard the first element.
 
     while(1) {
@@ -567,12 +567,12 @@ void parse_cmdline(int argc, char** argv) {
 
 void init_cmdline(const char* name, const char* preamble, const char* vers) {
 
-    cmdline           = _ALLOC_TYPE(cmdline_t);
-    cmdline->vers     = create_string(vers);
+    cmdline = _ALLOC_TYPE(cmdline_t);
+    cmdline->vers = create_string(vers);
     cmdline->preamble = create_string(preamble);
-    cmdline->name     = create_string(name);
-    cmdline->args     = create_ptr_list();
-    cmdline->files    = 0;
+    cmdline->name = create_string(name);
+    cmdline->args = create_ptr_list();
+    cmdline->files = 0;
 }
 
 void add_cmdline(int short_opt,
@@ -607,8 +607,8 @@ void add_cmdline(int short_opt,
     }
 
     ptr->short_opt = short_opt;
-    ptr->cb        = cb;
-    ptr->type      = type;
+    ptr->cb = cb;
+    ptr->type = type;
 
     if(type & CMD_LIST)
         ptr->type |= CMD_ARGS;

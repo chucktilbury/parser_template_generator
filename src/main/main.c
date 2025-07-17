@@ -21,7 +21,7 @@ extern master_list_t* master_list;
 
 void print_terminal_list(void) {
 
-    int mark  = 0;
+    int mark = 0;
     int count = 1;
 
     printf("\n-----------------------------\n");
@@ -75,7 +75,6 @@ int main(int argc, char** argv) {
     //             emit_string(stdout, str);
     //     }
     // }
-
 
 
     return 0;

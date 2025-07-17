@@ -20,7 +20,7 @@ static int get_char(const char* buffer, int* mark) {
     int ch = EOF;
 
     if(buffer[*mark] != '\0') {
-        ch    = buffer[*mark];
+        ch = buffer[*mark];
         *mark = *mark + 1;
     }
 
@@ -35,8 +35,8 @@ render_table_t* create_render_table(void) {
 render_item_t* create_render_item(const char* name, void (*render_func)(FILE*)) {
 
     render_item_t* ptr = _ALLOC_TYPE(render_item_t);
-    ptr->name          = _COPY_STRING(name);
-    ptr->render_func   = render_func;
+    ptr->name = _COPY_STRING(name);
+    ptr->render_func = render_func;
 
     return ptr;
 }
@@ -48,7 +48,7 @@ void add_render(render_table_t* ptr, render_item_t* item) {
 
 void render_template(const char* template, FILE* outf, render_table_t* ptr) {
 
-    int mark    = 0;
+    int mark = 0;
     int line_no = 1;
 
     char name[32];
@@ -74,7 +74,7 @@ void render_template(const char* template, FILE* outf, render_table_t* ptr) {
                 if(ch == '{') {
                     memset(name, 0, sizeof(name));
                     name_idx = 0;
-                    state    = 2;
+                    state = 2;
                 }
                 else {
                     fputc('{', outf);

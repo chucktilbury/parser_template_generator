@@ -53,9 +53,9 @@ term_item_t* index_term_list(term_list_t* lst, int idx) {
 term_item_t* create_term_item(string_t* term, string_t* tok, int type) {
 
     term_item_t* ptr = _ALLOC_TYPE(term_item_t);
-    ptr->term        = term;
-    ptr->token       = tok;
-    ptr->type        = type;
+    ptr->term = term;
+    ptr->token = tok;
+    ptr->type = type;
 
     return ptr;
 }
@@ -83,11 +83,11 @@ void sort_term_list(term_list_t* lst) {
 term_item_t* find_term(term_list_t* lst, const char* str) {
 
     // need to match the types for the search routine
-    string_t* ptr     = create_string(str);
+    string_t* ptr = create_string(str);
     term_item_t* item = create_term_item(ptr, ptr, 0);
 
     term_item_t* retv = NULL;
-    int val           = find_ptr_list((ptr_list_t*)lst, item, comp_term);
+    int val = find_ptr_list((ptr_list_t*)lst, item, comp_term);
     if(val >= 0)
         retv = lst->buffer[val];
 

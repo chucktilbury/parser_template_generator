@@ -25,14 +25,14 @@ typedef struct _func_stack_t_ {
 } func_stack_t;
 
 static func_stack_t* func_stack = NULL;
-static int stack_depth          = 0;
+static int stack_depth = 0;
 static void push_func_stack(ast_type_t type) {
 
     ENTER;
     TRACE("stack depth: %d", stack_depth);
     func_stack_t* ptr = _ALLOC_TYPE(func_stack_t);
-    ptr->type         = type;
-    ptr->next         = NULL;
+    ptr->type = type;
+    ptr->next = NULL;
 
     if(func_stack != NULL)
         ptr->next = func_stack;
@@ -101,8 +101,8 @@ static void add_non_terminal(nterm_item_t* item) {
 
     ENTER;
     nterm_ds_type_t* ptr = _ALLOC_TYPE(nterm_ds_type_t);
-    ptr->name            = item->nterm;
-    ptr->type            = 0;
+    ptr->name = item->nterm;
+    ptr->type = 0;
 
     TRACE("token: %s", item->nterm->buffer);
     add_list(crnt_rule->ds_names, ptr);

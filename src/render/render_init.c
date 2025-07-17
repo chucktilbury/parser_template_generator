@@ -29,8 +29,8 @@ render_table_t* render_table = NULL;
 
 static void _ctime(FILE* fp) {
 
-    time_t t             = time(NULL);
-    char* tpt            = ctime(&t);
+    time_t t = time(NULL);
+    char* tpt = ctime(&t);
     tpt[strlen(tpt) - 1] = '\0';
     fputs(tpt, fp);
 }
@@ -137,13 +137,13 @@ static void _parser_func_protos(FILE* fp) {
 
 static void _nterm_name(FILE* fp) {
 
-    nterm_item_t* item = master_list->crnt_nterm; //index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_item_t* item = master_list->crnt_nterm; // index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
     fprintf(fp, "%s", item->nterm->buffer);
 }
 
 static void _type_name(FILE* fp) {
 
-    nterm_item_t* item = master_list->crnt_nterm; //index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_item_t* item = master_list->crnt_nterm; // index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
     fprintf(fp, "%s", item->type->buffer);
 }
 
@@ -173,7 +173,7 @@ static void _tok_type_to_str(FILE* fp) {
 
 static void _ast_struct_elements(FILE* fp) {
 
-    nterm_item_t* nterm = master_list->crnt_nterm; //index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_item_t* nterm = master_list->crnt_nterm; // index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
     nterm_ds_type_t* item;
     int mark = 0;
 
@@ -191,7 +191,7 @@ static void _ast_struct_elements(FILE* fp) {
 
 static void _parser_struct_elements(FILE* fp) {
 
-    nterm_item_t* nterm = master_list->crnt_nterm; //index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_item_t* nterm = master_list->crnt_nterm; // index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
     nterm_ds_type_t* item;
     int mark = 0;
 
@@ -209,7 +209,7 @@ static void _parser_struct_elements(FILE* fp) {
 
 static void _parser_assignment_elements(FILE* fp) {
 
-    nterm_item_t* nterm = master_list->crnt_nterm; //index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
+    nterm_item_t* nterm = master_list->crnt_nterm; // index_nterm_list(master_list->nterm_list, master_list->nterm_idx);
     nterm_ds_type_t* item;
     int mark = 0;
 
@@ -226,7 +226,7 @@ static void _ast_func_implementation(FILE* fp) {
 void dump_rule(FILE* fp, nterm_item_t* rule);
 static void _dump_rule(FILE* fp) {
 
-    dump_rule(fp, master_list->crnt_nterm); //index_nterm_list(master_list->nterm_list, master_list->nterm_idx));
+    dump_rule(fp, master_list->crnt_nterm); // index_nterm_list(master_list->nterm_list, master_list->nterm_idx));
 }
 
 static void _gen_scanner_rules(FILE* fp) {
@@ -245,8 +245,8 @@ static void _gen_scanner_rules(FILE* fp) {
 
 static void _render_parser_comment(FILE* fp) {
 
-    int mark          = 0;
-    nterm_item_t* ptr = master_list->crnt_nterm; //master_list->nterm_list->buffer[master_list->nterm_idx];
+    int mark = 0;
+    nterm_item_t* ptr = master_list->crnt_nterm; // master_list->nterm_list->buffer[master_list->nterm_idx];
     string_t* s;
     // printf("\n%s\n", ptr->nterm->buffer);
     while(NULL != (s = iterate_string_list(ptr->rule_comment, &mark)))
@@ -352,7 +352,7 @@ void render_parser_funcs(void) {
 
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->crnt_nterm = item;
-        FILE* fp               = fopen(make_parser_fname(item->nterm->buffer), "w");
+        FILE* fp = fopen(make_parser_fname(item->nterm->buffer), "w");
         render_template(parser_func_def_template, fp, render_table);
         fprintf(fp, "\n");
         fclose(fp);
@@ -366,17 +366,36 @@ static void render_ast_funcs(void) {
 
     while(NULL != (item = iterate_nterm_list(master_list->nterm_list, &mark))) {
         master_list->crnt_nterm = item;
-        FILE* fp               = fopen(make_ast_fname(item->nterm->buffer), "w");
+        FILE* fp = fopen(make_ast_fname(item->nterm->buffer), "w");
         render_template(ast_func_def_template, fp, render_table);
         fprintf(fp, "\n");
         fclose(fp);
     }
 }
 
+void render_cmake(void) {
+
+    char buf[1024];
+
+    FILE* fp = fopen(make_fname(buf, sizeof(buf), "CMakeLists.txt"), "w");
+    render_template(cmake_d_template, fp, render_table);
+    fprintf(fp, "\n");
+    fclose(fp);
+}
+
+void format_everything(void) {
+
+    system("clang-format --verbose -i " \
+        "./out/ast/*.c ./out/ast/*.h " \
+        "./out/parser/*.c ./out/parser/*.h " \
+        "./out/scanner/*.c ./out/scanner/*.h");
+}
+
 void render_init(void) {
 
     make_render_dirs();
     make_render_table();
+    render_cmake();
     render_parser_funcs();
     render_ast_funcs();
 }

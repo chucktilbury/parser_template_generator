@@ -39,7 +39,7 @@
 static uint32_t hash_func(const char* key) {
 
     uint32_t hash = 2166136261u;
-    int slen      = strlen(key);
+    int slen = strlen(key);
 
     for(int i = 0; i < slen; i++) {
         hash ^= (uint8_t)key[i];
@@ -52,8 +52,8 @@ static uint32_t hash_func(const char* key) {
 static int find_slot(hash_table_t* tab, const char* key) {
 
     uint32_t hash = hash_func(key) & (tab->cap - 1);
-    int inc       = hash & 0x0F;
-    inc           = (inc == 0) ? 1 : inc;
+    int inc = hash & 0x0F;
+    inc = (inc == 0) ? 1 : inc;
 
     if(tab->table[hash] == NULL) {
         return hash;
@@ -84,18 +84,18 @@ static int find_slot(hash_table_t* tab, const char* key) {
 static void rehash_table(hash_table_t* tab) {
 
     if(tab->count * 1.75 >= tab->cap) {
-        int oldcap            = tab->cap;
+        int oldcap = tab->cap;
         _hash_node_t** oldtab = tab->table;
         tab->cap <<= 1; // double the capacity
         tab->tombstones = 0;
-        tab->count      = 0;
-        tab->table      = _ALLOC_ARRAY(_hash_node_t*, tab->cap);
+        tab->count = 0;
+        tab->table = _ALLOC_ARRAY(_hash_node_t*, tab->cap);
 
         int slot;
 
         for(int i = 0; i < oldcap; i++) {
             if(oldtab[i] != NULL && oldtab[i]->key != NULL) {
-                slot             = find_slot(tab, oldtab[i]->key);
+                slot = find_slot(tab, oldtab[i]->key);
                 tab->table[slot] = oldtab[i];
                 tab->count++;
             }
@@ -109,7 +109,7 @@ hash_table_t* create_hashtable(void) {
     hash_table_t* tab = _ALLOC_TYPE(hash_table_t);
 
     tab->count = 0;
-    tab->cap   = 0x01 << 2;
+    tab->cap = 0x01 << 2;
 
     tab->table = _ALLOC_ARRAY(_hash_node_t*, tab->cap);
 
@@ -154,7 +154,7 @@ int insert_hashtable(hash_table_t* table, const char* key, void* data) {
         table->table[slot] = _ALLOC_TYPE(_hash_node_t);
     }
 
-    table->table[slot]->key  = _COPY_STRING(key);
+    table->table[slot]->key = _COPY_STRING(key);
     table->table[slot]->data = data;
     table->count++;
 
@@ -164,7 +164,7 @@ int insert_hashtable(hash_table_t* table, const char* key, void* data) {
 
 int find_hashtable(hash_table_t* tab, const char* key, void** data) {
 
-    *data    = NULL;
+    *data = NULL;
     int slot = find_slot(tab, key);
 
     if(tab->table[slot] != NULL && tab->table[slot]->key != NULL) {

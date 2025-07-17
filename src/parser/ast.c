@@ -252,7 +252,7 @@ static size_t get_node_size(ast_type_t type) {
 ast_node_t* create_ast_node(ast_type_t type) {
 
     ast_node_t* node = _ALLOC(get_node_size(type));
-    node->type       = type;
+    node->type = type;
 
     return node;
 }

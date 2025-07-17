@@ -25,7 +25,7 @@
 #include "trace.h"
 
 static const char* base_file_name = NULL;
-static string_list_t* common_env  = NULL;
+static string_list_t* common_env = NULL;
 static char buffer[PATH_MAX]; // returning a pointer to this
 
 /**
@@ -58,7 +58,7 @@ static void add_env(const char* str) {
                 char* s;
                 // char* save;
                 char* f = ":";
-                s       = strtok(tmp, f);
+                s = strtok(tmp, f);
                 while(s != NULL) {
                     append_string_list(common_env, create_string(s));
                     s = strtok(NULL, f);

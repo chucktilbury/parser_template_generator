@@ -17,6 +17,7 @@ extern render_table_t* render_table;
 
 void render_init(void);
 void make_render_dirs(void);
+void format_everything(void);
 const char* make_fname(char* buf, size_t size, const char* base);
 const char* make_ast_fname(const char* base);
 const char* make_parser_fname(const char* base);

@@ -59,5 +59,7 @@ void render(void) {
     rend_file(scanner_h_template, "scanner/scanner.h");
     rend_file(scanner_l_template, "scanner/scanner.l");
     rend_file(cmake_l_template, "scanner/CMakeLists.txt");
-    //rend_file(cmake_template, "scanner/CMakeLists.txt");
+    // rend_file(cmake_template, "scanner/CMakeLists.txt");
+
+    format_everything();
 }
