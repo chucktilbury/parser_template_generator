@@ -1,7 +1,7 @@
-# pgen
-Recursive decent parser generator for C
+# parser_template_generator
+Generate a template for a recursive decent parser generator in C.
 
-This is a parser generator that generates a recursive decent parser. It is a work in progress. The goal it to create a working parser and AST generator/traverse from a simplified grammar. A scanner is not generated (yet) and there are specific rules to relate to the case and placement of symbols in the grammar.
+This is a parser generator that generates a recursive decent parser template. It is a work in progress. The goal it to create a working parser and AST generator/traverse from a simplified grammar. A scanner is not generated (yet) and there are specific rules to relate to the case and placement of symbols in the grammar.
 
 * A ``[a-z_][a-z0-9_]*`` is a non terminal symbol. It is defined exactly once and then may be referenced any number of times.
 * A ``[A-Z_][A-Z0-9_]*`` is a terminal that must be constructed in the scanner. So when the parser generator encounters a token that looks like ``WOMBAT99`` it will create a token type of ``TOK_WOMBAT99`` and assign a number to it and the generated parser will expect to see a ``TOK_WOMBAT99`` in the input stream. The scanner for the generated parser will return that as a token type when it scans whatever a ``TOK_WOMBAT99`` is supposed to represent.
