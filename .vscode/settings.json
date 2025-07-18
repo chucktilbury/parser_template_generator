@@ -2,5 +2,9 @@
     "files.associations": {
         "chrono": "c",
         "typeinfo": "c"
-    }
+    },
+    "cSpell.words": [
+        "nequ",
+        "prelist"
+    ]
 }
