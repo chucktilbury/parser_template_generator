@@ -4,7 +4,7 @@
 
 #include "ast.h"
 #include "ast_protos.h"
-#include "common.h"
+#include "alloc.h"
 
 /*
  * public interface

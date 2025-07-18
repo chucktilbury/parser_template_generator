@@ -74,7 +74,7 @@ function_definition (
 )
 
 function_parameters (
-    : '(' (data_declaration (',' data_declaration)* )? ')'
+    '(' (data_declaration (',' data_declaration)* )? ')'
 )
 
 struct_definition (
@@ -82,7 +82,7 @@ struct_definition (
 )
 
 expression (
-    expression *' expression |
+    expression '*' expression |
     expression '/' expression |
     expression '%' expression |
     expression '+' expression |
@@ -105,8 +105,13 @@ primary_expression (
     INT_LITERAL |
     FLOAT_LITERAL |
     formatted_string |
+    bool_literal |
     ('(' expression ')') |
     compound_reference
+)
+
+bool_literal (
+    'true' | 'false'
 )
 
 expression_list (

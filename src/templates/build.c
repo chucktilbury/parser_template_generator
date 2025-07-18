@@ -37,11 +37,13 @@ static const char* template_list[] = {
     "file_header",
     "tokens_h",
     "tokens_c",
-    "scanner_h",
+    //"scanner_h",
     "cmake",
     "scanner_l",
     "cmake_l",
     "cmake_d",
+    "file_io_h",
+    "file_io_c",
     NULL
 };
 

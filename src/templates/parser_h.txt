@@ -3,7 +3,7 @@
 #define _PARSER_H_
 
 #include "ast.h"
-#include "common.h"
+#include "pointer_list.h"
 
 typedef enum {
     PMODE_NORMAL,
@@ -18,8 +18,8 @@ typedef enum {
 } parser_scope_t;
 
 typedef struct {
-    ptr_list_t* scope_stack;
-    ptr_list_t* mode_stack;
+    pointer_list_t* scope_stack;
+    pointer_list_t* mode_stack;
 } parser_state_t;
 
 ast_node_t* parse(void);

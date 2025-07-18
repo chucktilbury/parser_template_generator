@@ -8,18 +8,23 @@
 #include <string.h>
 #include <errno.h>
 
-#include "common.h"
+#include "string_buffer.h"
+#include "alloc.h"
+#include "errors.h"
+#include "fileio.h"
 #include "tokens.h"
+#include "file_io.h"
 
-int yycolumn = 1;
 int inline_depth = 0;
 string_t* strbuf = NULL;
+int yycolno = 1;
+int prev_lineno;
 
 extern int parser_line;
 extern char* parser_file;
 
 #define MAX_INCL 16
-
+/*
 typedef struct _file_stack_t_ {
     const char* fname;
     FILE* fp;
@@ -30,7 +35,7 @@ typedef struct _file_stack_t_ {
 } file_stack_t;
 
 file_stack_t* file_stack = NULL;
-
+*/
 // const char* strip_quotes(const char* str) {
 //     static char buf[64];
 //     size_t len = strlen(str) - 2;
@@ -39,13 +44,15 @@ file_stack_t* file_stack = NULL;
 //     return buf;
 // }
 
-#define YY_USER_ACTION \
-  file_stack->col = yycolumn; \
-  if (yylineno == prev_yylineno) yycolumn += yyleng; \
-  else { \
-    for (yycolumn = 1; yytext[yyleng - yycolumn] != '\n'; ++yycolumn) {} \
-    prev_yylineno = yylineno; \
-  }
+//#define YY_USER_ACTION \
+//  file_stack->col = yycolumn; \
+//  if (yylineno == prev_yylineno) yycolumn += yyleng; \
+//  else { \
+//    for (yycolumn = 1; yytext[yyleng - yycolumn] != '\n'; ++yycolumn) {} \
+//    prev_yylineno = yylineno; \
+//  }
+
+#define YY_USER_ACTION update_numbers();
 
 %}
 
@@ -58,7 +65,7 @@ file_stack_t* file_stack = NULL;
 
 %%
    // int start_line, start_column;
-   int prev_yylineno = yylineno;
+   prev_lineno = yylineno;
 
 {{gen_scanner_rules}}
 
@@ -82,7 +89,6 @@ file_stack_t* file_stack = NULL;
 
 <INLINE_BLOCK>\n {
     append_string_char(strbuf, '\n');
-    file_stack->line++;
 }
 
 <INLINE_BLOCK>"}" {
@@ -99,12 +105,12 @@ file_stack_t* file_stack = NULL;
 }
 
 \"[^\"\n]*\" {
-    add_token_queue(create_token(strip_quotes(create_string(yytext)), TOK_STRING_LITERAL));
+    add_token_queue(create_token(strip_ends(create_string(yytext), '\"'), TOK_STRING_LITERAL));
     return TOK_STRING_LITERAL;
 }
 
 \'[^\'\n]*\' {
-    add_token_queue(create_token(strip_quotes(create_string(yytext)), TOK_STRING_LITERAL));
+    add_token_queue(create_token(strip_ends(create_string(yytext), '\''), TOK_STRING_LITERAL));
     return TOK_STRING_LITERAL;
 }
 
@@ -123,28 +129,11 @@ file_stack_t* file_stack = NULL;
     return TOK_INT_LITERAL;
 }
 
-"true"|"false" {
-    add_token_queue(create_token(create_string(yytext), TOK_BOOL_LITERAL));
-    return TOK_BOOL_LITERAL;
-}
+(";"|"#")[^\n]*\n  { /* ignore comment */ }
 
-#[^\n]*\n  {
-    /* comment */
-    file_stack->line++;
-}
+[ \t\r\n\v\f]+ { /* ignore spaces */ }
 
-;[^\n]*\n  {
-    /* comment */
-    file_stack->line++;
-}
-
-\n {
-    file_stack->line++;
-}
-
-[ \t\r]+ { /* ignore spaces */ }
-
-. { return yytext[0]; }
+. { fprintf(stderr, "scanner error: %d: unexpected character: %c (0x%02X)\n", yylineno, yytext[0], yytext[0]); }
 
 <<EOF>> {
     add_token_queue(create_token(create_string(NULL), TOK_END_OF_FILE));
@@ -153,9 +142,11 @@ file_stack_t* file_stack = NULL;
 
 %%
 
+/*
 void open_scanner_file(const char* fn) {
 
-    const char *fname = find_file(fn);
+    // TODO: put this literal string in a configuration
+    const char *fname = find_file(fn, ".tok");
     yyin = fopen(fname, "r");
     if(yyin == NULL)
         FATAL("cannot open input file: \"%s\": %s\n", fname, strerror(errno));
@@ -229,3 +220,4 @@ token_t* get_scanner_token(void) {
     yylex();
     return NULL;
 }
+*/

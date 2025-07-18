@@ -56,10 +56,12 @@ void render(void) {
     set_project_name("scanner");
     rend_file(tokens_h_template, "scanner/tokens.h");
     rend_file(tokens_c_template, "scanner/tokens.c");
-    rend_file(scanner_h_template, "scanner/scanner.h");
+    //rend_file(scanner_h_template, "scanner/scanner.h");
     rend_file(scanner_l_template, "scanner/scanner.l");
     rend_file(cmake_l_template, "scanner/CMakeLists.txt");
     // rend_file(cmake_template, "scanner/CMakeLists.txt");
+    rend_file(file_io_h_template, "scanner/file_io.h");
+    rend_file(file_io_c_template, "scanner/file_io.c");
 
     format_everything();
 }

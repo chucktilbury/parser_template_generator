@@ -46,5 +46,9 @@
 
 [ \t\r\n\v\f]* { /* ignore whitespace */ }
 
+. {
+    fprintf(stderr, "scanner error: %d: unexpected character: %c (0x%02X)\n", yylineno, yytext[0], yytext[0]);
+}
+
 %%
 

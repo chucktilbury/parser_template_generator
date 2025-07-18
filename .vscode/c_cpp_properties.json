@@ -12,7 +12,8 @@
                 "${workspaceFolder}/src/lists",
                 "${workspaceFolder}/src/parser",
                 "${workspaceFolder}/build/src/parser",
-                "${workspaceFolder}/build/src/templates"
+                "${workspaceFolder}/build/src/templates",
+                "/home/chuck/Src/parser_template_generator/src/generate"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/clang",

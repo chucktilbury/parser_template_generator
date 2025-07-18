@@ -52,6 +52,10 @@ int main(int argc, char** argv) {
     generate_rules();
     render();
 
+    printf("%d terminals\n%d non-terminals\n",
+            len_ptr_list(master_list->term_list),
+            len_ptr_list(master_list->nterm_list));
+
     // int mark = 0;
     // nterm_item_t* node;
     //

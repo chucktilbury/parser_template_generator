@@ -385,7 +385,7 @@ void render_cmake(void) {
 
 void format_everything(void) {
 
-    system("clang-format --verbose -i " \
+    system("clang-format -i " \
         "./out/ast/*.c ./out/ast/*.h " \
         "./out/parser/*.c ./out/parser/*.h " \
         "./out/scanner/*.c ./out/scanner/*.h");
