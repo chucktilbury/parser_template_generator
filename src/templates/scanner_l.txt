@@ -20,43 +20,13 @@ string_t* strbuf = NULL;
 int yycolno = 1;
 int prev_lineno;
 
-extern int parser_line;
-extern char* parser_file;
-
 #define MAX_INCL 16
-/*
-typedef struct _file_stack_t_ {
-    const char* fname;
-    FILE* fp;
-    int line;
-    int col;
-    YY_BUFFER_STATE buffer;
-    struct _file_stack_t_* next;
-} file_stack_t;
-
-file_stack_t* file_stack = NULL;
-*/
-// const char* strip_quotes(const char* str) {
-//     static char buf[64];
-//     size_t len = strlen(str) - 2;
-//     memset(buf, 0, sizeof(buf));
-//     strncpy(buf, &str[1], (len < sizeof(buf))? len: sizeof(buf)-1);
-//     return buf;
-// }
-
-//#define YY_USER_ACTION \
-//  file_stack->col = yycolumn; \
-//  if (yylineno == prev_yylineno) yycolumn += yyleng; \
-//  else { \
-//    for (yycolumn = 1; yytext[yyleng - yycolumn] != '\n'; ++yycolumn) {} \
-//    prev_yylineno = yylineno; \
-//  }
 
 #define YY_USER_ACTION update_numbers();
 
 %}
 
-%x INLINE_BLOCK
+%x INLINE_BLOCK DTEXT_BLOCK STEXT_BLOCK DQUOTE SQUOTE
 
 %option yylineno
 %option noinput
@@ -104,13 +74,114 @@ file_stack_t* file_stack = NULL;
     }
 }
 
-\"[^\"\n]*\" {
-    add_token_queue(create_token(strip_ends(create_string(yytext), '\"'), TOK_STRING_LITERAL));
+\" {
+    if(strbuf == NULL)
+        strbuf = create_string(NULL);
+    BEGIN(DQUOTE);
+}
+
+<DQUOTE>\n {
+    fprintf(stderr, "scanner error: %d: unexpected end of line in literal string\n", yylineno);
+    BEGIN(INITIAL);
+}
+
+<DQUOTE>\\n { append_string_char(strbuf, '\n'); }
+<DQUOTE>\\r { append_string_char(strbuf, '\r'); }
+<DQUOTE>\\t { append_string_char(strbuf, '\t'); }
+<DQUOTE>\\v { append_string_char(strbuf, '\v'); }
+<DQUOTE>\\a { append_string_char(strbuf, '\a'); }
+<DQUOTE>\\b { append_string_char(strbuf, '\b'); }
+<DQUOTE>\\f { append_string_char(strbuf, '\f'); }
+<DQUOTE>\\e { append_string_char(strbuf, '\x1b'); }
+<DQUOTE>\\\" { append_string_char(strbuf, '\"'); }
+<DQUOTE>\\. { append_string_char(strbuf, yytext[1]); }
+
+<DQUOTE>\\[xX][0-9A-Fa-f]{1,4} {
+    int tmp = strtol(&yytext[2], NULL, 16);
+    append_string_char(strbuf, tmp);
+}
+
+<DQUOTE>\"[ \t]*\\[ \t]*\n[ \t]*\" { /* line ignore continuation */ }
+
+<DQUOTE>[^\\\n\"]+ { append_string(strbuf, yytext); }
+
+<DQUOTE>\" {
+    add_token_queue(create_token(copy_string(strbuf), TOK_STRING_LITERAL));
+    clear_string(strbuf);
+    BEGIN(INITIAL);
     return TOK_STRING_LITERAL;
 }
 
-\'[^\'\n]*\' {
-    add_token_queue(create_token(strip_ends(create_string(yytext), '\''), TOK_STRING_LITERAL));
+\' {
+    if(strbuf == NULL)
+        strbuf = create_string(NULL);
+    BEGIN(SQUOTE);
+}
+
+<SQUOTE>\'[ \t]*\\[ \t]*\n[ \t]*\' { /* ignore continuation */ }
+
+<SQUOTE>\n {
+    fprintf(stderr, "scanner error: %d: unexpected end of line in literal string\n", yylineno);
+    BEGIN(INITIAL);
+}
+
+<SQUOTE>\\ { append_string_char(strbuf, '\\'); }
+
+<SQUOTE>[^\\\n\']+ { append_string(strbuf, yytext); }
+
+<SQUOTE>\' {
+    add_token_queue(create_token(copy_string(strbuf), TOK_STRING_LITERAL));
+    clear_string(strbuf);
+    BEGIN(INITIAL);
+    return TOK_STRING_LITERAL;
+}
+
+\"{3,} {
+    if(strbuf == NULL)
+        strbuf = create_string(NULL);
+    BEGIN(DTEXT_BLOCK);
+}
+
+<DTEXT_BLOCK>\"  { append_string_char(strbuf, '\"'); }
+<DTEXT_BLOCK>(\\n|\n) { append_string_char(strbuf, '\n'); }
+<DTEXT_BLOCK>\\r { append_string_char(strbuf, '\r'); }
+<DTEXT_BLOCK>\\t { append_string_char(strbuf, '\t'); }
+<DTEXT_BLOCK>\\v { append_string_char(strbuf, '\v'); }
+<DTEXT_BLOCK>\\a { append_string_char(strbuf, '\a'); }
+<DTEXT_BLOCK>\\b { append_string_char(strbuf, '\b'); }
+<DTEXT_BLOCK>\\f { append_string_char(strbuf, '\f'); }
+<DTEXT_BLOCK>\\e { append_string_char(strbuf, '\x1b'); }
+<DTEXT_BLOCK>\\. { append_string_char(strbuf, yytext[1]); }
+
+<DTEXT_BLOCK>\\[xX][0-9a-fA-F]{1,4} {
+    int tmp = strtol(&yytext[2], NULL, 16);
+    append_string_char(strbuf, tmp);
+}
+
+<DTEXT_BLOCK>[^\"\n\\]+ { append_string(strbuf, yytext); }
+
+<DTEXT_BLOCK>\"{3,} {
+    add_token_queue(create_token(copy_string(strbuf), TOK_STRING_LITERAL));
+    clear_string(strbuf);
+    BEGIN(INITIAL);
+    return TOK_STRING_LITERAL;
+}
+
+\'{3,} {
+    if(strbuf == NULL)
+        strbuf = create_string(NULL);
+    BEGIN(STEXT_BLOCK);
+}
+
+<STEXT_BLOCK>\' { append_string_char(strbuf, '\''); }
+<STEXT_BLOCK>\n { append_string_char(strbuf, ' '); }
+<STEXT_BLOCK>\\. { append_string_char(strbuf, yytext[1]); }
+<STEXT_BLOCK>[^\'\n]+ { append_string(strbuf, yytext); }
+
+<STEXT_BLOCK>\'{3,} {
+    add_token_queue(create_token(copy_string(strbuf), TOK_STRING_LITERAL));
+    clear_string(strbuf);
+    BEGIN(INITIAL);
     return TOK_STRING_LITERAL;
 }
 
@@ -119,7 +190,7 @@ file_stack_t* file_stack = NULL;
     return TOK_IDENTIFIER;
 }
 
-(([1-9][0-9]*)|0)?\.[0-9]*([eE][-+]?[0-9]+)? {
+(([1-9][0-9]*\.[0-9]+)|(0\.[0-9]+))([eE][-+]?[0-9]+)? {
     add_token_queue(create_token(create_string(yytext), TOK_FLOAT_LITERAL));
     return TOK_FLOAT_LITERAL;
 }
@@ -142,82 +213,3 @@ file_stack_t* file_stack = NULL;
 
 %%
 
-/*
-void open_scanner_file(const char* fn) {
-
-    // TODO: put this literal string in a configuration
-    const char *fname = find_file(fn, ".tok");
-    yyin = fopen(fname, "r");
-    if(yyin == NULL)
-        FATAL("cannot open input file: \"%s\": %s\n", fname, strerror(errno));
-
-    file_stack_t* fs = _ALLOC_TYPE(file_stack_t);
-    fs->fname = fname;
-    fs->next = NULL;
-    fs->line = 1;
-    fs->col = 1;
-
-    fs->fp = yyin;
-    fs->buffer = yy_create_buffer(yyin, YY_BUF_SIZE);
-    yy_switch_to_buffer(fs->buffer);
-
-    if(file_stack != NULL) {
-        fs->next = file_stack;
-        file_stack = fs;
-    }
-    else {
-        file_stack = fs;
-        //set_base_file_name(fs->fname);
-    }
-
-}
-
-void close_scanner_file(void) {
-
-    file_stack_t* fs = file_stack;
-    yy_delete_buffer(fs->buffer);
-    file_stack = file_stack->next;
-
-    fclose(fs->fp);
-    _FREE(fs->fname);
-    _FREE(fs);
-
-    if(file_stack != NULL)
-        yy_switch_to_buffer(file_stack->buffer);
-}
-
-int get_line_no(void) {
-
-    if(file_stack != NULL)
-        return file_stack->line;
-    else
-        return -1;
-}
-
-int get_col_no(void) {
-
-    if(file_stack != NULL)
-        return file_stack->col;
-    else
-        return -1;
-}
-
-const char* get_file_name(void) {
-
-    if(file_stack != NULL)
-        return file_stack->fname;
-    else
-        return "no open file"; //get_base_file_name();
-}
-
-void init_scanner(void) {
-
-    init_token_queue();
-}
-
-token_t* get_scanner_token(void) {
-
-    yylex();
-    return NULL;
-}
-*/

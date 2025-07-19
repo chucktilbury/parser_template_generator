@@ -23,6 +23,8 @@ static void zero_or_one_function(FILE* fp, zero_or_one_function_t* node);
 static void one_or_more_function(FILE* fp, one_or_more_function_t* node);
 static void grouping_function(FILE* fp, grouping_function_t* node);
 
+static int nl_flag = 0;
+
 static void rule_element_list(FILE* fp, rule_element_list_t* node) {
 
     int mark = 0;
@@ -64,7 +66,9 @@ static void rule_element(FILE* fp, rule_element_t* node) {
                 one_or_more_function(fp, (one_or_more_function_t*)node->nterm);
                 break;
             case AST_GROUPING_FUNCTION:
+                nl_flag++;
                 grouping_function(fp, (grouping_function_t*)node->nterm);
+                nl_flag--;
                 break;
             default:
                 FATAL("unknown non-terminal type: %s", nterm_to_str(node->nterm->type));
@@ -78,6 +82,8 @@ static void or_function(FILE* fp, or_function_t* node) {
 
     rule_element(fp, node->left);
     fprintf(fp, "| ");
+    if(!nl_flag)
+        fprintf(fp, "\n *     ");
     rule_element(fp, node->right);
 }
 
@@ -103,12 +109,18 @@ static void one_or_more_function(FILE* fp, one_or_more_function_t* node) {
 static void grouping_function(FILE* fp, grouping_function_t* node) {
 
     fprintf(fp, "( ");
+    if(!nl_flag)
+        fprintf(fp, "\n *     ");
     rule_element_list(fp, node->rule_element_list);
-    fprintf(fp, ") ");
+    if(!nl_flag)
+        fprintf(fp, "\n * )\n *");
+    else
+        fprintf(fp, ") ");
 }
 
 void dump_rule(FILE* fp, nterm_item_t* rule) {
 
     fprintf(fp, "%s ", rule->nterm->buffer);
+    nl_flag = 0;
     grouping_function(fp, (grouping_function_t*)rule->node);
 }

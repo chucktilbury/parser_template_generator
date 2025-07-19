@@ -29,9 +29,9 @@ data_definition (
 
 initializer (
     expression |
-    ('[' expression (',' expression)* ']') |
-    ('[' dss_initializer ']') |
-    ('{' dss_initializer '}')
+    list_init |
+    dict_init |
+    struct_init
 )
 
 dss_initializer_item (
@@ -40,6 +40,18 @@ dss_initializer_item (
 
 dss_initializer (
     dss_initializer_item (',' dss_initializer_item)*
+)
+
+list_init (
+    '[' expression (',' expression)* ']'
+)
+
+dict_init (
+    '[' dss_initializer ']'
+)
+
+struct_init (
+    '{' dss_initializer '}'
 )
 
 formatted_string (
